@@ -1,19 +1,22 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <string.h>
 
-#define LONGUEUR 8
-#define PIECE_BLANC -1
-#define PIECE_NOIR 1
-#define TOUR_BLANC -2
-#define TOUR_NOIR 2
-#define CHEVAL_BLANC -3
-#define CHEVAL_NOIR 3
-#define FOU_BLANC -4
+
+#define LONGUEUR 7
+#define PIECE_BLANC 1
+#define PIECE_NOIR -1
+#define TOUR_BLANC 2
+#define TOUR_NOIR -2
+#define CHEVAL_BLANC 3
+#define CHEVAL_NOIR -3
 #define FOU_NOIR 4
-#define REINE_BLANC -5
-#define REINE_NOIR 5
-#define ROI_BLANC -6
-#define ROI_NOIR 6
+#define FOU_BLANC -4
+#define REINE_BLANC 5
+#define REINE_NOIR -5
+#define ROI_BLANC 6
+#define ROI_NOIR -6
+#define MaxSize 8
 #define BLANC 1
 #define NOIR 0
 #define ZONE_VIDE 0
@@ -28,7 +31,7 @@ struct poistion
 
 int taille = 100, ca_bouge = 0;
 
-int tableDeJeu[LONGUEUR][LONGUEUR]=
+int tableDeJeu[MaxSize][MaxSize]=
 { 2, 3, 4, 5, 6, 4, 3, 2,
   1, 1, 1, 1, 1, 1, 1, 1,
   0, 0, 0, 0, 0, 0, 0, 0,
@@ -42,222 +45,18 @@ int tableDeJeu[LONGUEUR][LONGUEUR]=
 int mouvDroitTourBlanc = 0, mouvGaucheTourBlanc = 0, RoiBlancPremierMouv = 0;
 int mouvDroitTourNoir = 0, mouvGaucheTourNoir = 0, RoiNoirPremierMouv = 0;
 
-int mouvement = 0, x, y; // 1 -> Mouvement Blanc 0 -> Mouvement Noir
+int mouvement = 0; // 1 -> Mouvement Blanc 0 -> Mouvement Noir
 
 int testBlanc = 0, testNoir = 0;
 
 int transformationBlanc = 0, transformationNoir = 0;
 
-// Mouvement de pièce
-//------------------------------------------Mouvement Pice Blanc----------------------------//
-int PieceB(int ancienX, int ancienY, int nouveauX, int nouveauY)
-{
-    if (ancienne_Pos.y == 6)
-    {
-        if ( ( nouveauY == ancienY - 1 && nouveauX == ancienX && tableDeJeu[ancienY - 1][ancienX] == 0 ) ||
-             ( nouveauY == ancienY - 2 && nouveauX == ancienX && tableDeJeu[ancienY - 1][ancienX] == BLANC && tableDeJeu[ancienY - 2][ancienX] == 0 )
-            )
-        {
-            return NOIR;
-        }
-        else if ( nouveauY == ancienY - 1 && nouveauX == ancienX && tableDeJeu[ancienY - 1][ancienX] == 0 )
-            {
-                return NOIR;
-            }
-        else if ( (tableDeJeu[ancienY - 1][ancienX - 1] > 0) && ( nouveauY == ancienY - 1 && nouveauX == ancienX -1 ))
-        {
-            return BLANC;
-        }
-        if ( (tableDeJeu[ancienY -1][ancienX + 1] > 0) && ( nouveauY == ancienY - 1 && nouveauX == nouveauX + 1))
-        {
-            return 1; 
-        } 
-    }
-    return BLANC;
-}
-
-//------------------------------------------Mouvement Pice Noir----------------------------//
-int PieceN(int ancienX, int ancienY, int nouveauX, int nouveauY)
-{
-    if (ancienne_Pos.y == 6)
-    {
-        if ( ( nouveauY == ancienY + 1 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == 0 ) ||
-             ( nouveauY == ancienY + 2 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == BLANC && tableDeJeu[ancienY + 2][ancienX] == 0 )
-            )
-        {
-            return NOIR;
-        }
-        else if ( nouveauY == ancienY + 1 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == 0 )
-            {
-                return NOIR;
-            }
-        else if ( (tableDeJeu[ancienY + 1][ancienX + 1] < 0) && ( nouveauY == ancienY + 1 && nouveauX == ancienX +1 ))
-        {
-            return BLANC;
-        }
-        if ( (tableDeJeu[ancienY +1][ancienX + 1] < 0) && ( nouveauY == ancienY + 1 && nouveauX == nouveauX + 1))
-        {
-            return 1; 
-        } 
-    }
-    return BLANC;
-}
-
-//------------------------------------------Mouvement Pice Blanc----------------------------//
-int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
-{
-    for (int i = ancienX - 1; i >= 0; i--) // Côté gauche
-    {
-        if ( tableDeJeu[ancienY][i] >= 0 && ( nouveauX == i && nouveauY == ancienY ) )
-        {
-            return NOIR;
-        }
-        else if ( tableDeJeu[ancienY][i] != 0)
-        {
-            break;
-        }      
-    }
-    for (int i = ancienX - 1; i >= 0; i--) // Côté Haut
-    {
-        if ( tableDeJeu[i][ancienX] >= 0 && ( nouveauX == ancienX && nouveauY == i ) )
-        {
-            return NOIR;
-        }
-        else if ( tableDeJeu[i][ancienX] != 0)
-        {
-            break;
-        }      
-    }
-    for (int i = ancienX + 1; i <= LONGUEUR; i++)
-    {
-        if ( (tableDeJeu[ancienY][i] >= 0) && (nouveauY == ancienY && nouveauX ==i) )
-        {
-            return 1;
-        }
-        else if ( tableDeJeu[ancienY][i] != 0)
-        {
-            break;
-        }
-    }
-    for (int i = ancienX + 1; i <= LONGUEUR; i++)
-    {
-        if ( (tableDeJeu[i][ancienX] >= 0) && (nouveauY == 1 && nouveauX == ancienX) )
-        {
-            return 1;
-        }
-        else if ( tableDeJeu[i][ancienX] != 0)
-        {
-            break;
-        }
-    }    
-    return  BLANC;
-}
-
-//------------------------------------------Mouvement Pice Blanc----------------------------//
-int TourN(int ancienX, int ancienY, int nouveauX, int nouveauY)
-{
-    for (int i = ancienX - 1; i <= 0; i--) // Côté gauche
-    {
-        if ( tableDeJeu[ancienY][i] <= 0 && ( nouveauX == i && nouveauY == ancienY ) )
-        {
-            return NOIR;
-        }
-        else if ( tableDeJeu[ancienY][i] != 0)
-        {
-            break;
-        }      
-    }
-    for (int i = ancienX - 1; i <= 0; i--) // Côté Haut
-    {
-        if ( tableDeJeu[i][ancienX] <= 0 && ( nouveauX == ancienX && nouveauY == i ) )
-        {
-            return NOIR;
-        }
-        else if ( tableDeJeu[i][ancienX] != 0)
-        {
-            break;
-        }      
-    }
-    for (int i = ancienX + 1; i <= LONGUEUR; i++)
-    {
-        if ( (tableDeJeu[ancienY][i] <= 0) && (nouveauY == ancienY && nouveauX ==i) )
-        {
-            return 1;
-        }
-        else if ( tableDeJeu[ancienY][i] != 0)
-        {
-            break;
-        }
-    }
-    for (int i = ancienX + 1; i <= LONGUEUR; i++)
-    {
-        if ( (tableDeJeu[i][ancienX] <= 0) && (nouveauY == 1 && nouveauX == ancienX) )
-        {
-            return 1;
-        }
-        else if ( tableDeJeu[i][ancienX] != 0)
-        {
-            break;
-        }
-    }    
-    return  BLANC;
-}
-
-//------------------------------------------Mouvement Pice Blanc----------------------------//
-int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
-{
-    return  BLANC;
-}
-
-//------------------------------------------Mouvement Pice Blanc----------------------------//
-int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
-{
-    return  BLANC;
-}
-
-//------------------------------------------Mouvement Pice Blanc----------------------------//
-int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
-{
-    return  BLANC;
-}
-
-//------------------------------------------Mouvement Pice Blanc----------------------------//
-int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
-{
-    return  BLANC;
-}
-
-//------------------------------------------Mouvement Pice Blanc----------------------------//
-int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
-{
-    return  BLANC;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int main(int argc, char const *argv[])
 {
-    RenderWindow window(VideoMode(800, 800), "Ehiquier by Emmanuel NGBAME");
+    int largeurJeu = 800, hauteurJeu = 800;
+    String auteur = "Echiquier Emmanuel NGBAME";
 
+    RenderWindow window(VideoMode(largeurJeu, hauteurJeu), auteur);
     Texture t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15;
     
     // importation des images
@@ -268,6 +67,8 @@ int main(int argc, char const *argv[])
     t5.loadFromFile("images/TourBlanc.png");
     t6.loadFromFile("images/ChevalBlanc.png");
     t7.loadFromFile("images/ChevalNoir.png");
+    // t8.loadFromFile("images/BoutiqueNoir.png");
+    // t9.loadFromFile("images/BoutiqueBlanc.png");
     t8.loadFromFile("images/FouNoir.png");
     t9.loadFromFile("images/FouBlanc.png");
     t10.loadFromFile("images/ReineBlanc.png");
@@ -286,6 +87,8 @@ int main(int argc, char const *argv[])
 	Sprite TourBlanc(t5);
 	Sprite ChevalBlanc(t6);
 	Sprite ChevalNoir(t7);
+    // Sprite BoutiqueNoir(t8);
+	// Sprite BoutiqueBlanc(t9);
 	Sprite FouNoir(t8);
 	Sprite FouBlanc(t9);
 	Sprite ReineBlanc(t10);
@@ -300,25 +103,26 @@ int main(int argc, char const *argv[])
     float dx = 0, dy = 0;
     int pasMouvPiece = 0;
 
-	while (window.isOpen())
-	{
-		Vector2i pos = Mouse::getPosition(window);
-		x = pos.x / taille;
-		y = pos.y / taille;
-		Event e;
-		while (window.pollEvent(e))
-		{
-			if (e.type == Event::Closed)
-			{
-				window.close();
-			}
-			window.clear();
-		}
-		// Affichage
-		window.clear();
-		window.draw(Tableau);
-        //---------------------------------------------------------
-        //On detecte le mouvement 
+    // lancement du programme
+    while (window.isOpen())
+    {
+        Vector2i pos = Mouse::getPosition(window); // detecter le mouvement de la souris
+        int x = pos.x / taille;
+        int y = pos.y / taille;
+        Event e; // événement
+
+        while (window.pollEvent(e))
+        {
+            if (e.type == Event::Closed)
+            {
+                window.close();
+            }
+            window.clear();
+        }
+        window.clear();
+        window.draw(Tableau);
+
+        // On detecte le mouvement 
         if (e.type == Event::MouseButtonPressed)
         {
             // On traite cas par cas selon le mouvement choisi
@@ -425,29 +229,27 @@ int main(int argc, char const *argv[])
             }
         }
     
-        // Cas particulier de Dame
         if (transformationBlanc == BLANC)
         {
             BlancTransformation.setPosition(transforme_blanc.x * taille, transforme_blanc.y * taille);
             window.draw(BlancTransformation);
         }
-		if (transformationNoir == BLANC)
+        if (transformationNoir == NOIR)
         {
             NoirTransformation.setPosition(transforme_noir.x * taille, transforme_noir.y * taille);
             window.draw(NoirTransformation);
         }
         if (ca_bouge == BLANC)
         {
-            deplacement.setPosition(pos.x - dx, pos.y - dy);
+            MouveImages.setPosition(pos.x - dx, pos.y - dy);
             window.draw(deplacement);
         }
-        // Cas normal
-		// On dessine la table de jeu
+        // On dessine la table de jeu
         for (int i = 0; i < LONGUEUR; i++)
         {
             for (int j = 0; j < LONGUEUR; j++)
             {
-				if (tableDeJeu[i][j] != NOIR)
+                if (tableDeJeu[i][j] != NOIR)
                 {
                     if(tableDeJeu[i][j] == PIECE_BLANC) // Si mouvement pion piece BLANC
                     {
@@ -509,10 +311,11 @@ int main(int argc, char const *argv[])
                         RoiNoir.setPosition(j * taille, i * taille);
                         window.draw(RoiNoir);
                     }
-                }
-            }
-		}
-		window.display();
-	}
-	return EXIT_SUCCESS;
+                }  
+            }       
+        }
+        window.display();       
+    }
+    return EXIT_SUCCESS;
 }
+
