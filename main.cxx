@@ -1591,7 +1591,7 @@ int RoiN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 
 //------------------------------------------Mouvement ROI Blanc Echec----------------------------//
 
-void posReineBlanc()
+void posRoiBlanc()
 {
 	for (int i = 0; i < LONGUEUR; i++)
 	{
@@ -1607,7 +1607,7 @@ void posReineBlanc()
 	}
 }
 
-//------------------------------------------Mouvement ROI Blanc Echec----------------------------//
+//------------------------------------------Mouvement ROI Noir Echec----------------------------//
 
 void posRoiNoir()
 {
@@ -1677,10 +1677,12 @@ int main(int argc, char const *argv[])
 
 	while (window.isOpen())
 	{
+
 		Vector2i pos = Mouse::getPosition(window);
 		x = pos.x / taille;
 		y = pos.y / taille;
 		Event e;
+
 		while (window.pollEvent(e))
 		{
 			if (e.type == Event::Closed)
@@ -1688,118 +1690,390 @@ int main(int argc, char const *argv[])
 				window.close();
 			}
 			window.clear();
+
+			//On detecte le mouvement CLICK sur un pion
+			if (e.type == Event::MouseButtonPressed)
+			{
+    			if (e.key.code == Mouse::Left)
+				{
+					//std::cout << "x=" << x << " y=" << y << "\n";
+					//std::cout << "pos_x=" << pos.x << " pos_y=" << pos.y << "\n";
+					//std::cout << "tableDeJeu[y][x]=" << tableDeJeu[y][x] << "\n";
+					//std::cout << "\n";
+					if (transformationBlanc	== 1)
+					{
+						if (pos.y >= transforme_blanc.y * taille && pos.y <= (transforme_blanc.y + 1) * taille && pos.x >= transforme_blanc.x * taille && pos.x <= (transforme_blanc.x + 1) * taille)
+						{
+							int posX = pos.x % 100, posY = pos.y % 100;
+							//std::cout << "pos.y=" << posY << "\n";
+							//std::cout << "pos.x=" << posX << "\n";
+							if (posX < 50 && posY < 50 && posX > 0 && posY > 0)
+							{
+								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = TOUR_BLANC;
+								transformationBlanc = 0;
+							}
+							if (posX > 50 && posX < 100 && posY < 50 && posY > 0)
+							{
+								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = REINE_BLANC;
+								transformationBlanc = 0;
+							}
+							if (posX > 50 && posX < 100 && posY>50 && posY < 100)
+							{
+								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = CHEVAL_BLANC;
+								transformationBlanc = 0;
+							}
+							if (posX < 50 && posX>0 && posY > 50 && y < 100)
+							{
+								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = FOU_BLANC;
+								transformationBlanc = 0;
+							}
+							if (transformationBlanc == 0)
+							{
+								posRoiNoir();
+								int h = RoiNEchecTest(roi_noir.x, roi_noir.y);
+								if (h == 0)
+								{
+									testNoir = 1;
+								}
+							}
+						}
+					}
+					if (transformationNoir	== 1)
+					{
+						if (pos.y >= transforme_noir.y * taille && pos.y <= (transforme_noir.y + 1) * taille && pos.x >= transforme_noir.x * taille && pos.x <= (transforme_noir.x + 1) * taille)
+						{
+							int posX = pos.x % 100, posY = pos.y % 100;
+							//std::cout << "pos.y=" << posY << "\n";
+							//std::cout << "pos.x=" << posX << "\n";
+							if (posX < 50 && posY < 50 && posX > 0 && posY > 0)
+							{
+								tableDeJeu[transforme_noir.y][transforme_noir.x] = TOUR_NOIR;
+								transformationNoir = 0;
+							}
+							if (posX > 50 && posX < 100 && posY < 50 && posY > 0)
+							{
+								tableDeJeu[transforme_noir.y][transforme_noir.x] = REINE_NOIR;
+								transformationNoir = 0;
+							}
+							if (posX > 50 && posX < 100 && posY>50 && posY < 100)
+							{
+								tableDeJeu[transforme_noir.y][transforme_noir.x] = CHEVAL_NOIR;
+								transformationNoir = 0;
+							}
+							if (posX < 50 && posX>0 && posY > 50 && y < 100)
+							{
+								tableDeJeu[transforme_noir.y][transforme_noir.x] = FOU_NOIR;
+								transformationNoir = 0;
+							}
+							if (transformationNoir == 0)
+							{
+								posRoiBlanc();
+								int h = RoiBEchecTest(roi_blanc.x, roi_blanc.y);
+								if (h == 0)
+								{
+									testBlanc = 1;
+								}
+							}
+						}
+					}
+					// On traite cas par cas selon le mouvement choisi
+					if (e.key.code == Mouse::Left)
+					{
+						// Transformation
+						//
+						if(tableDeJeu[y][x] != NOIR)
+						{
+							dx = pos.x - (x * taille);
+							dy = pos.y - (y * taille);
+						
+							if(tableDeJeu[y][x] == PIECE_BLANC && mouvement == BLANC) // Si mouvement pion piece BLANC
+							{
+								pasMouvPiece        = PIECE_BLANC; // Alors pion piece BLANC ne bouge pas
+								MouveImages         = PieceBlanc; // Le mouvement va au pion piece blanc
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if(tableDeJeu[y][x] == PIECE_NOIR && mouvement == NOIR) // Si mouvement pion piece NOIR
+							{
+								pasMouvPiece        = PIECE_NOIR; // Alors pion piece NOIR ne bouge pas
+								MouveImages         = PieceNoir; // Le mouvement va au pion piece NOIR
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if(tableDeJeu[y][x] == CHEVAL_NOIR && mouvement == NOIR) // Si mouvement pion cheval Noir
+							{
+								pasMouvPiece        = CHEVAL_NOIR; // Alors pion cheval noir ne bouge pas
+								MouveImages         = ChevalNoir; // Le mouvement va au pion cheval blanc
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if(tableDeJeu[y][x] == CHEVAL_BLANC && mouvement == BLANC) // Si mouvement pion cheval BLANC
+							{
+								pasMouvPiece        = CHEVAL_BLANC; // Alors pion cheval BLANC ne bouge pas
+								MouveImages         = ChevalBlanc; // Le mouvement va au pion cheval blanc
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if(tableDeJeu[y][x] == TOUR_BLANC && mouvement == BLANC) // Si mouvement pion tour BLANC
+							{
+								pasMouvPiece        = TOUR_BLANC; // Alors pion tour BLANC ne bouge pas
+								MouveImages         = TourBlanc; // Le mouvement va au pion tour blanc
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if(tableDeJeu[y][x] == TOUR_NOIR && mouvement == NOIR) // Si mouvement pion tour NOIR
+							{
+								pasMouvPiece        = TOUR_NOIR; // Alors pion tour NOIR ne bouge pas
+								MouveImages         = TourNoir; // Le mouvement va au pion tour NOIR
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if(tableDeJeu[y][x] == FOU_BLANC && mouvement == BLANC) // Si mouvement pion boutique NOIR
+							{
+								pasMouvPiece        = FOU_BLANC; // Alors pion boutique NOIR ne bouge pas
+								MouveImages         = FouBlanc; // Le mouvement va au pion Fou NOIR
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if(tableDeJeu[y][x] == FOU_NOIR && mouvement == NOIR) // Si mouvement pion Fou NOIR
+							{
+								pasMouvPiece        = FOU_NOIR; // Alors pion Fou NOIR ne bouge pas
+								MouveImages         = FouNoir; // Le mouvement va au pion Fou NOIR
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if(tableDeJeu[y][x] == REINE_BLANC && mouvement == BLANC) // Si mouvement pion REINE BLANC
+							{
+								pasMouvPiece        = REINE_BLANC; // Alors pion REINE BLANC ne bouge pas
+								MouveImages         = ReineBlanc; // Le mouvement va au pion REINE BLANC
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if(tableDeJeu[y][x] == REINE_NOIR && mouvement == NOIR) // Si mouvement pion REINE NOIR
+							{
+								pasMouvPiece        = REINE_NOIR; // Alors pion REINE NOIR ne bouge pas
+								MouveImages         = ReineNoir; // Le mouvement va au pion REINE NOIR
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if(tableDeJeu[y][x] == ROI_BLANC && mouvement == BLANC) // Si mouvement pion ROI BLANC
+							{
+								pasMouvPiece        = ROI_BLANC; // Alors pion ROI BLANC ne bouge pas
+								MouveImages         = RoiBlanc; // Le mouvement va au pion ROI BLANC
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if(tableDeJeu[y][x] == ROI_NOIR && mouvement == NOIR) // Si mouvement pion ROI NOIR
+							{
+								pasMouvPiece        = ROI_NOIR; // Alors pion ROI NOIR ne bouge pas
+								MouveImages         = RoiNoir; // Le mouvement va au pion ROI NOIR
+								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+							}
+							if (tableDeJeu[y][x] == ZONE_VIDE)
+							{
+								ca_bouge        = BLANC;
+								ancienne_Pos.x  = x;
+								ancienne_Pos.y  = y;
+							}                      
+						}
+					}	
+				}
+			}
+			
+			//On detecte le mouvement DECLICK sur un pion			
+			if (e.type == Event::MouseButtonReleased)
+			{
+				if (e.key.code == Mouse::Left)
+				{
+					int ok=2;
+					if (pasMouvPiece == PIECE_BLANC && ca_bouge==1)
+					{
+							ok = PieceB(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == PIECE_NOIR && ca_bouge == 1)
+					{
+						ok = PieceN(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == TOUR_BLANC && ca_bouge == 1)
+					{
+						ok = TourB(ancienne_Pos.x, ancienne_Pos.y, x, y);
+						if (ok == 1 && mouvGaucheTourBlanc==0 && ancienne_Pos.y == 7 && ancienne_Pos.x == 0)
+						{
+							mouvGaucheTourBlanc = 1;
+							//std::cout << mouvGaucheTourBlanc << "\n";
+						}
+						if (ok == 1 && mouvDroitTourBlanc==0 && ancienne_Pos.y == 7 && ancienne_Pos.x == 7)
+						{
+							mouvDroitTourBlanc = 1;
+							//std::cout << mouvDroitTourBlanc << "\n";
+						}
+					}
+					if (pasMouvPiece == TOUR_NOIR && ca_bouge == 1)
+					{
+						ok=TourN(ancienne_Pos.x, ancienne_Pos.y, x, y);
+						if (ok == 1 && mouvDroitTourNoir == 0 && ancienne_Pos.y == 0 && ancienne_Pos.x == 7)
+						{
+							mouvDroitTourNoir = 1;
+							//std::cout << mouvDroitTourNoir<< "\n";
+						}
+						if (ok == 1 && mouvGaucheTourNoir == 0 && ancienne_Pos.y == 0 && ancienne_Pos.x == 0)
+						{
+							mouvGaucheTourNoir = 1;
+							//std::cout << mouvGaucheTourNoir << "\n";
+						}
+					}
+					if (pasMouvPiece == FOU_BLANC && ca_bouge == 1)
+					{
+						ok = FouB(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == FOU_NOIR && ca_bouge == 1)
+					{
+						ok= FouN(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == REINE_BLANC && ca_bouge == 1)
+					{
+						ok=ReineB(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == REINE_NOIR && ca_bouge == 1)
+					{
+						ok=ReineN(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == CHEVAL_BLANC && ca_bouge == 1)
+					{
+						ok=ChevalB(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == CHEVAL_NOIR && ca_bouge == 1)
+					{
+						ok = ChevalN(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == ROI_NOIR && ca_bouge == 1)
+					{
+						ok=RoiN(ancienne_Pos.x, ancienne_Pos.y, x, y);
+						if (ok == 1 && RoiNoirPremierMouv == 0)
+						{
+							RoiNoirPremierMouv = 1;
+						//	std::cout << RoiNoirPremierMouv << "\n";
+						}
+					}
+					if (pasMouvPiece == ROI_BLANC && ca_bouge == 1)
+					{
+						ok=RoiB(ancienne_Pos.x, ancienne_Pos.y, x, y);
+						if (ok == 1 && RoiBlancPremierMouv == 0)
+						{
+							RoiBlancPremierMouv = 1;
+							//std::cout << "RoiBlancPremierMouv=" << RoiBlancPremierMouv << "\n";
+						}
+					}
+					if (ok == 1)
+					{
+						int nr = tableDeJeu[y][x];
+						tableDeJeu[y][x] = pasMouvPiece;
+						if (y == 0 && pasMouvPiece == PIECE_BLANC)
+						{
+							transformationBlanc = 1;
+							transforme_blanc.x = x;
+							transforme_blanc.y = y;
+							tableDeJeu[y][x] = 0;
+						}
+						if (y == 7 && pasMouvPiece == PIECE_NOIR)
+						{
+							transformationNoir = 1;
+							transforme_noir.x = x;
+							transforme_noir.y = y;
+							tableDeJeu[y][x] = 0;
+						}
+						if(mouvement==0) // blanc a bougé et noir suit
+						{
+							if (testBlanc == 1)
+							{
+								posRoiBlanc();
+								int s = RoiBEchecTest(roi_blanc.x, roi_blanc.y);
+								if (s == 0)
+								{
+									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
+									tableDeJeu[y][x] = nr;
+								}
+								else
+								{
+									testBlanc = 0;
+									posRoiNoir();
+									int sah = RoiNEchecTest(roi_noir.x,roi_noir.y);
+									if (sah == 0)
+									{
+										testNoir = 1;
+									}
+									mouvement = 1;
+								}
+							}
+							else
+							{
+								posRoiBlanc();
+								int sa = RoiBEchecTest(roi_blanc.x, roi_blanc.y);
+								if (sa == 0)
+								{
+									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
+									tableDeJeu[y][x] = nr;
+								}
+								else
+								{
+									posRoiNoir();
+									int sah = RoiNEchecTest(roi_noir.x, roi_noir.y);
+									if (sah == 0)
+									{
+										testNoir = 1;
+									}
+									mouvement = 1;
+								}
+							}
+						}
+						else // noir a bougé et blanc suit
+						{
+							if (testNoir == 1)
+							{
+								posRoiNoir();
+								int s = RoiNEchecTest(roi_noir.x,roi_noir.y);
+								if (s == 0)
+								{
+									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
+									tableDeJeu[y][x] = nr;
+								}
+								else
+								{
+									testNoir = 0;
+									posRoiBlanc();
+									int sah = RoiBEchecTest(roi_blanc.x,roi_blanc.y);
+									if (sah == 0)
+									{
+										testBlanc = 1;
+									}
+									mouvement = 0;
+								}
+							}
+							else
+							{
+								posRoiNoir();
+								int sa = RoiNEchecTest(roi_noir.x, roi_noir.y);
+								if (sa == 0)
+								{
+									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
+									tableDeJeu[y][x] = nr;
+								}
+								else
+								{
+									posRoiBlanc();
+									int sah = RoiBEchecTest(roi_blanc.x, roi_blanc.y);
+									if (sah == 0)
+									{
+										testBlanc = 1;
+									}
+									mouvement = 0;
+								}
+							}
+						}
+					}
+					else if(ok==0)
+					{
+						tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
+					}
+					ca_bouge = 0;
+				}
+			}
+
 		}
 		// Affichage
 		window.clear();
 		window.draw(Tableau);
         //---------------------------------------------------------
-        //On detecte le mouvement 
-        if (e.type == Event::MouseButtonPressed)
-        {
-            // On traite cas par cas selon le mouvement choisi
-            if (e.key.code == Mouse::Left)
-            {
-                // Transformation
 
-                //
-                if(tableDeJeu[y][x] != NOIR)
-                {
-                    dx = pos.x - (x * taille);
-                    dy = pos.y - (y * taille);
-                    
-                    if(tableDeJeu[y][x] == PIECE_BLANC && mouvement == BLANC) // Si mouvement pion piece BLANC
-                    {
-                        pasMouvPiece        = PIECE_BLANC; // Alors pion piece BLANC ne bouge pas
-                        MouveImages         = PieceBlanc; // Le mouvement va au pion piece blanc
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if(tableDeJeu[y][x] == PIECE_NOIR && mouvement == NOIR) // Si mouvement pion piece NOIR
-                    {
-                        pasMouvPiece        = PIECE_NOIR; // Alors pion piece NOIR ne bouge pas
-                        MouveImages         = PieceNoir; // Le mouvement va au pion piece NOIR
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if(tableDeJeu[y][x] == CHEVAL_NOIR && mouvement == NOIR) // Si mouvement pion cheval Noir
-                    {
-                        pasMouvPiece        = CHEVAL_NOIR; // Alors pion cheval noir ne bouge pas
-                        MouveImages         = ChevalNoir; // Le mouvement va au pion cheval blanc
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if(tableDeJeu[y][x] == CHEVAL_BLANC && mouvement == BLANC) // Si mouvement pion cheval BLANC
-                    {
-                        pasMouvPiece        = CHEVAL_BLANC; // Alors pion cheval BLANC ne bouge pas
-                        MouveImages         = ChevalBlanc; // Le mouvement va au pion cheval blanc
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if(tableDeJeu[y][x] == TOUR_BLANC && mouvement == BLANC) // Si mouvement pion tour BLANC
-                    {
-                        pasMouvPiece        = TOUR_BLANC; // Alors pion tour BLANC ne bouge pas
-                        MouveImages         = TourBlanc; // Le mouvement va au pion tour blanc
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if(tableDeJeu[y][x] == TOUR_NOIR && mouvement == NOIR) // Si mouvement pion tour NOIR
-                    {
-                        pasMouvPiece        = TOUR_NOIR; // Alors pion tour NOIR ne bouge pas
-                        MouveImages         = TourNoir; // Le mouvement va au pion tour NOIR
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if(tableDeJeu[y][x] == FOU_BLANC && mouvement == BLANC) // Si mouvement pion boutique NOIR
-                    {
-                        pasMouvPiece        = FOU_BLANC; // Alors pion boutique NOIR ne bouge pas
-                        MouveImages         = FouBlanc; // Le mouvement va au pion Fou NOIR
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if(tableDeJeu[y][x] == FOU_NOIR && mouvement == NOIR) // Si mouvement pion Fou NOIR
-                    {
-                        pasMouvPiece        = FOU_NOIR; // Alors pion Fou NOIR ne bouge pas
-                        MouveImages         = FouNoir; // Le mouvement va au pion Fou NOIR
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if(tableDeJeu[y][x] == REINE_BLANC && mouvement == BLANC) // Si mouvement pion REINE BLANC
-                    {
-                        pasMouvPiece        = REINE_BLANC; // Alors pion REINE BLANC ne bouge pas
-                        MouveImages         = ReineBlanc; // Le mouvement va au pion REINE BLANC
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if(tableDeJeu[y][x] == REINE_NOIR && mouvement == NOIR) // Si mouvement pion REINE NOIR
-                    {
-                        pasMouvPiece        = REINE_NOIR; // Alors pion REINE NOIR ne bouge pas
-                        MouveImages         = ReineNoir; // Le mouvement va au pion REINE NOIR
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if(tableDeJeu[y][x] == ROI_BLANC && mouvement == BLANC) // Si mouvement pion ROI BLANC
-                    {
-                        pasMouvPiece        = ROI_BLANC; // Alors pion ROI BLANC ne bouge pas
-                        MouveImages         = RoiBlanc; // Le mouvement va au pion ROI BLANC
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if(tableDeJeu[y][x] == ROI_NOIR && mouvement == NOIR) // Si mouvement pion ROI NOIR
-                    {
-                        pasMouvPiece        = ROI_NOIR; // Alors pion ROI NOIR ne bouge pas
-                        MouveImages         = RoiNoir; // Le mouvement va au pion ROI NOIR
-                        tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
-                    }
-                    if (tableDeJeu[y][x] == ZONE_VIDE)
-                    {
-                        ca_bouge        = BLANC;
-                        ancienne_Pos.x  = x;
-                        ancienne_Pos.y  = y;
-                    }                      
-                }
-            }
-        }
-        if (e.type == Event::MouseButtonReleased)
-        {
-            if (e.key.code == Mouse::Left)
-            {
-                int ok;
-                // Mouvement de pièce
-
-                //
-
-            }
-        }
-    
         // Cas particulier de Dame
         if (transformationBlanc == BLANC)
         {
