@@ -2,21 +2,18 @@
 #include <iostream>
 
 #define LONGUEUR 8
-#define PIECE_BLANC -1
-#define PIECE_NOIR 1
-#define TOUR_BLANC -2
-#define TOUR_NOIR 2
-#define CHEVAL_BLANC -3
-#define CHEVAL_NOIR 3
-#define FOU_BLANC -4
-#define FOU_NOIR 4
-#define REINE_BLANC -5
-#define REINE_NOIR 5
-#define ROI_BLANC -6
-#define ROI_NOIR 6
-#define BLANC 1
-#define NOIR 0
-#define ZONE_VIDE 0
+#define PIECE_BLANC 1
+#define PIECE_NOIR -1
+#define TOUR_BLANC 2
+#define TOUR_NOIR -2
+#define CHEVAL_BLANC 3
+#define CHEVAL_NOIR -3
+#define FOU_BLANC 4
+#define FOU_NOIR -4
+#define REINE_BLANC 5
+#define REINE_NOIR -5
+#define ROI_BLANC 6
+#define ROI_NOIR -6
 
 using namespace sf; 
 
@@ -42,7 +39,7 @@ int tableDeJeu[LONGUEUR][LONGUEUR]=
 int mouvDroitTourBlanc = 0, mouvGaucheTourBlanc = 0, RoiBlancPremierMouv = 0;
 int mouvDroitTourNoir = 0, mouvGaucheTourNoir = 0, RoiNoirPremierMouv = 0;
 
-int mouvement = 0, x, y; // 1 -> Mouvement Blanc 0 -> Mouvement Noir
+int mouvement = 0, x, y; // 0 -> Mouvement Blanc 1 -> Mouvement Noir
 
 int testBlanc = 0, testNoir = 0;
 
@@ -61,25 +58,24 @@ int PieceB(int ancienX, int ancienY, int nouveauX, int nouveauY)
     if (ancienne_Pos.y == 6)
     {
         if ( ( nouveauY == ancienY - 1 && nouveauX == ancienX && tableDeJeu[ancienY - 1][ancienX] == 0 ) ||
-             ( nouveauY == ancienY - 2 && nouveauX == ancienX && tableDeJeu[ancienY - 1][ancienX] == BLANC && tableDeJeu[ancienY - 2][ancienX] == 0 )
-            )
+             ( nouveauY == ancienY - 2 && nouveauX == ancienX && tableDeJeu[ancienY - 1][ancienX] == 0 && tableDeJeu[ancienY - 2][ancienX] == 0 ))
         {
-            return NOIR;
-        }
-        else if ( nouveauY == ancienY - 1 && nouveauX == ancienX && tableDeJeu[ancienY - 1][ancienX] == 0 )
-            {
-                return NOIR;
-            }
-        else if ( (tableDeJeu[ancienY - 1][ancienX - 1] > 0) && ( nouveauY == ancienY - 1 && nouveauX == ancienX -1 ))
-        {
-            return BLANC;
-        }
-        if ( (tableDeJeu[ancienY -1][ancienX + 1] > 0) && ( nouveauY == ancienY - 1 && nouveauX == nouveauX + 1))
-        {
-            return NOIR; 
-        } 
+            return 1;
+		}
+    }    
+	else if ( nouveauY == ancienY - 1 && nouveauX == ancienX && tableDeJeu[ancienY - 1][ancienX] == 0 )
+    {
+        return 1;
     }
-    return BLANC;
+	if ( (tableDeJeu[ancienY - 1][ancienX - 1] > 0) && ( nouveauY == ancienY - 1 && nouveauX == ancienX -1 ))
+	{
+		return 1;
+	}
+	if ( (tableDeJeu[ancienY -1][ancienX + 1] > 0) && ( nouveauY == ancienY - 1 && nouveauX == nouveauX + 1))
+	{
+		return 1; 
+	}
+    return 0;
 }
 
 //------------------------------------------Mouvement Pièce Noir----------------------------//
@@ -89,25 +85,25 @@ int PieceN(int ancienX, int ancienY, int nouveauX, int nouveauY)
     if (ancienne_Pos.y == 6)
     {
         if ( ( nouveauY == ancienY + 1 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == 0 ) ||
-             ( nouveauY == ancienY + 2 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == BLANC && tableDeJeu[ancienY + 2][ancienX] == 0 )
+             ( nouveauY == ancienY + 2 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == 1 && tableDeJeu[ancienY + 2][ancienX] == 0 )
             )
         {
-            return NOIR;
+            return 1;
         }
         else if ( nouveauY == ancienY + 1 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == 0 )
             {
-                return NOIR;
+                return 1;
             }
         else if ( (tableDeJeu[ancienY + 1][ancienX + 1] < 0) && ( nouveauY == ancienY + 1 && nouveauX == ancienX +1 ))
         {
-            return BLANC;
+            return 0;
         }
         if ( (tableDeJeu[ancienY +1][ancienX + 1] < 0) && ( nouveauY == ancienY + 1 && nouveauX == nouveauX + 1))
         {
-            return NOIR; 
+            return 1; 
         } 
     }
-    return BLANC;
+    return 0;
 }
 
 //------------------------------------------Mouvement Tour Blanc----------------------------//
@@ -118,7 +114,7 @@ int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ( tableDeJeu[ancienY][i] >= 0 && ( nouveauX == i && nouveauY == ancienY ) )
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[ancienY][i] != 0)
         {
@@ -129,7 +125,7 @@ int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ( tableDeJeu[i][ancienX] >= 0 && ( nouveauX == ancienX && nouveauY == i ) )
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][ancienX] != 0)
         {
@@ -140,7 +136,7 @@ int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ( (tableDeJeu[ancienY][i] >= 0) && (nouveauY == ancienY && nouveauX ==i) )
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[ancienY][i] != 0)
         {
@@ -151,14 +147,14 @@ int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ( (tableDeJeu[i][ancienX] >= 0) && (nouveauY == 1 && nouveauX == ancienX) )
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][ancienX] != 0)
         {
             break;
         }
     }    
-    return  BLANC;
+    return 0;
 }
 
 //------------------------------------------Mouvement Tour Blanc----------------------------//
@@ -169,7 +165,7 @@ int TourN(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ( tableDeJeu[ancienY][i] <= 0 && ( nouveauX == i && nouveauY == ancienY ) )
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[ancienY][i] != 0)
         {
@@ -180,7 +176,7 @@ int TourN(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ( tableDeJeu[i][ancienX] <= 0 && ( nouveauX == ancienX && nouveauY == i ) )
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][ancienX] != 0)
         {
@@ -191,7 +187,7 @@ int TourN(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ( (tableDeJeu[ancienY][i] <= 0) && (nouveauY == ancienY && nouveauX ==i) )
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[ancienY][i] != 0)
         {
@@ -202,14 +198,14 @@ int TourN(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ( (tableDeJeu[i][ancienX] <= 0) && (nouveauY == 1 && nouveauX == ancienX) )
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][ancienX] != 0)
         {
             break;
         }
     }    
-    return  BLANC;
+    return 0;
 }
 
 //------------------------------------------Mouvement Fou Blanc----------------------------//
@@ -221,7 +217,7 @@ int FouB(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ((tableDeJeu[i][j] >= 0) && (nouveauY == 1 && nouveauX == j))
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][j] != 0)
         {
@@ -234,7 +230,7 @@ int FouB(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ((tableDeJeu[i][j] >= 0) && (nouveauY == 1 && nouveauX == j))
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][j] != 0)
         {
@@ -247,7 +243,7 @@ int FouB(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ((tableDeJeu[i][j] >= 0) && (nouveauY == 1 && nouveauX == j))
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][j] != 0)
         {
@@ -260,7 +256,7 @@ int FouB(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ((tableDeJeu[i][j] >= 0) && (nouveauY == 1 && nouveauX == j))
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][j] != 0)
         {
@@ -268,7 +264,7 @@ int FouB(int ancienX, int ancienY, int nouveauX, int nouveauY)
         }
         j--;
     }
-    return  BLANC;
+    return 0;
 }
 
 //------------------------------------------Mouvement Fou Blanc----------------------------//
@@ -280,7 +276,7 @@ int FouN(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ((tableDeJeu[i][j] <= 0) && (nouveauY == 1 && nouveauX == j))
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][j] != 0)
         {
@@ -293,7 +289,7 @@ int FouN(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ((tableDeJeu[i][j] <= 0) && (nouveauY == 1 && nouveauX == j))
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][j] != 0)
         {
@@ -306,7 +302,7 @@ int FouN(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ((tableDeJeu[i][j] <= 0) && (nouveauY == 1 && nouveauX == j))
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][j] != 0)
         {
@@ -319,7 +315,7 @@ int FouN(int ancienX, int ancienY, int nouveauX, int nouveauY)
     {
         if ((tableDeJeu[i][j] <= 0) && (nouveauY == 1 && nouveauX == j))
         {
-            return NOIR;
+            return 1;
         }
         else if ( tableDeJeu[i][j] != 0)
         {
@@ -327,7 +323,7 @@ int FouN(int ancienX, int ancienY, int nouveauX, int nouveauY)
         }
         j--;
     }
-    return  BLANC;
+    return 0;
 }
 
 //------------------------------------------Mouvement Reine Blanc----------------------------//
@@ -338,7 +334,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[ancienY][i] >= 0 && (nouveauX == i && nouveauY == ancienY))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[ancienY][i] != 0)
 		{
@@ -349,7 +345,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][ancienX] >= 0 && (nouveauY == i && nouveauX == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][ancienX] != 0)
 		{
@@ -360,7 +356,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[ancienY][i] >= 0 && (nouveauY == ancienY && nouveauX == i))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[ancienY][i] != 0)
 		{
@@ -371,7 +367,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][ancienX] >= 0 && (nouveauY == i && nouveauX == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][ancienX] != 0)
 		{
@@ -383,7 +379,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][j] >= 0 && (nouveauY == i && nouveauX == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -396,7 +392,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][j] >= 0 && (nouveauY == i && nouveauX == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -409,7 +405,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][j] >= 0 && (nouveauY == i && nouveauX == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -422,7 +418,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][j] >= 0 && (nouveauY == i && nouveauX == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -430,7 +426,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		}
 		j++;
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement Reine Blanc----------------------------//
@@ -441,7 +437,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[ancienY][i] <= 0 && (nouveauX == i && nouveauY == ancienY))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[ancienY][i] != 0)
 		{
@@ -452,7 +448,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][ancienX] <= 0 && (nouveauY == i && nouveauX == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][ancienX] != 0)
 		{
@@ -463,7 +459,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[ancienY][i] <= 0 && (nouveauY == ancienY && nouveauX == i))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[ancienY][i] != 0)
 		{
@@ -474,7 +470,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][ancienX] <= 0 && (nouveauY == i && nouveauX == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][ancienX] != 0)
 		{
@@ -486,7 +482,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][j] <= 0 && (nouveauY == i && nouveauX == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -499,7 +495,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][j] <= 0 && (nouveauY == i && nouveauX == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -512,7 +508,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][j] <= 0 && (nouveauY == i && nouveauX == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -525,7 +521,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		if (tableDeJeu[i][j] <= 0 && (nouveauY == i && nouveauX == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -533,7 +529,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		}
 		j++;
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement Cheval Blanc----------------------------//
@@ -542,37 +538,37 @@ int ChevalB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 {
 	if (ancienY - 2 >= 0 && ancienX - 1 >= 0 && nouveauY == ancienY - 2 && nouveauX == ancienX - 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
 	{
-		return NOIR; // Haut gauche
+		return 1; // Haut gauche
 	}
 	if (ancienY - 2 >= 0 && ancienX + 1 <LONGUEUR && nouveauY == ancienY - 2 && nouveauX == ancienX + 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
 	{
-		return NOIR; // Haut droite
+		return 1; // Haut droite
 	}
 	if (ancienY - 1 >= 0 && ancienX + 2 < LONGUEUR && nouveauY==ancienY-1 && nouveauX==ancienX+2 && tableDeJeu[nouveauY][nouveauX]>=0)
 	{
-		return NOIR; // droite 1
+		return 1; // droite 1
 	}
 	if (ancienY + 1 >= 0 && ancienX + 2 < LONGUEUR && nouveauY == ancienY + 1 && nouveauX == ancienX + 2 && tableDeJeu[nouveauY][nouveauX] >= 0)
 	{
-		return NOIR; // droite 2
+		return 1; // droite 2
 	}
 	if (ancienY+2<LONGUEUR && ancienX+1<LONGUEUR && nouveauY==ancienY+2 && nouveauX==ancienX+1 && tableDeJeu[nouveauY][nouveauX]>=0)
 	{
-		return NOIR; // jos 1
+		return 1; // jos 1
 	}
 	if (ancienY + 2 < LONGUEUR && ancienX - 1 >= 0 && nouveauY == ancienY + 2 && nouveauX == ancienX - 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
 	{
-		return NOIR; //jos 2
+		return 1; //jos 2
 	}
 	if (ancienY+1<LONGUEUR && ancienX-2>=0 && nouveauY==ancienY+1 && nouveauX==ancienX-2 && tableDeJeu[nouveauY][nouveauX]>=0 )
 	{
-		return NOIR; // stanga 1
+		return 1; // stanga 1
 	}
 	if (ancienY - 1 >= 0 && ancienX - 2 >= 0 && nouveauY == ancienY - 1 && nouveauX == ancienX - 2 && tableDeJeu[nouveauY][nouveauX] >= 0)
 	{
-		return NOIR;
+		return 1;
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement Cheval Blanc----------------------------//
@@ -581,37 +577,37 @@ int ChevalN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 {
 	if (ancienY - 2 >= 0 && ancienX - 1 >= 0 && nouveauY == ancienY - 2 && nouveauX == ancienX - 1 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
-		return NOIR; // Haut gauche
+		return 1; // Haut gauche
 	}
 	if (ancienY - 2 >= 0 && ancienX + 1 < LONGUEUR && nouveauY == ancienY - 2 && nouveauX == ancienX + 1 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
-		return NOIR; // Haut droite
+		return 1; // Haut droite
 	}
 	if (ancienY - 1 >= 0 && ancienX + 2 < LONGUEUR && nouveauY == ancienY - 1 && nouveauX == ancienX + 2 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
-		return NOIR; // droite 1
+		return 1; // droite 1
 	}
 	if (ancienY + 1 >= 0 && ancienX + 2 < LONGUEUR && nouveauY == ancienY + 1 && nouveauX == ancienX + 2 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
-		return NOIR; // droite 2
+		return 1; // droite 2
 	}
 	if (ancienY + 2 < LONGUEUR && ancienX + 1 < LONGUEUR && nouveauY == ancienY + 2 && nouveauX == ancienX + 1 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
-		return NOIR; // jos 1
+		return 1; // jos 1
 	}
 	if (ancienY + 2 < LONGUEUR && ancienX - 1 >= 0 && nouveauY == ancienY + 2 && nouveauX == ancienX - 1 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
-		return NOIR; //jos 2
+		return 1; //jos 2
 	}
 	if (ancienY + 1 < LONGUEUR && ancienX - 2 >= 0 && nouveauY == ancienY + 1 && nouveauX == ancienX - 2 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
-		return NOIR; // stanga 1
+		return 1; // stanga 1
 	}
 	if (ancienY - 1 >= 0 && ancienX - 2 >= 0 && nouveauY == ancienY - 1 && nouveauX == ancienX - 2 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
-		return NOIR;
+		return 1;
 	}
-	return BLANC;
+	return 0;
 }
 
 //===============================================================================================//
@@ -627,17 +623,17 @@ int PieceBEchec(int pos_x, int pos_y, int roi_x, int roi_y)
 	{
 		if (pos_y - 1 == roi_y && pos_x - 1 == roi_x)
 		{
-			return NOIR;
+			return 1;
 		}
 	}
 	if (tableDeJeu[pos_y - 1][pos_x + 1] >= 0)
 	{
 		if (pos_y - 1 == roi_y && pos_x + 1==roi_x)
 		{
-			return NOIR;
+			return 1;
 		}
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement Tour Blanc Echec----------------------------//
@@ -648,7 +644,7 @@ int TourBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[ancienY][i] >= 0 && (roi_x== i && roi_y == ancienY))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[ancienY][i] != 0)
 		{
@@ -659,7 +655,7 @@ int TourBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][ancienX] >= 0 && (roi_y == i && roi_x == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[i][ancienX] != 0)
 		{
@@ -670,7 +666,7 @@ int TourBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[ancienY][i] >= 0 && (roi_y == ancienY && roi_x == i))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[ancienY][i] != 0)
 		{
@@ -681,14 +677,14 @@ int TourBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][ancienX] >= 0 && (roi_y == i && roi_x == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[i][ancienX] != 0)
 		{
 			break;
 		}
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement Fou Blanc Echec----------------------------//
@@ -700,7 +696,7 @@ int FouBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] >= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[i][j] != 0)
 		{
@@ -713,7 +709,7 @@ int FouBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] >= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[i][j] != 0)
 		{
@@ -726,7 +722,7 @@ int FouBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] >= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -739,7 +735,7 @@ int FouBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] >= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -747,7 +743,7 @@ int FouBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 		}
 		j++;
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement Reine Blanc Echec---------------------------//
@@ -758,7 +754,7 @@ int ReineBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[ancienY][i] >= 0 && (roi_x == i && roi_y == ancienY))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[ancienY][i] != 0)
 		{
@@ -769,7 +765,7 @@ int ReineBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][ancienX] >= 0 && (roi_y == i && roi_x == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[i][ancienX] != 0)
 		{
@@ -780,7 +776,7 @@ int ReineBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[ancienY][i] >= 0 && (roi_y == ancienY && roi_x == i))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[ancienY][i] != 0)
 		{
@@ -791,7 +787,7 @@ int ReineBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][ancienX] >= 0 && (roi_y == i && roi_x == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[i][ancienX] != 0)
 		{
@@ -803,7 +799,7 @@ int ReineBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] >= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[i][j] != 0)
 		{
@@ -816,7 +812,7 @@ int ReineBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] >= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -829,7 +825,7 @@ int ReineBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] >= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[i][j] != 0)
 		{
@@ -842,7 +838,7 @@ int ReineBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] >= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if(tableDeJeu[i][j] != 0)
 		{
@@ -850,7 +846,7 @@ int ReineBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 		}
 		j++;
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement Cheval Blanc Echec--------------------------//
@@ -859,37 +855,37 @@ int ChevalBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 {
 	if (ancienY - 2 >= 0 && ancienX - 1 >= 0 && roi_y == ancienY - 2 && roi_x == ancienX - 1 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR; // gauche haut
+		return 1; // gauche haut
 	}
 	if (ancienY - 2 >= 0 && ancienX + 1 < LONGUEUR && roi_y == ancienY - 2 && roi_x == ancienX + 1 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR; // droit haut
+		return 1; // droit haut
 	}
 	if (ancienY - 1 >= 0 && ancienX + 2 < LONGUEUR && roi_y == ancienY - 1 && roi_x == ancienX + 2 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR; // droit 1
+		return 1; // droit 1
 	}
 	if (ancienY + 1 >= 0 && ancienX + 2 < LONGUEUR && roi_y == ancienY + 1 && roi_x == ancienX + 2 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR; // droit 2
+		return 1; // droit 2
 	}
 	if (ancienY + 2 < LONGUEUR && ancienX + 1 < LONGUEUR && roi_y == ancienY + 2 && roi_x == ancienX + 1 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR; // bas 1
+		return 1; // bas 1
 	}
 	if (ancienY + 2 < LONGUEUR && ancienX - 1 >= 0 && roi_y == ancienY + 2 && roi_x == ancienX - 1 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR; //bas 2
+		return 1; //bas 2
 	}
 	if (ancienY + 1 < LONGUEUR && ancienX - 2 >= 0 && roi_y == ancienY + 1 && roi_x == ancienX - 2 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR; // gauche 1
+		return 1; // gauche 1
 	}
 	if (ancienY - 1 >= 0 && ancienX - 2 >= 0 && roi_y == ancienY - 1 && roi_x == ancienX - 2 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR;
+		return 1;
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement ROI Blanc Echec----------------------------//
@@ -898,37 +894,37 @@ int RoiBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 {
 	if (ancienX - 1 >= 0 && ancienY - 1 >= 0 && roi_y == ancienY - 1 && roi_x == ancienX - 1 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienY - 1 >= 0 && roi_x == ancienX && roi_y == ancienY - 1 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienY - 1 >= 0 && ancienX + 1 < LONGUEUR && roi_x == ancienX + 1 && roi_y == ancienY - 1 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienX + 1 < LONGUEUR && roi_y == ancienY && roi_x == ancienX + 1 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienX + 1 < LONGUEUR && ancienY + 1 < LONGUEUR && roi_y == ancienY + 1 && roi_x == ancienX + 1 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienY + 1 < LONGUEUR && roi_y == ancienY + 1 && roi_x == ancienX && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienX - 1 >= 0 && ancienY + 1 < LONGUEUR && roi_x == ancienX - 1 && roi_y == ancienY + 1 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienX - 1 >= 0 && roi_y == ancienY && roi_x == ancienX - 1 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR;
+		return 1;
 	}
-	return BLANC;
+	return 0;
 }
 
 //===============================================================================================//
@@ -944,17 +940,17 @@ int PieceNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (roi_y == ancienY + 1 && roi_x == ancienX - 1)
 		{
-			return NOIR;
+			return 1;
 		}
 	}
 	if (tableDeJeu[ancienY + 1][ancienX + 1] <= 0)
 	{
 		if (roi_y == ancienY + 1 && roi_x == ancienX + 1)
 		{
-			return NOIR;
+			return 1;
 		}
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement Tour Noir Echec----------------------------//
@@ -965,7 +961,7 @@ int TourNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[ancienY][i] <= 0 && (roi_x == i && roi_y == ancienY))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[ancienY][i] != 0)
 		{
@@ -976,7 +972,7 @@ int TourNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][ancienX] <= 0 && (roi_y == i && roi_x == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][ancienX] != 0)
 		{
@@ -987,7 +983,7 @@ int TourNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[ancienY][i] <= 0 && (roi_y == ancienY && roi_x == i))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[ancienY][i] != 0)
 		{
@@ -998,14 +994,14 @@ int TourNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][ancienX] <= 0 && (roi_y == i && roi_x == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][ancienX] != 0)
 		{
 			break;
 		}
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement ROI Noir Echec----------------------------//
@@ -1017,7 +1013,7 @@ int FouNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] <= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -1030,7 +1026,7 @@ int FouNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] <= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -1043,7 +1039,7 @@ int FouNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] <= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -1056,7 +1052,7 @@ int FouNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] <= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -1064,7 +1060,7 @@ int FouNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 		}
 		j++;
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement Reine Noir Echec----------------------------//
@@ -1075,7 +1071,7 @@ int ReineNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[ancienY][i] <= 0 && (roi_x == i && roi_y == ancienY))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[ancienY][i] != 0)
 		{
@@ -1086,7 +1082,7 @@ int ReineNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][ancienX] <= 0 && (roi_y == i && roi_x == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][ancienX] != 0)
 		{
@@ -1097,7 +1093,7 @@ int ReineNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[ancienY][i] <= 0 && (roi_y == ancienY && roi_x == i))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[ancienY][i] != 0)
 		{
@@ -1108,7 +1104,7 @@ int ReineNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][ancienX] <= 0 && (roi_y == i && roi_x == ancienX))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][ancienX] != 0)
 		{
@@ -1120,7 +1116,7 @@ int ReineNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] <= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -1133,7 +1129,7 @@ int ReineNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] <= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -1146,7 +1142,7 @@ int ReineNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] <= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -1159,7 +1155,7 @@ int ReineNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 	{
 		if (tableDeJeu[i][j] <= 0 && (roi_y == i && roi_x == j))
 		{
-			return NOIR;
+			return 1;
 		}
 		else if (tableDeJeu[i][j] != 0)
 		{
@@ -1167,7 +1163,7 @@ int ReineNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 		}
 		j++;
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement ROI Blanc Echec----------------------------//
@@ -1176,37 +1172,37 @@ int ChevalNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 {
 	if (ancienY - 2 >= 0 && ancienX - 1 >= 0 && roi_y == ancienY - 2 && roi_x == ancienX - 1 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR; // gauche haut
+		return 1; // gauche haut
 	}
 	if (ancienY - 2 >= 0 && ancienX + 1 < LONGUEUR && roi_y == ancienY - 2 && roi_x == ancienX + 1 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR; // droit haut
+		return 1; // droit haut
 	}
 	if (ancienY - 1 >= 0 && ancienX + 2 < LONGUEUR && roi_y == ancienY - 1 && roi_x == ancienX + 2 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR; // droit 1
+		return 1; // droit 1
 	}
 	if (ancienY + 1 >= 0 && ancienX + 2 < LONGUEUR && roi_y == ancienY + 1 && roi_x == ancienX + 2 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR; // droit 2
+		return 1; // droit 2
 	}
 	if (ancienY + 2 < LONGUEUR && ancienX + 1 < LONGUEUR && roi_y == ancienY + 2 && roi_x == ancienX + 1 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR; // bas 1
+		return 1; // bas 1
 	}
 	if (ancienY + 2 < LONGUEUR && ancienX - 1 >= 0 && roi_y == ancienY + 2 && roi_x == ancienX - 1 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR; //bas 2
+		return 1; //bas 2
 	}
 	if (ancienY + 1 < LONGUEUR && ancienX - 2 >= 0 && roi_y == ancienY + 1 && roi_x == ancienX - 2 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR; // gauche 1
+		return 1; // gauche 1
 	}
 	if (ancienY - 1 >= 0 && ancienX - 2 >= 0 && roi_y == ancienY - 1 && roi_x == ancienX - 2 && tableDeJeu[roi_y][roi_x] <= 0)
 	{
-		return NOIR;
+		return 1;
 	}
-	return BLANC;
+	return 0;
 }
 
 //------------------------------------------Mouvement ROI Noir Echec----------------------------//
@@ -1215,37 +1211,37 @@ int RoiNEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 {
 	if (ancienX - 1 >= 0 && ancienY - 1 >= 0 && roi_y == ancienY - 1 && roi_x == ancienX - 1 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienY - 1 >= 0 && roi_x == ancienX && roi_y == ancienY - 1 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienY - 1 >= 0 && ancienX + 1 < LONGUEUR && roi_x == ancienX + 1 && roi_y == ancienY - 1 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienX + 1 < LONGUEUR && roi_y == ancienY && roi_x == ancienX + 1 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienX + 1 < LONGUEUR && ancienY + 1 < LONGUEUR && roi_y == ancienY + 1 && roi_x == ancienX + 1 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienY + 1 < LONGUEUR && roi_y == ancienY + 1 && roi_x == ancienX && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienX - 1 >= 0 && ancienY + 1 < LONGUEUR && roi_x == ancienX - 1 && roi_y == ancienY + 1 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR;
+		return 1;
 	}
 	if (ancienX - 1 >= 0 && roi_y == ancienY && roi_x == ancienX - 1 && tableDeJeu[roi_y][roi_x] >= 0)
 	{
-		return NOIR;
+		return 1;
 	}
-	return BLANC;
+	return 0;
 }
 
 //===============================================================================================//
@@ -1290,12 +1286,12 @@ int RoiBEchecTest(int posRoiX, int posRoiY)
 				}
 				if (ok == 1)
 				{
-					return 0;
+					return 1;
 				}
 			}
 		}
 	}
-	return 1;
+	return 0;
 }
 
 //-----------------------------------Mouvement Roi Blanc----------------------------------------//
@@ -1307,7 +1303,7 @@ int RoiB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiBEchecTest(ancienX - 1, ancienY - 1);
 		if (ok == 1)
 		{
-			return 1;  // Gauche haut
+			return 0;  // Gauche haut
 		}
 	}
 	if (ancienY - 1 >= 0 && nouveauX == ancienX && nouveauY == ancienY - 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
@@ -1315,7 +1311,7 @@ int RoiB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiBEchecTest(ancienX, ancienY - 1);
 		if (ok == 1)
 		{
-			return 1; // haut
+			return 0; // haut
 		}
 	}
 	if (ancienY - 1 >= 0 && ancienX + 1 < LONGUEUR && nouveauX == ancienX + 1 && nouveauY == ancienY - 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
@@ -1323,7 +1319,7 @@ int RoiB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiBEchecTest(ancienX + 1, ancienY - 1);
 		if (ok == 1)
 		{
-			return 1; // Droit haut
+			return 0; // Droit haut
 		}
 	}
 	if (ancienX + 1 < LONGUEUR && nouveauY == ancienY && nouveauX == ancienX + 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
@@ -1331,7 +1327,7 @@ int RoiB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiBEchecTest(ancienX + 1, ancienY);
 		if (ok == 1)
 		{
-			return 1; // Droit
+			return 0; // Droit
 		}
 	}
 	if (ancienX + 1 < LONGUEUR && ancienY + 1 < LONGUEUR && nouveauY == ancienY + 1 && nouveauX == ancienX + 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
@@ -1339,7 +1335,7 @@ int RoiB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiBEchecTest(ancienX + 1, ancienY + 1);
 		if (ok == 1)
 		{
-			return 1; // Droit bas
+			return 0; // Droit bas
 		}
 	}
 	if (ancienY + 1 < LONGUEUR && nouveauY == ancienY + 1 && nouveauX == ancienX && tableDeJeu[nouveauY][nouveauX] >= 0)
@@ -1347,7 +1343,7 @@ int RoiB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiBEchecTest(ancienX, ancienY + 1);
 		if (ok == 1)
 		{
-			return 1; // bas
+			return 0; // bas
 		}
 	}
 	if (ancienX - 1 >= 0 && ancienY + 1 < LONGUEUR && nouveauX == ancienX - 1 && nouveauY == ancienY + 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
@@ -1355,7 +1351,7 @@ int RoiB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiBEchecTest(ancienX - 1, ancienY + 1);
 		if (ok == 1)
 		{
-			return 1; // Gauche bas
+			return 0; // Gauche bas
 		}
 	}
 	if (ancienX - 1 >= 0 && nouveauY == ancienY && nouveauX == ancienX - 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
@@ -1363,7 +1359,7 @@ int RoiB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiBEchecTest(ancienX - 1, ancienY);
 		if (ok == 1)
 		{
-			return 1; // Gauche
+			return 0; // Gauche
 		}
 	}
 	// Tourner à Droit
@@ -1383,7 +1379,7 @@ int RoiB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 					tableDeJeu[7][5] = TOUR_BLANC;
 					RoiBlancPremierMouv = 1;
 					mouvDroitTourBlanc = 1;
-					return 1;
+					return 0;
 				}
 			}
 		}
@@ -1408,13 +1404,13 @@ int RoiB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 						tableDeJeu[7][3] = TOUR_BLANC;
 						RoiBlancPremierMouv = 1;
 						mouvGaucheTourBlanc = 1;
-						return 1;
+						return 0;
 					}
 				}
 			}
 		}
 	}
-	return 0;
+	return 1;
 }
 
 
@@ -1460,12 +1456,12 @@ int RoiNEchecTest(int posRoiX, int posRoiY)
 				}
 				if (ok == 1)
 				{
-					return 0;
+					return 1;
 				}
 			}
 		}
 	}
-	return 1;
+	return 0;
 }
 
 //-----------------------------------Mouvement Roi Noir----------------------------------------//
@@ -1477,7 +1473,7 @@ int RoiN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiNEchecTest(ancienX - 1, ancienY - 1);
 		if (ok == 1)
 		{
-			return 1;  // Gauche haut
+			return 0;  // Gauche haut
 		}
 	}
 	if (ancienY - 1 >= 0 && nouveauX == ancienX && nouveauY == ancienY-1 && tableDeJeu[nouveauY][nouveauX] <= 0)
@@ -1485,7 +1481,7 @@ int RoiN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiNEchecTest(ancienX, ancienY-1);
 		if (ok == 1)
 		{
-			return 1; // haut
+			return 0; // haut
 		}
 	}
 	if (ancienY - 1 >= 0 && ancienX + 1 < LONGUEUR && nouveauX == ancienX + 1 && nouveauY == ancienY - 1 && tableDeJeu[nouveauY][nouveauX] <= 0)
@@ -1493,7 +1489,7 @@ int RoiN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiNEchecTest(ancienX+ 1, ancienY- 1);
 		if (ok == 1)
 		{
-			return 1; // Droit haut
+			return 0; // Droit haut
 		}
 	}
 	if (ancienX + 1 < LONGUEUR && nouveauY == ancienY && nouveauX == ancienX+1 && tableDeJeu[nouveauY][nouveauX] <= 0)
@@ -1501,7 +1497,7 @@ int RoiN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiNEchecTest(ancienX+1, ancienY);
 		if (ok == 1)
 		{
-			return 1; // Droit
+			return 0; // Droit
 		}
 	}
 	if (ancienX + 1 < LONGUEUR && ancienY + 1 < LONGUEUR && nouveauY == ancienY + 1 && nouveauX == ancienX + 1 && tableDeJeu[nouveauY][nouveauX] <= 0)
@@ -1509,7 +1505,7 @@ int RoiN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiNEchecTest(ancienX + 1, ancienY + 1);
 		if (ok == 1)
 		{
-			return 1; // Droit bas
+			return 0; // Droit bas
 		}
 	}
 	if (ancienY + 1 < LONGUEUR && nouveauY == ancienY+1 && nouveauX == ancienX && tableDeJeu[nouveauY][nouveauX] <= 0)
@@ -1517,7 +1513,7 @@ int RoiN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiNEchecTest(ancienX, ancienY+1);
 		if (ok == 1)
 		{
-			return 1; // bas
+			return 0; // bas
 		}
 	}
 	if (ancienX - 1 >=0 && ancienY + 1 <LONGUEUR && nouveauX == ancienX - 1 && nouveauY == ancienY + 1 && tableDeJeu[nouveauY][nouveauX] <= 0)
@@ -1525,7 +1521,7 @@ int RoiN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiNEchecTest(ancienX-1, ancienY+ 1);
 		if (ok == 1)
 		{
-			return 1; // Gauche bas
+			return 0; // Gauche bas
 		}
 	}
 	if (ancienX - 1 >= 0 && nouveauY == ancienY && nouveauX == ancienX-1 && tableDeJeu[nouveauY][nouveauX] <= 0)
@@ -1533,7 +1529,7 @@ int RoiN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		int ok = RoiNEchecTest(ancienX-1, ancienY);
 		if (ok == 1)
 		{
-			return 1; // Gauche
+			return 0; // Gauche
 		}
 	}
 	// Tourner à Droit
@@ -1552,7 +1548,7 @@ int RoiN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 					RoiBlancPremierMouv = 1;
 					tableDeJeu[0][7] = 0;
 					tableDeJeu[0][5] = TOUR_NOIR;
-					return 1;
+					return 0;
 				}
 			}
 		}
@@ -1575,13 +1571,13 @@ int RoiN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 						RoiBlancPremierMouv = 1;
 						tableDeJeu[0][0] = 0;
 						tableDeJeu[0][3] = TOUR_NOIR;
-						return 1;
+						return 0;
 					}
 				}
 			}
 		}
 	}
-	return 0;
+	return 1;
 }
 
 //===============================================================================================//
@@ -1781,86 +1777,86 @@ int main(int argc, char const *argv[])
 					{
 						// Transformation
 						//
-						if(tableDeJeu[y][x] != NOIR)
+						if(tableDeJeu[y][x] != 0)
 						{
 							dx = pos.x - (x * taille);
 							dy = pos.y - (y * taille);
 						
-							if(tableDeJeu[y][x] == PIECE_BLANC && mouvement == BLANC) // Si mouvement pion piece BLANC
+							if(tableDeJeu[y][x] == PIECE_BLANC && mouvement == 1) // Si mouvement pion piece BLANC
 							{
 								pasMouvPiece        = PIECE_BLANC; // Alors pion piece BLANC ne bouge pas
 								MouveImages         = PieceBlanc; // Le mouvement va au pion piece blanc
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if(tableDeJeu[y][x] == PIECE_NOIR && mouvement == NOIR) // Si mouvement pion piece NOIR
+							if(tableDeJeu[y][x] == PIECE_NOIR && mouvement == 0) // Si mouvement pion piece NOIR
 							{
 								pasMouvPiece        = PIECE_NOIR; // Alors pion piece NOIR ne bouge pas
 								MouveImages         = PieceNoir; // Le mouvement va au pion piece NOIR
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if(tableDeJeu[y][x] == CHEVAL_NOIR && mouvement == NOIR) // Si mouvement pion cheval Noir
+							if(tableDeJeu[y][x] == CHEVAL_NOIR && mouvement == 0) // Si mouvement pion cheval Noir
 							{
 								pasMouvPiece        = CHEVAL_NOIR; // Alors pion cheval noir ne bouge pas
 								MouveImages         = ChevalNoir; // Le mouvement va au pion cheval blanc
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if(tableDeJeu[y][x] == CHEVAL_BLANC && mouvement == BLANC) // Si mouvement pion cheval BLANC
+							if(tableDeJeu[y][x] == CHEVAL_BLANC && mouvement == 1) // Si mouvement pion cheval BLANC
 							{
 								pasMouvPiece        = CHEVAL_BLANC; // Alors pion cheval BLANC ne bouge pas
 								MouveImages         = ChevalBlanc; // Le mouvement va au pion cheval blanc
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if(tableDeJeu[y][x] == TOUR_BLANC && mouvement == BLANC) // Si mouvement pion tour BLANC
+							if(tableDeJeu[y][x] == TOUR_BLANC && mouvement == 1) // Si mouvement pion tour BLANC
 							{
 								pasMouvPiece        = TOUR_BLANC; // Alors pion tour BLANC ne bouge pas
 								MouveImages         = TourBlanc; // Le mouvement va au pion tour blanc
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if(tableDeJeu[y][x] == TOUR_NOIR && mouvement == NOIR) // Si mouvement pion tour NOIR
+							if(tableDeJeu[y][x] == TOUR_NOIR && mouvement == 0) // Si mouvement pion tour NOIR
 							{
 								pasMouvPiece        = TOUR_NOIR; // Alors pion tour NOIR ne bouge pas
 								MouveImages         = TourNoir; // Le mouvement va au pion tour NOIR
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if(tableDeJeu[y][x] == FOU_BLANC && mouvement == BLANC) // Si mouvement pion boutique NOIR
+							if(tableDeJeu[y][x] == FOU_BLANC && mouvement == 1) // Si mouvement pion boutique NOIR
 							{
 								pasMouvPiece        = FOU_BLANC; // Alors pion boutique NOIR ne bouge pas
 								MouveImages         = FouBlanc; // Le mouvement va au pion Fou NOIR
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if(tableDeJeu[y][x] == FOU_NOIR && mouvement == NOIR) // Si mouvement pion Fou NOIR
+							if(tableDeJeu[y][x] == FOU_NOIR && mouvement == 0) // Si mouvement pion Fou NOIR
 							{
 								pasMouvPiece        = FOU_NOIR; // Alors pion Fou NOIR ne bouge pas
 								MouveImages         = FouNoir; // Le mouvement va au pion Fou NOIR
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if(tableDeJeu[y][x] == REINE_BLANC && mouvement == BLANC) // Si mouvement pion REINE BLANC
+							if(tableDeJeu[y][x] == REINE_BLANC && mouvement == 1) // Si mouvement pion REINE BLANC
 							{
 								pasMouvPiece        = REINE_BLANC; // Alors pion REINE BLANC ne bouge pas
 								MouveImages         = ReineBlanc; // Le mouvement va au pion REINE BLANC
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if(tableDeJeu[y][x] == REINE_NOIR && mouvement == NOIR) // Si mouvement pion REINE NOIR
+							if(tableDeJeu[y][x] == REINE_NOIR && mouvement == 0) // Si mouvement pion REINE NOIR
 							{
 								pasMouvPiece        = REINE_NOIR; // Alors pion REINE NOIR ne bouge pas
 								MouveImages         = ReineNoir; // Le mouvement va au pion REINE NOIR
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if(tableDeJeu[y][x] == ROI_BLANC && mouvement == BLANC) // Si mouvement pion ROI BLANC
+							if(tableDeJeu[y][x] == ROI_BLANC && mouvement == 1) // Si mouvement pion ROI BLANC
 							{
 								pasMouvPiece        = ROI_BLANC; // Alors pion ROI BLANC ne bouge pas
 								MouveImages         = RoiBlanc; // Le mouvement va au pion ROI BLANC
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if(tableDeJeu[y][x] == ROI_NOIR && mouvement == NOIR) // Si mouvement pion ROI NOIR
+							if(tableDeJeu[y][x] == ROI_NOIR && mouvement == 0) // Si mouvement pion ROI NOIR
 							{
 								pasMouvPiece        = ROI_NOIR; // Alors pion ROI NOIR ne bouge pas
 								MouveImages         = RoiNoir; // Le mouvement va au pion ROI NOIR
-								tableDeJeu[y][x]    = ZONE_VIDE;  // Initialiser la case vide
+								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
-							if (tableDeJeu[y][x] == ZONE_VIDE)
+							if (tableDeJeu[y][x] == 0)
 							{
-								ca_bouge        = BLANC;
+								ca_bouge        = 1;
 								ancienne_Pos.x  = x;
 								ancienne_Pos.y  = y;
 							}                      
@@ -2075,17 +2071,17 @@ int main(int argc, char const *argv[])
         //---------------------------------------------------------
 
         // Cas particulier de Dame
-        if (transformationBlanc == BLANC)
+        if (transformationBlanc == 1)
         {
             BlancTransformation.setPosition(transforme_blanc.x * taille, transforme_blanc.y * taille);
             window.draw(BlancTransformation);
         }
-		if (transformationNoir == BLANC)
+		if (transformationNoir == 1)
         {
             NoirTransformation.setPosition(transforme_noir.x * taille, transforme_noir.y * taille);
             window.draw(NoirTransformation);
         }
-        if (ca_bouge == BLANC)
+        if (ca_bouge == 1)
         {
             deplacement.setPosition(pos.x - dx, pos.y - dy);
             window.draw(deplacement);
@@ -2096,7 +2092,7 @@ int main(int argc, char const *argv[])
         {
             for (int j = 0; j < LONGUEUR; j++)
             {
-				if (tableDeJeu[i][j] != NOIR)
+				if (tableDeJeu[i][j] != 0)
                 {
                     if(tableDeJeu[i][j] == PIECE_BLANC) // Si mouvement pion piece BLANC
                     {

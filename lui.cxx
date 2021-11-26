@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-
 #define LONGUEUR 8
 #define PionNEGRU 1
 #define PionALB -1
@@ -32,7 +31,8 @@ int board[8][8] =
   0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0,
  -1,-1,-1,-1,-1,-1,-1,-1,
- -2,-3,-4,-5,-6,-4,-3,-2,};
+ -2,-3,-4,-5,-6,-4,-3,-2,
+};
 
 int turnAlbDreapta = 0, turnAlbStanga = 0, regeAlb = 0;
 int turnNegruDreapta = 0, turnNegruStanga = 0, regeNegru = 0;
@@ -1994,7 +1994,6 @@ int main()
 		{
 			for (int j = 0; j < LONGUEUR; j++)
 			{
-
 				if (board[i][j] != 0)
 				{
 					if (board[i][j] == PionNEGRU)
@@ -2064,5 +2063,8 @@ int main()
 		}
 		window.display();
 	}
-		return 0;
+	bool yes = true, no = false;
+	std::cout << "Vrai :" << yes << "Vrai :" << no << std::endl;
+
+	return 0;
 }
