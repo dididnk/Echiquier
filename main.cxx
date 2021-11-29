@@ -2,18 +2,18 @@
 #include <iostream>
 
 #define LONGUEUR 8
-#define PIECE_BLANC 1
-#define PIECE_NOIR -1
-#define TOUR_BLANC 2
-#define TOUR_NOIR -2
-#define CHEVAL_BLANC 3
-#define CHEVAL_NOIR -3
-#define FOU_BLANC 4
-#define FOU_NOIR -4
-#define REINE_BLANC 5
-#define REINE_NOIR -5
-#define ROI_BLANC 6
-#define ROI_NOIR -6
+#define PIECE_BLANC -1
+#define PIECE_NOIR 1
+#define TOUR_BLANC -2
+#define TOUR_NOIR 2
+#define CHEVAL_BLANC -3
+#define CHEVAL_NOIR 3
+#define FOU_BLANC -4
+#define FOU_NOIR 4
+#define REINE_BLANC -5
+#define REINE_NOIR 5
+#define ROI_BLANC -6
+#define ROI_NOIR 6
 
 using namespace sf; 
 
@@ -1627,7 +1627,7 @@ void posRoiNoir()
 
 int main(int argc, char const *argv[])
 {
-    RenderWindow window(VideoMode(800, 800), "Ehiquier by Emmanuel NGBAME");
+    RenderWindow window(VideoMode(800, 800), "Ehiquier by Emmanuel NGBAME DNK");
 
     Texture t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15;
     
