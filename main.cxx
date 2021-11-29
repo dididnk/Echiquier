@@ -82,27 +82,27 @@ int PieceB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 
 int PieceN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 {
-    if (ancienne_Pos.y == 6)
+    if (ancienne_Pos.y == 1)
     {
         if ( ( nouveauY == ancienY + 1 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == 0 ) ||
-             ( nouveauY == ancienY + 2 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == 1 && tableDeJeu[ancienY + 2][ancienX] == 0 )
-            )
+             ( nouveauY == ancienY + 2 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == 0 && tableDeJeu[ancienY + 2][ancienX] == 0 ))
         {
             return 1;
         }
-        else if ( nouveauY == ancienY + 1 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == 0 )
-            {
-                return 1;
-            }
-        else if ( (tableDeJeu[ancienY + 1][ancienX + 1] < 0) && ( nouveauY == ancienY + 1 && nouveauX == ancienX +1 ))
-        {
-            return 0;
-        }
-        if ( (tableDeJeu[ancienY +1][ancienX + 1] < 0) && ( nouveauY == ancienY + 1 && nouveauX == nouveauX + 1))
-        {
-            return 1; 
-        } 
-    }
+	}
+	else if ( nouveauY == ancienY + 1 && nouveauX == ancienX && tableDeJeu[ancienY + 1][ancienX] == 0 )
+		{
+			return 1;
+		}
+	
+	if ( (tableDeJeu[ancienY + 1][ancienX - 1] < 0) && ( nouveauY == ancienY + 1 && nouveauX == ancienX - 1 ))
+	{
+		return 1;
+	}
+	if ( (tableDeJeu[ancienY +1][ancienX + 1] < 0) && ( nouveauY == ancienY + 1 && nouveauX == nouveauX + 1))
+	{
+		return 1; 
+	} 
     return 0;
 }
 
@@ -121,7 +121,7 @@ int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
             break;
         }      
     }
-    for (int i = ancienX - 1; i >= 0; i--) // Côté Haut
+    for (int i = ancienY - 1; i >= 0; i--) // Côté Haut
     {
         if ( tableDeJeu[i][ancienX] >= 0 && ( nouveauX == ancienX && nouveauY == i ) )
         {
@@ -132,9 +132,9 @@ int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
             break;
         }      
     }
-    for (int i = ancienX + 1; i <= LONGUEUR; i++)
+    for (int i = ancienX + 1; i < LONGUEUR; i++) // À droite
     {
-        if ( (tableDeJeu[ancienY][i] >= 0) && (nouveauY == ancienY && nouveauX ==i) )
+        if ( (tableDeJeu[ancienY][i] >= 0) && (nouveauY == ancienY && nouveauX == i) )
         {
             return 1;
         }
@@ -143,9 +143,9 @@ int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
             break;
         }
     }
-    for (int i = ancienX + 1; i <= LONGUEUR; i++)
+    for (int i = ancienY + 1; i < LONGUEUR; i++) // jos
     {
-        if ( (tableDeJeu[i][ancienX] >= 0) && (nouveauY == 1 && nouveauX == ancienX) )
+        if ( (tableDeJeu[i][ancienX] >= 0) && (nouveauY == i && nouveauX == ancienX) )
         {
             return 1;
         }
@@ -161,7 +161,7 @@ int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 
 int TourN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 {
-    for (int i = ancienX - 1; i <= 0; i--) // Côté gauche
+    for (int i = ancienX - 1; i >= 0; i--) // Côté gauche
     {
         if ( tableDeJeu[ancienY][i] <= 0 && ( nouveauX == i && nouveauY == ancienY ) )
         {
@@ -172,7 +172,7 @@ int TourN(int ancienX, int ancienY, int nouveauX, int nouveauY)
             break;
         }      
     }
-    for (int i = ancienX - 1; i <= 0; i--) // Côté Haut
+    for (int i = ancienY - 1; i >= 0; i--) // Côté Haut
     {
         if ( tableDeJeu[i][ancienX] <= 0 && ( nouveauX == ancienX && nouveauY == i ) )
         {
@@ -183,7 +183,7 @@ int TourN(int ancienX, int ancienY, int nouveauX, int nouveauY)
             break;
         }      
     }
-    for (int i = ancienX + 1; i <= LONGUEUR; i++)
+    for (int i = ancienX + 1; i < LONGUEUR; i++) // À droite
     {
         if ( (tableDeJeu[ancienY][i] <= 0) && (nouveauY == ancienY && nouveauX ==i) )
         {
@@ -194,9 +194,9 @@ int TourN(int ancienX, int ancienY, int nouveauX, int nouveauY)
             break;
         }
     }
-    for (int i = ancienX + 1; i <= LONGUEUR; i++)
+    for (int i = ancienY + 1; i < LONGUEUR; i++) // En bas
     {
-        if ( (tableDeJeu[i][ancienX] <= 0) && (nouveauY == 1 && nouveauX == ancienX) )
+        if ( (tableDeJeu[i][ancienX] <= 0) && (nouveauY == i && nouveauX == ancienX) )
         {
             return 1;
         }
@@ -213,9 +213,9 @@ int TourN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 int FouB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 {
     int j = ancienX - 1;
-    for (int i = ancienY - 1; i >= 0; i--)
+    for (int i = ancienY - 1; i >= 0; i--) //en haut à gauche
     {
-        if ((tableDeJeu[i][j] >= 0) && (nouveauY == 1 && nouveauX == j))
+        if ((tableDeJeu[i][j] >= 0) && (nouveauY == i && nouveauX == j))
         {
             return 1;
         }
@@ -226,9 +226,9 @@ int FouB(int ancienX, int ancienY, int nouveauX, int nouveauY)
         j--;
     }
     j = ancienX + 1;
-    for (int i = ancienY - 1; i >= 0; i--)
+    for (int i = ancienY - 1; i >= 0; i--) // en haut à droite
     {
-        if ((tableDeJeu[i][j] >= 0) && (nouveauY == 1 && nouveauX == j))
+        if ((tableDeJeu[i][j] >= 0) && (nouveauY == i && nouveauX == j))
         {
             return 1;
         }
@@ -239,9 +239,9 @@ int FouB(int ancienX, int ancienY, int nouveauX, int nouveauY)
         j++;
     }
     j = ancienX - 1;
-    for (int i = ancienY - 1; i >= 0; i--)
+    for (int i = ancienY + 1; i < LONGUEUR; i++) // en bas à gauche
     {
-        if ((tableDeJeu[i][j] >= 0) && (nouveauY == 1 && nouveauX == j))
+        if ((tableDeJeu[i][j] >= 0) && (nouveauY == i && nouveauX == j))
         {
             return 1;
         }
@@ -252,9 +252,9 @@ int FouB(int ancienX, int ancienY, int nouveauX, int nouveauY)
         j--;
     }
     j = ancienX + 1;
-    for (int i = ancienY - 1; i >= 0; i--)
+    for (int i = ancienY + 1; i < LONGUEUR; i++) // en bas à droite
     {
-        if ((tableDeJeu[i][j] >= 0) && (nouveauY == 1 && nouveauX == j))
+        if ((tableDeJeu[i][j] >= 0) && (nouveauY == i && nouveauX == j))
         {
             return 1;
         }
@@ -262,7 +262,7 @@ int FouB(int ancienX, int ancienY, int nouveauX, int nouveauY)
         {
             break;
         }
-        j--;
+        j++;
     }
     return 0;
 }
@@ -272,9 +272,9 @@ int FouB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 int FouN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 {
     int j = ancienX - 1;
-    for (int i = ancienY - 1; i <= 0; i--)
+    for (int i = ancienY - 1; i >= 0; i--) // en haut gauche
     {
-        if ((tableDeJeu[i][j] <= 0) && (nouveauY == 1 && nouveauX == j))
+        if ((tableDeJeu[i][j] <= 0) && (nouveauY == i && nouveauX == j))
         {
             return 1;
         }
@@ -285,9 +285,9 @@ int FouN(int ancienX, int ancienY, int nouveauX, int nouveauY)
         j--;
     }
     j = ancienX + 1;
-    for (int i = ancienY - 1; i <= 0; i--)
+    for (int i = ancienY - 1; i >= 0; i--) // en haut droit
     {
-        if ((tableDeJeu[i][j] <= 0) && (nouveauY == 1 && nouveauX == j))
+        if ((tableDeJeu[i][j] <= 0) && (nouveauY == i && nouveauX == j))
         {
             return 1;
         }
@@ -298,9 +298,9 @@ int FouN(int ancienX, int ancienY, int nouveauX, int nouveauY)
         j++;
     }
     j = ancienX - 1;
-    for (int i = ancienY - 1; i <= 0; i--)
+    for (int i = ancienY + 1; i < LONGUEUR; i++) // en bas gauche
     {
-        if ((tableDeJeu[i][j] <= 0) && (nouveauY == 1 && nouveauX == j))
+        if ((tableDeJeu[i][j] <= 0) && (nouveauY == i && nouveauX == j))
         {
             return 1;
         }
@@ -311,9 +311,9 @@ int FouN(int ancienX, int ancienY, int nouveauX, int nouveauY)
         j--;
     }
     j = ancienX + 1;
-    for (int i = ancienY - 1; i <= 0; i--)
+    for (int i = ancienY + 1; i < LONGUEUR; i++) // en bas droit
     {
-        if ((tableDeJeu[i][j] <= 0) && (nouveauY == 1 && nouveauX == j))
+        if ((tableDeJeu[i][j] <= 0) && (nouveauY == i && nouveauX == j))
         {
             return 1;
         }
