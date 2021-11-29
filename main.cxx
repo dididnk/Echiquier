@@ -143,7 +143,7 @@ int TourB(int ancienX, int ancienY, int nouveauX, int nouveauY)
             break;
         }
     }
-    for (int i = ancienY + 1; i < LONGUEUR; i++) // jos
+    for (int i = ancienY + 1; i < LONGUEUR; i++) // bas
     {
         if ( (tableDeJeu[i][ancienX] >= 0) && (nouveauY == i && nouveauX == ancienX) )
         {
@@ -330,7 +330,7 @@ int FouN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 
 int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 {
-	for (int i = ancienX - 1; i >= 0; i--) // spre stanga
+	for (int i = ancienX - 1; i >= 0; i--) // à gauche
 	{
 		if (tableDeJeu[ancienY][i] >= 0 && (nouveauX == i && nouveauY == ancienY))
 		{
@@ -341,7 +341,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 			break;
 		}
 	}
-	for (int i = ancienY - 1; i >= 0; i--) // haut
+	for (int i = ancienY - 1; i >= 0; i--) // en haut
 	{
 		if (tableDeJeu[i][ancienX] >= 0 && (nouveauY == i && nouveauX == ancienX))
 		{
@@ -352,7 +352,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 			break;
 		}
 	}
-	for (int i = ancienX + 1; i <= 7; i++) // spre droite
+	for (int i = ancienX + 1; i < LONGUEUR; i++) // à droite
 	{
 		if (tableDeJeu[ancienY][i] >= 0 && (nouveauY == ancienY && nouveauX == i))
 		{
@@ -363,7 +363,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 			break;
 		}
 	}
-	for (int i = ancienY + 1; i <= 7; i++) // jos
+	for (int i = ancienY + 1; i < LONGUEUR; i++) // bas
 	{
 		if (tableDeJeu[i][ancienX] >= 0 && (nouveauY == i && nouveauX == ancienX))
 		{
@@ -375,7 +375,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		}
 	}
 	int j = ancienX - 1;
-	for (int i = ancienY - 1; i >= 0; i--) // spre Haut gauche
+	for (int i = ancienY - 1; i >= 0; i--) // en Haut gauche
 	{
 		if (tableDeJeu[i][j] >= 0 && (nouveauY == i && nouveauX == j))
 		{
@@ -388,7 +388,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		j--;
 	}
 	j = ancienX + 1;
-	for (int i = ancienY - 1; i >= 0; i--) // spre Haut droite
+	for (int i = ancienY - 1; i >= 0; i--) // en Haut droite
 	{
 		if (tableDeJeu[i][j] >= 0 && (nouveauY == i && nouveauX == j))
 		{
@@ -401,7 +401,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		j++;
 	}
 	j = ancienX - 1;
-	for (int i = ancienY + 1; i <= 7; i++) // spre stanga jos
+	for (int i = ancienY + 1; i < LONGUEUR; i++) // en bas gauche
 	{
 		if (tableDeJeu[i][j] >= 0 && (nouveauY == i && nouveauX == j))
 		{
@@ -414,7 +414,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		j--;
 	}
 	j = ancienX + 1;
-	for (int i = ancienY + 1; i <= 7; i++)  // spre droite jos
+	for (int i = ancienY + 1; i < LONGUEUR; i++)  // en bas roite
 	{
 		if (tableDeJeu[i][j] >= 0 && (nouveauY == i && nouveauX == j))
 		{
@@ -433,7 +433,7 @@ int ReineB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 
 int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 {
-	for (int i = ancienX - 1; i >= 0; i--) // spre stanga
+	for (int i = ancienX - 1; i >= 0; i--) // à gauche
 	{
 		if (tableDeJeu[ancienY][i] <= 0 && (nouveauX == i && nouveauY == ancienY))
 		{
@@ -455,7 +455,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 			break;
 		}
 	}
-	for (int i = ancienX + 1; i <= 7; i++) // spre droite
+	for (int i = ancienX + 1; i < LONGUEUR; i++) // à droite
 	{
 		if (tableDeJeu[ancienY][i] <= 0 && (nouveauY == ancienY && nouveauX == i))
 		{
@@ -466,7 +466,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 			break;
 		}
 	}
-	for (int i = ancienY + 1; i <= 7; i++) // jos
+	for (int i = ancienY + 1; i < LONGUEUR; i++) // en bas
 	{
 		if (tableDeJeu[i][ancienX] <= 0 && (nouveauY == i && nouveauX == ancienX))
 		{
@@ -478,7 +478,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		}
 	}
 	int j = ancienX - 1;
-	for (int i = ancienY - 1; i >= 0; i--) // spre Haut gauche
+	for (int i = ancienY - 1; i >= 0; i--) // en haut gauche
 	{
 		if (tableDeJeu[i][j] <= 0 && (nouveauY == i && nouveauX == j))
 		{
@@ -491,7 +491,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		j--;
 	}
 	j = ancienX + 1;
-	for (int i = ancienY - 1; i >= 0; i--) // spre Haut droite
+	for (int i = ancienY - 1; i >= 0; i--) // en Haut droite
 	{
 		if (tableDeJeu[i][j] <= 0 && (nouveauY == i && nouveauX == j))
 		{
@@ -504,7 +504,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		j++;
 	}
 	j = ancienX - 1;
-	for (int i = ancienY + 1; i <= 7; i++) // spre stanga jos
+	for (int i = ancienY + 1; i < LONGUEUR; i++) // en bas gauche
 	{
 		if (tableDeJeu[i][j] <= 0 && (nouveauY == i && nouveauX == j))
 		{
@@ -517,7 +517,7 @@ int ReineN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 		j--;
 	}
 	j = ancienX + 1;
-	for (int i = ancienY + 1; i <= 7; i++)  // spre droite jos
+	for (int i = ancienY + 1; i < LONGUEUR; i++)  // en bas droite
 	{
 		if (tableDeJeu[i][j] <= 0 && (nouveauY == i && nouveauX == j))
 		{
@@ -540,7 +540,7 @@ int ChevalB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		return 1; // Haut gauche
 	}
-	if (ancienY - 2 >= 0 && ancienX + 1 <LONGUEUR && nouveauY == ancienY - 2 && nouveauX == ancienX + 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
+	if (ancienY - 2 >= 0 && ancienX + 1 < LONGUEUR && nouveauY == ancienY - 2 && nouveauX == ancienX + 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
 	{
 		return 1; // Haut droite
 	}
@@ -552,17 +552,17 @@ int ChevalB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		return 1; // droite 2
 	}
-	if (ancienY+2<LONGUEUR && ancienX+1<LONGUEUR && nouveauY==ancienY+2 && nouveauX==ancienX+1 && tableDeJeu[nouveauY][nouveauX]>=0)
+	if (ancienY + 2 < LONGUEUR && ancienX + 1 < LONGUEUR && nouveauY==ancienY+2 && nouveauX==ancienX+1 && tableDeJeu[nouveauY][nouveauX]>=0)
 	{
-		return 1; // jos 1
+		return 1; // bas 1
 	}
 	if (ancienY + 2 < LONGUEUR && ancienX - 1 >= 0 && nouveauY == ancienY + 2 && nouveauX == ancienX - 1 && tableDeJeu[nouveauY][nouveauX] >= 0)
 	{
-		return 1; //jos 2
+		return 1; //bas 2
 	}
-	if (ancienY+1<LONGUEUR && ancienX-2>=0 && nouveauY==ancienY+1 && nouveauX==ancienX-2 && tableDeJeu[nouveauY][nouveauX]>=0 )
+	if (ancienY + 1 < LONGUEUR && ancienX-2>=0 && nouveauY==ancienY+1 && nouveauX==ancienX-2 && tableDeJeu[nouveauY][nouveauX]>=0 )
 	{
-		return 1; // stanga 1
+		return 1; // gauche 1
 	}
 	if (ancienY - 1 >= 0 && ancienX - 2 >= 0 && nouveauY == ancienY - 1 && nouveauX == ancienX - 2 && tableDeJeu[nouveauY][nouveauX] >= 0)
 	{
@@ -593,15 +593,15 @@ int ChevalN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	}
 	if (ancienY + 2 < LONGUEUR && ancienX + 1 < LONGUEUR && nouveauY == ancienY + 2 && nouveauX == ancienX + 1 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
-		return 1; // jos 1
+		return 1; // bas 1
 	}
 	if (ancienY + 2 < LONGUEUR && ancienX - 1 >= 0 && nouveauY == ancienY + 2 && nouveauX == ancienX - 1 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
-		return 1; //jos 2
+		return 1; //bas 2
 	}
 	if (ancienY + 1 < LONGUEUR && ancienX - 2 >= 0 && nouveauY == ancienY + 1 && nouveauX == ancienX - 2 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
-		return 1; // stanga 1
+		return 1; // gauche 1
 	}
 	if (ancienY - 1 >= 0 && ancienX - 2 >= 0 && nouveauY == ancienY - 1 && nouveauX == ancienX - 2 && tableDeJeu[nouveauY][nouveauX] <= 0)
 	{
