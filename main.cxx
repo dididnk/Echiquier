@@ -560,7 +560,7 @@ int ChevalB(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	{
 		return 1; //bas 2
 	}
-	if (ancienY + 1 < LONGUEUR && ancienX-2>=0 && nouveauY==ancienY+1 && nouveauX==ancienX-2 && tableDeJeu[nouveauY][nouveauX]>=0 )
+	if (ancienY + 1 < LONGUEUR && ancienX - 2 >= 0 && nouveauY == ancienY + 1 && nouveauX == ancienX - 2 && tableDeJeu[nouveauY][nouveauX]>=0 )
 	{
 		return 1; // gauche 1
 	}
@@ -609,6 +609,7 @@ int ChevalN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 	}
 	return 0;
 }
+// Tous mouvements OK
 
 //===============================================================================================//
 //                                 Test Mouvement Echeque et match                               //
