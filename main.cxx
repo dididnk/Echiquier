@@ -1622,7 +1622,7 @@ void posRoiNoir()
 
 int main(int argc, char const *argv[])
 {
-    RenderWindow window(VideoMode(800, 800), "Ehiquier by Emmanuel NGBAME DNK");
+    RenderWindow window(VideoMode(800, 800), "Ehiquier by Emmanuel NGBAME");
 
     Texture t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15;
     
@@ -1658,10 +1658,10 @@ int main(int argc, char const *argv[])
 	Sprite ReineNoir(t11);
 	Sprite RoiNoir(t12);
 	Sprite RoiBlanc(t13);
-	Sprite deplacement;
+	Sprite Deplacement;
 	Sprite BlancTransformation(t14);
 	Sprite NoirTransformation(t15);
-    Sprite MouveImages;
+    Sprite Deplacement;
 
     float dx = 0, dy = 0;
     int pasMouvPiece = 0;
@@ -1780,73 +1780,73 @@ int main(int argc, char const *argv[])
 							if(tableDeJeu[y][x] == PIECE_BLANC && mouvement == 1) // Si mouvement pion piece BLANC
 							{
 								pasMouvPiece        = PIECE_BLANC; // Alors pion piece BLANC ne bouge pas
-								MouveImages         = PieceBlanc; // Le mouvement va au pion piece blanc
+								Deplacement         = PieceBlanc; // Le mouvement va au pion piece blanc
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if(tableDeJeu[y][x] == PIECE_NOIR && mouvement == 0) // Si mouvement pion piece NOIR
 							{
 								pasMouvPiece        = PIECE_NOIR; // Alors pion piece NOIR ne bouge pas
-								MouveImages         = PieceNoir; // Le mouvement va au pion piece NOIR
+								Deplacement         = PieceNoir; // Le mouvement va au pion piece NOIR
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if(tableDeJeu[y][x] == CHEVAL_NOIR && mouvement == 0) // Si mouvement pion cheval Noir
 							{
 								pasMouvPiece        = CHEVAL_NOIR; // Alors pion cheval noir ne bouge pas
-								MouveImages         = ChevalNoir; // Le mouvement va au pion cheval blanc
+								Deplacement         = ChevalNoir; // Le mouvement va au pion cheval blanc
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if(tableDeJeu[y][x] == CHEVAL_BLANC && mouvement == 1) // Si mouvement pion cheval BLANC
 							{
 								pasMouvPiece        = CHEVAL_BLANC; // Alors pion cheval BLANC ne bouge pas
-								MouveImages         = ChevalBlanc; // Le mouvement va au pion cheval blanc
+								Deplacement         = ChevalBlanc; // Le mouvement va au pion cheval blanc
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if(tableDeJeu[y][x] == TOUR_BLANC && mouvement == 1) // Si mouvement pion tour BLANC
 							{
 								pasMouvPiece        = TOUR_BLANC; // Alors pion tour BLANC ne bouge pas
-								MouveImages         = TourBlanc; // Le mouvement va au pion tour blanc
+								Deplacement         = TourBlanc; // Le mouvement va au pion tour blanc
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if(tableDeJeu[y][x] == TOUR_NOIR && mouvement == 0) // Si mouvement pion tour NOIR
 							{
 								pasMouvPiece        = TOUR_NOIR; // Alors pion tour NOIR ne bouge pas
-								MouveImages         = TourNoir; // Le mouvement va au pion tour NOIR
+								Deplacement         = TourNoir; // Le mouvement va au pion tour NOIR
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if(tableDeJeu[y][x] == FOU_BLANC && mouvement == 1) // Si mouvement pion boutique NOIR
 							{
 								pasMouvPiece        = FOU_BLANC; // Alors pion boutique NOIR ne bouge pas
-								MouveImages         = FouBlanc; // Le mouvement va au pion Fou NOIR
+								Deplacement         = FouBlanc; // Le mouvement va au pion Fou NOIR
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if(tableDeJeu[y][x] == FOU_NOIR && mouvement == 0) // Si mouvement pion Fou NOIR
 							{
 								pasMouvPiece        = FOU_NOIR; // Alors pion Fou NOIR ne bouge pas
-								MouveImages         = FouNoir; // Le mouvement va au pion Fou NOIR
+								Deplacement         = FouNoir; // Le mouvement va au pion Fou NOIR
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if(tableDeJeu[y][x] == REINE_BLANC && mouvement == 1) // Si mouvement pion REINE BLANC
 							{
 								pasMouvPiece        = REINE_BLANC; // Alors pion REINE BLANC ne bouge pas
-								MouveImages         = ReineBlanc; // Le mouvement va au pion REINE BLANC
+								Deplacement         = ReineBlanc; // Le mouvement va au pion REINE BLANC
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if(tableDeJeu[y][x] == REINE_NOIR && mouvement == 0) // Si mouvement pion REINE NOIR
 							{
 								pasMouvPiece        = REINE_NOIR; // Alors pion REINE NOIR ne bouge pas
-								MouveImages         = ReineNoir; // Le mouvement va au pion REINE NOIR
+								Deplacement         = ReineNoir; // Le mouvement va au pion REINE NOIR
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if(tableDeJeu[y][x] == ROI_BLANC && mouvement == 1) // Si mouvement pion ROI BLANC
 							{
 								pasMouvPiece        = ROI_BLANC; // Alors pion ROI BLANC ne bouge pas
-								MouveImages         = RoiBlanc; // Le mouvement va au pion ROI BLANC
+								Deplacement         = RoiBlanc; // Le mouvement va au pion ROI BLANC
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if(tableDeJeu[y][x] == ROI_NOIR && mouvement == 0) // Si mouvement pion ROI NOIR
 							{
 								pasMouvPiece        = ROI_NOIR; // Alors pion ROI NOIR ne bouge pas
-								MouveImages         = RoiNoir; // Le mouvement va au pion ROI NOIR
+								Deplacement         = RoiNoir; // Le mouvement va au pion ROI NOIR
 								tableDeJeu[y][x]    = 0;  // Initialiser la case vide
 							}
 							if (tableDeJeu[y][x] == 0)
@@ -2078,8 +2078,8 @@ int main(int argc, char const *argv[])
         }
         if (ca_bouge == 1)
         {
-            deplacement.setPosition(pos.x - dx, pos.y - dy);
-            window.draw(deplacement);
+            Deplacement.setPosition(pos.x - dx, pos.y - dy);
+            window.draw(Deplacement);
         }
         // Cas normal
 		// On dessine la table de jeu
