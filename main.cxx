@@ -620,19 +620,13 @@ int ChevalN(int ancienX, int ancienY, int nouveauX, int nouveauY)
 
 int PieceBEchec(int pos_x, int pos_y, int roi_x, int roi_y)
 {
-	if (tableDeJeu[pos_y - 1][pos_x - 1] >= 0)
+	if ((tableDeJeu[pos_y - 1][pos_x - 1] >= 0) && (pos_y - 1 == roi_y && pos_x - 1 == roi_x))
 	{
-		if (pos_y - 1 == roi_y && pos_x - 1 == roi_x)
-		{
-			return 1;
-		}
+		return 1;
 	}
-	if (tableDeJeu[pos_y - 1][pos_x + 1] >= 0)
+	if ((tableDeJeu[pos_y - 1][pos_x + 1] >= 0) && (pos_y - 1 == roi_y && pos_x + 1 == roi_x))
 	{
-		if (pos_y - 1 == roi_y && pos_x + 1==roi_x)
-		{
-			return 1;
-		}
+		return 1;
 	}
 	return 0;
 }
@@ -643,7 +637,7 @@ int TourBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 {
 	for (int i = ancienX - 1; i >= 0; i--) // À gauche
 	{
-		if (tableDeJeu[ancienY][i] >= 0 && (roi_x== i && roi_y == ancienY))
+		if (tableDeJeu[ancienY][i] >= 0 && (roi_x == i && roi_y == ancienY))
 		{
 			return 1;
 		}
@@ -674,7 +668,7 @@ int TourBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 			break;
 		}
 	}
-	for (int i = ancienY + 1; i <LONGUEUR; i++) // bas
+	for (int i = ancienY + 1; i < LONGUEUR; i++) // bas
 	{
 		if (tableDeJeu[i][ancienX] >= 0 && (roi_y == i && roi_x == ancienX))
 		{
@@ -719,7 +713,7 @@ int FouBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 		j++;
 	}
 	j = ancienX - 1;
-	for (int i = ancienY + 1; i <= 7; i++) // en bas à gauche
+	for (int i = ancienY + 1; i < LONGUEUR; i++) // en bas à gauche
 	{
 		if (tableDeJeu[i][j] >= 0 && (roi_y == i && roi_x == j))
 		{
@@ -732,7 +726,7 @@ int FouBEchec(int ancienX, int ancienY, int roi_x, int roi_y)
 		j--;
 	}
 	j = ancienX + 1;
-	for (int i = ancienY + 1; i <= 7; i++)  // en bas à droite
+	for (int i = ancienY + 1; i < LONGUEUR; i++)  // en bas à droite
 	{
 		if (tableDeJeu[i][j] >= 0 && (roi_y == i && roi_x == j))
 		{
