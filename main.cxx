@@ -622,7 +622,7 @@ int ChevalNoir(int ax, int ay, int nx, int ny)
 }
 
 //===============================================================================================//
-//                                 Test Mouvement Echeque et match                               //
+//                                 Test Mouvement Echec et match                               //
 //                                             [BLANC]                                           //
 //===============================================================================================//
 
@@ -939,7 +939,7 @@ int RoiBlancEchec(int ax, int ay, int roiX, int roiY)
 }
 
 //===============================================================================================//
-//                                 Test Mouvement Echeque et match                               //
+//                                 Test Mouvement Echec et match                               //
 //                                              [NOIR]                                           //
 //===============================================================================================//
 
@@ -1256,7 +1256,7 @@ int RoiNoirEchec(int ax, int ay, int roiX, int roiY)
 }
 
 //===============================================================================================//
-//                Test Mouvement Checking Echeque et match plus Deplacement "Roi"                //
+//                Test Mouvement Checking Echec et match plus Deplacement "Roi"                //
 //                                          [Noir]                                              //
 //===============================================================================================//
 
@@ -1422,7 +1422,7 @@ int RoiNoir(int ax, int ay, int nx, int ny)
 }
 
 //===============================================================================================//
-//                Test Mouvement Checking Echeque et match plus Deplacement "Roi"                //
+//                Test Mouvement Checking Echec et match plus Deplacement "Roi"                //
 //                                          [Blanc]                                              //
 //===============================================================================================//
 
@@ -1635,8 +1635,16 @@ void posRoiNoir()
 //===============================================================================================//
 //                                   Fonction principale                                         //
 //===============================================================================================//
+ void Run();
 
 int main(int argc, char const *argv[])
+{
+	Run();
+
+	return EXIT_SUCCESS;
+}
+
+void Run()
 {
 	// fênetre de jeu
 	RenderWindow window(VideoMode(800, 800), "Ehiquier by Emmanuel NGBAME");
@@ -2163,6 +2171,4 @@ int main(int argc, char const *argv[])
 		}
 		window.display();
 	}
-
-	return 0;
 }
