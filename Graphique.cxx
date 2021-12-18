@@ -1,50 +1,13 @@
+#include "Graphique.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#define LONGUEUR 8
-#define PION_BLANC -1
-#define PION_NOIR 1
-#define TOUR_BLANC -2
-#define TOUR_NOIR 2
-#define CHEVAL_BLANC -3
-#define CHEVAL_NOIR 3
-#define FOU_BLANC -4
-#define FOU_NOIR 4
-#define REINE_BLANC -5
-#define REINE_NOIR 5
-#define ROI_BLANC -6
-#define ROI_NOIR 6
-
 using namespace sf; 
 
-// Structure pour stocker les positions
-struct position
-{
-    int x, y;
-}ancienne_Pos, roi_blanc, roi_noir, transforme_blanc, transforme_noir;
+RenderWindow window(VideoMode(800, 800), "Ehiquier by Emmanuel NGBAME");
+Texture t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15;
 
 
-int  taille = 100, ca_bouge = 0, x, y;
-
-int tableDeJeu[LONGUEUR][LONGUEUR] =
-{ 2, 3, 4, 5, 6, 4, 3, 2,
-  1, 1, 1, 1, 1, 1, 1, 1,
-  0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0,
- -1,-1,-1,-1,-1,-1,-1,-1,
- -2,-3,-4,-5,-6,-4,-3,-2,
-};
-
-int mouvDroitTourBlanc = 0, mouvGaucheTourBlanc = 0, RoiBlancPremierMouv = 0;
-int mouvDroitTourNoir = 0, mouvGaucheTourNoir = 0, RoiNoirPremierMouv = 0;
-
-int mouvement = 0; // 0 -> Mouvement Blanc 1 -> Mouvement Noir
-
-int EchecBlanc = 0, EchecNoir = 0;
-
-int transformationBlanc = 0, transformationNoir = 0;
 
 //===============================================================================================//
 //                                 Test Mouvement Simple                                         //
@@ -53,7 +16,7 @@ int transformationBlanc = 0, transformationNoir = 0;
 
 //------------------------------------------Mouvement Pièce Blanc----------------------------//
 
-int PionBlanc(int ax, int ay, int nx, int ny)
+bool PionBlanc(int ax, int ay, int nx, int ny)
 {
 	if (ancienne_Pos.y == 6)
 	{
@@ -86,7 +49,7 @@ int PionBlanc(int ax, int ay, int nx, int ny)
 
 //------------------------------------------Mouvement Pièce Noir----------------------------//
 
-int PionNoir(int ax, int ay, int nx, int ny)
+bool PionNoir(int ax, int ay, int nx, int ny)
 {
 	if (ancienne_Pos.y == 1)
 	{
@@ -119,7 +82,7 @@ int PionNoir(int ax, int ay, int nx, int ny)
 
 //------------------------------------------Mouvement Tour Blanc----------------------------//
 
-int TourBlanc(int ax, int ay, int nx, int ny)
+bool TourBlanc(int ax, int ay, int nx, int ny)
 {
 	for (int i = ax-1; i >= 0; i--) // Côté gauche
 	{
@@ -170,7 +133,7 @@ int TourBlanc(int ax, int ay, int nx, int ny)
 
 //------------------------------------------Mouvement Tour Noir----------------------------//
 
-int TourNoir(int ax, int ay, int nx, int ny)
+bool TourNoir(int ax, int ay, int nx, int ny)
 {
 	for (int i = ax - 1; i >= 0; i--) // Côté gauche
 	{
@@ -221,7 +184,7 @@ int TourNoir(int ax, int ay, int nx, int ny)
 
 //------------------------------------------Mouvement Fou Blanc----------------------------//
 
-int FouBlanc(int ax, int ay, int nx, int ny)
+bool FouBlanc(int ax, int ay, int nx, int ny)
 {
 	int j = ax - 1;
 	for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
@@ -280,7 +243,7 @@ int FouBlanc(int ax, int ay, int nx, int ny)
 
 //------------------------------------------Mouvement Tour Noir----------------------------//
 
-int FouNoir(int ax, int ay, int nx, int ny)
+bool FouNoir(int ax, int ay, int nx, int ny)
 {
 	int j = ax - 1;
 	for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
@@ -339,7 +302,7 @@ int FouNoir(int ax, int ay, int nx, int ny)
 
 //------------------------------------------Mouvement Reine Blanc----------------------------//
 
-int ReineBlanc(int ax, int ay, int nx, int ny)
+bool ReineBlanc(int ax, int ay, int nx, int ny)
 {
 	for (int i = ax - 1; i >= 0; i--) // Côté gauche
 	{
@@ -442,7 +405,7 @@ int ReineBlanc(int ax, int ay, int nx, int ny)
 
 //------------------------------------------Mouvement Tour Noir----------------------------//
 
-int ReineNoir(int ax, int ay, int nx, int ny)
+bool ReineNoir(int ax, int ay, int nx, int ny)
 {
 	for (int i = ax - 1; i >= 0; i--) // Côté gauche
 	{
@@ -545,7 +508,7 @@ int ReineNoir(int ax, int ay, int nx, int ny)
 
 //------------------------------------------Mouvement Cheval Blanc----------------------------//
 
-int ChevalBlanc(int ax, int ay, int nx, int ny)
+bool ChevalBlanc(int ax, int ay, int nx, int ny)
 {
 	if (ay - 2 >= 0 && ax - 1 >= 0 && ny == ay - 2 && nx == ax - 1 && tableDeJeu[ny][nx] >= 0)
 	{
@@ -584,7 +547,7 @@ int ChevalBlanc(int ax, int ay, int nx, int ny)
 
 //------------------------------------------Mouvement Cheval Noir----------------------------//
 
-int ChevalNoir(int ax, int ay, int nx, int ny)
+bool ChevalNoir(int ax, int ay, int nx, int ny)
 {
 	if (ay - 2 >= 0 && ax - 1 >= 0 && ny == ay - 2 && nx == ax - 1 && tableDeJeu[ny][nx] <= 0)
 	{
@@ -628,7 +591,7 @@ int ChevalNoir(int ax, int ay, int nx, int ny)
 
 //------------------------------------------Mouvement Piece Blanc Echec----------------------------//
 
-int PionBlancEchec(int posx, int posy, int roiX, int roiY)
+bool PionBlancEchec(int posx, int posy, int roiX, int roiY)
 {
 	if (tableDeJeu[posy - 1][posx - 1] >= 0)
 	{
@@ -649,7 +612,7 @@ int PionBlancEchec(int posx, int posy, int roiX, int roiY)
 
 //------------------------------------------Mouvement Tour Blanc Echec----------------------------//
 
-int TourBlancEchec(int ax, int ay, int roiX, int roiY)
+bool TourBlancEchec(int ax, int ay, int roiX, int roiY)
 {
 	for (int i = ax - 1; i >= 0; i--) // Côté gauche
 	{
@@ -700,7 +663,7 @@ int TourBlancEchec(int ax, int ay, int roiX, int roiY)
 
 //------------------------------------------Mouvement Fou Blanc Echec----------------------------//
 
-int FouBlancEchec(int ax, int ay, int roiX, int roiY)
+bool FouBlancEchec(int ax, int ay, int roiX, int roiY)
 {
 	int j = ax - 1;
 	for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
@@ -759,7 +722,7 @@ int FouBlancEchec(int ax, int ay, int roiX, int roiY)
 
 //------------------------------------------Mouvement Reine Blanc Echec----------------------------//
 
-int ReineBlancEchec(int ax, int ay, int roiX, int roiY)
+bool ReineBlancEchec(int ax, int ay, int roiX, int roiY)
 {
 	for (int i = ax - 1; i >= 0; i--) // Côté gauche
 	{
@@ -862,7 +825,7 @@ int ReineBlancEchec(int ax, int ay, int roiX, int roiY)
 
 //------------------------------------------Mouvement Cheval Blanc Echec----------------------------//
 
-int ChevalBlancEchec(int ax, int ay, int roiX, int roiY)
+bool ChevalBlancEchec(int ax, int ay, int roiX, int roiY)
 {
 	if (ay - 2 >= 0 && ax - 1 >= 0 && roiY == ay - 2 && roiX == ax - 1 && tableDeJeu[roiY][roiX] >= 0)
 	{
@@ -901,7 +864,7 @@ int ChevalBlancEchec(int ax, int ay, int roiX, int roiY)
 
 //------------------------------------------Mouvement Roi Blanc Echec----------------------------//
 
-int RoiBlancEchec(int ax, int ay, int roiX, int roiY)
+bool RoiBlancEchec(int ax, int ay, int roiX, int roiY)
 {
 	if (ax - 1 >= 0 && ay - 1 >= 0 && roiY == ay - 1 && roiX == ax - 1 && tableDeJeu[roiY][roiX] <= 0)
 	{
@@ -945,7 +908,7 @@ int RoiBlancEchec(int ax, int ay, int roiX, int roiY)
 
 //------------------------------------------Mouvement Piece Noir Echec--------------------------//
 
-int PionNoirEchec(int ax, int ay, int roiX, int roiY)
+bool PionNoirEchec(int ax, int ay, int roiX, int roiY)
 {
 	if (tableDeJeu[ay + 1][ax - 1] <= 0)
 	{
@@ -966,7 +929,7 @@ int PionNoirEchec(int ax, int ay, int roiX, int roiY)
 
 //------------------------------------------Mouvement Tour Noir Echec--------------------------//
 
-int TourNoirEchec(int ax, int ay, int roiX, int roiY)
+bool TourNoirEchec(int ax, int ay, int roiX, int roiY)
 {
 	for (int i = ax - 1; i >= 0; i--) // Côté gauche
 	{
@@ -1017,7 +980,7 @@ int TourNoirEchec(int ax, int ay, int roiX, int roiY)
 
 //------------------------------------------Mouvement Fou Noir Echec--------------------------//
 
-int FouNoirEchec(int ax, int ay, int roiX, int roiY)
+bool FouNoirEchec(int ax, int ay, int roiX, int roiY)
 {
 	int j = ax - 1;
 	for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
@@ -1076,7 +1039,7 @@ int FouNoirEchec(int ax, int ay, int roiX, int roiY)
 
 //------------------------------------------Mouvement Reine Noir Echec--------------------------//
 
-int ReineNoirEchec(int ax, int ay, int roiX, int roiY)
+bool ReineNoirEchec(int ax, int ay, int roiX, int roiY)
 {
 	for (int i = ax - 1; i >= 0; i--) // Côté gauche
 	{
@@ -1179,7 +1142,7 @@ int ReineNoirEchec(int ax, int ay, int roiX, int roiY)
 
 //------------------------------------------Mouvement Cheval Noir Echec--------------------------//
 
-int ChevalNoirEchec(int ax, int ay, int roiX, int roiY)
+bool ChevalNoirEchec(int ax, int ay, int roiX, int roiY)
 {
 	if (ay - 2 >= 0 && ax - 1 >= 0 && roiY == ay - 2 && roiX == ax - 1 && tableDeJeu[roiY][roiX] <= 0)
 	{
@@ -1218,7 +1181,7 @@ int ChevalNoirEchec(int ax, int ay, int roiX, int roiY)
 
 //------------------------------------------Mouvement Roi Noir Echec--------------------------//
 
-int RoiNoirEchec(int ax, int ay, int roiX, int roiY)
+bool RoiNoirEchec(int ax, int ay, int roiX, int roiY)
 {
 	if (ax - 1 >= 0 && ay - 1 >= 0 && roiY == ay - 1 && roiX == ax - 1 && tableDeJeu[roiY][roiX] >= 0)
 	{
@@ -1262,7 +1225,7 @@ int RoiNoirEchec(int ax, int ay, int roiX, int roiY)
 
 //------------------------Mouvement Noir Checking Echec et match Roi----------------------------//
 
-int RoiNoirEchecTest(int posRoiX, int posRoiY)
+bool RoiNoirEchecTest(int posRoiX, int posRoiY)
 {
 	int ok = 0;
 	for (int i = 0; i < LONGUEUR; i++)
@@ -1307,7 +1270,7 @@ int RoiNoirEchecTest(int posRoiX, int posRoiY)
 
 //-----------------------------------Mouvement Roi Noir----------------------------------------//
 
-int RoiNoir(int ax, int ay, int nx, int ny)
+bool RoiNoir(int ax, int ay, int nx, int ny)
 {
 	if (ax - 1 >= 0 && ay - 1 >= 0 && ny == ay - 1 && nx == ax - 1 && tableDeJeu[ny][nx] <= 0)
 	{
@@ -1428,7 +1391,7 @@ int RoiNoir(int ax, int ay, int nx, int ny)
 
 //------------------------Mouvement Blanc Testing Echec et match Roi----------------------------//
 
-int RoiBlancEchecTest(int posRoiX, int posRoiY)
+bool RoiBlancEchecTest(int posRoiX, int posRoiY)
 {
 	int ok = 0;
 	for (int i = 0; i < LONGUEUR; i++)
@@ -1474,7 +1437,7 @@ int RoiBlancEchecTest(int posRoiX, int posRoiY)
 
 //-----------------------------------Mouvement Roi Blanc----------------------------------------//
 
-int RoiBlanc(int ax, int ay, int nx, int ny)
+bool RoiBlanc(int ax, int ay, int nx, int ny)
 {
 	if (ax - 1 >= 0 && ay - 1 >= 0 && ny == ay - 1 && nx == ax - 1 && tableDeJeu[ny][nx] >= 0)
 	{
@@ -1632,24 +1595,8 @@ void posRoiNoir()
 	}
 }
 
-//===============================================================================================//
-//                                   Fonction principale                                         //
-//===============================================================================================//
- void Run();
-
-int main(int argc, char const *argv[])
-{
-	Run();
-
-	return EXIT_SUCCESS;
-}
-
 void Run()
 {
-	// fênetre de jeu
-	RenderWindow window(VideoMode(800, 800), "Ehiquier by Emmanuel NGBAME");
-	Texture t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15;
-
     // importation des images
     t1.loadFromFile("images/Tableau.png");
     t2.loadFromFile("images/PieceNoir.png");
@@ -1740,7 +1687,7 @@ void Run()
 							if (transformationBlanc == 0)
 							{
 								posRoiNoir();
-								int h = RoiNoirEchecTest(roi_noir.x, roi_noir.y);
+								bool h = RoiNoirEchecTest(roi_noir.x, roi_noir.y);
 								if (h == 0)
 								{
 									EchecNoir = 1;
