@@ -22,8 +22,7 @@ Piece::Piece( int x, int y, bool white )
 {
     m_x     = x;
     m_y     = y;
-    m_white = white;
-    
+    m_white = white;    
     
     if(m_white == false)
     {
@@ -554,7 +553,7 @@ Echiquier::affiche()
     t2.loadFromFile(PION_NOIR);
     t3.loadFromFile(PION_BLANC);
     t4.loadFromFile(TOUR_NOIR);
-    t5.loadFromFile(TOUR_NOIR);
+    t5.loadFromFile(TOUR_BLANC);
     t6.loadFromFile(CHEVAL_BLANC);
     t7.loadFromFile(CHEVAL_NOIR);
     t8.loadFromFile(FOU_NOIR);
@@ -1032,34 +1031,129 @@ Echiquier::affiche()
 		// On dessine la table de jeu  
         //hear_we_go      
         
-        int cpt = 0;
-        for (int i = 0; i < LONGUEUR; i++)
+        for (int i = 1; i <= LONGUEUR; i++)
         {
-            for (int j = 0; j < LONGUEUR; j++)
+            for (int j = 1; j <= LONGUEUR; j++)
             {
                 // On place les piions noirs en premiers
                 // On récupère le pion dans ImagePiece
-                
-                Pion* pn    = new Pion(false, i+1);
-                Tour* tng    = new Tour(false, true);
-                Pion* pb    = new Pion(true, i+1);
+                // Tour *tg      = new Tour( false, true );
+                // Cavalier *cg  = new Cavalier( false, true );
+                // Fou *fg       = new Fou( false, true );
+                // Reine *q      = new Reine( false );
+                // Roi *r        = new Roi( false );
+                // Fou *fd       = new Fou( false, false );  
+                // Cavalier *cd  = new Cavalier( false, false );
+                // Tour *td      = new Tour( false, false );
+                // for ( int i = 1; i <= 8; i++ ) {
+                //     Pion *ptr     = new Pion( false, i );
+                // }   
+                // //Pion* pn    = new Pion(false, i+1);
+                // Tour* tng    = new Tour(false, true);
+                // Pion* pb    = new Pion(true, i+1);
                 // //Pion(false, i+1);
                 // m_cases[ 9 ] = nullptr;
                 // m_cases[ 9 ] = pn;
+                Piece* p    = m_cases[ (i - 1) + (j - 1) * 8 ];
+                int index   = (i - 1) + (j - 1) * 8 ;
 
-                //Piece* p = m_cases[ (j - 1) + (i - 1) * 8 ];
-
+                if (p != nullptr)
+                {                    
+                    int x       = p->x()-1;
+                    int y       = p->y()-1;
+                    // Pions noir
+                    if (p->isBlack())
+                    { 
+                        if (0 == x || 7 == x)
+                        {
+                            imgTourNoir.setPosition(x * taille, 0 * taille);
+                            window.draw(imgTourNoir);  
+                        }
+                        else if (1 == x || 6 == x)
+                        {
+                            imgChevalNoir.setPosition(x * taille, 0 * taille);
+                            window.draw(imgChevalNoir);  
+                        }
+                        else if (2 == x || 5 == x)
+                        {
+                            imgFouNoir.setPosition(x * taille, 0 * taille);
+                            window.draw(imgFouNoir);  
+                        }
+                        else if (3 == x)
+                        {
+                            imgReineNoir.setPosition(x * taille, 0 * taille);
+                            window.draw(imgReineNoir);  
+                        }
+                        else
+                        {
+                            imgRoiNoir.setPosition(x * taille, 0 * taille);
+                            window.draw(imgRoiNoir); 
+                        }                        
+                        if (1 == y)
+                        {
+                            for (int lignePionNoir = 0; lignePionNoir < 8; lignePionNoir++)
+                            {
+                                imgPionNoir.setPosition(lignePionNoir * taille, y * taille);
+                                window.draw(imgPionNoir);
+                            }  
+                        } 
+                    }
+                    // Pions blanc
+                    if (p->isWhite())
+                    { 
+                        if (0 == x || 7 == x)
+                        {
+                            imgTourBlanc.setPosition(x * taille, 7 * taille);
+                            window.draw(imgTourBlanc);  
+                        }
+                        else if (1 == x || 6 == x)
+                        {
+                            imgChevalBlanc.setPosition(x * taille, 7 * taille);
+                            window.draw(imgChevalBlanc);  
+                        }
+                        else if (2 == x || 5 == x)
+                        {
+                            imgFouBlanc.setPosition(x * taille, 7 * taille);
+                            window.draw(imgFouBlanc);  
+                        }
+                        else if (3 == x)
+                        {
+                            imgReineBlanc.setPosition(x * taille, 7 * taille);
+                            window.draw(imgReineBlanc);  
+                        }
+                        else
+                        {
+                            imgRoiBlanc.setPosition(x * taille, 7 * taille);
+                            window.draw(imgRoiBlanc); 
+                        }                        
+                        if (6 == y)
+                        {
+                            for (int lignePionBlanc = 0; lignePionBlanc < 8; lignePionBlanc++)
+                            {
+                                imgPionBlanc.setPosition(lignePionBlanc * taille, y * taille);
+                                window.draw(imgPionBlanc);
+                            }  
+                        } 
+                    }
+                
+                }
                 //if (m_cases[ (j - 1) + (i - 1) * 8 ]->getImage().loadFromFile(PION_NOIR))
-                if(pn->getImage().loadFromFile(TOUR_NOIR))
-                {
-                    imgTourNoir.setPosition(j * taille, 0 * taille);
-                    window.draw(imgTourNoir);
-                }
-                if(pn->getImage().loadFromFile(PION_NOIR))
-                {
-                    imgPionNoir.setPosition(j * taille, 1 * taille);
-                    window.draw(imgPionNoir);
-                }
+                //imgTourNoir.setPosition(j * taille, 0 * taille);
+                // if(( (i - 1) + (j - 1) * 8 ) == 1)
+                // {
+                //     imgPionNoir.setPosition((j - 1) * taille, 1 * taille);
+                //     window.draw(imgPionNoir);
+                // }
+                // if(( (i - 1) + (j - 1) * 8 ) == 49)
+                // {
+                //     imgPionBlanc.setPosition((j - 1) * taille, 6 * taille);
+                //     window.draw(imgPionBlanc);
+                // }
+                // if(p->getImage().loadFromFile(PION_NOIR))
+                // {
+                //     imgPionNoir.setPosition(j * taille, 1 * taille);
+                //     window.draw(imgPionNoir);
+                // }
                 // if (m_cases[ 49 ]->getImage().loadFromFile(PION_BLANC))
                 // {
                 //     imgPionBlanc.setPosition(j * taille, 6 * taille);
@@ -1250,29 +1344,15 @@ int main(int argc, char const *argv[])
 {
 
 	Echiquier e; // on créer la table de jeu
-    //e.affiche(); // on test par un affichage
+    //e.affiche(); // on test par un affichage R=>Tableau vide
 
-    JoueurNoir JoueurNr; // on créer un joueur noir (avec pions noires)
-    JoueurNr.placerPieces(e);
-    //JoueurBlanc JoueurBl;
+    JoueurNoir JoueurNr; // on créer un joueur noir (avec pions noirs)
+    JoueurBlanc JoueurBl; // on créer un joueur blanc (avec pions blancs)
     
-    //assert( JoueurNr.placerPieces( e ) ); // On place toutes les pions noirs sur la table
-    //e.affiche();
-    // assert( JoueurBl.placerPieces( e ) ); // On place toutes les pions noirs sur la table
-    e.affiche();
-    // JoueurNr.placerPieces( e );
-    // if(JoueurNr.placerPieces( e ))
-    //     cout << "ok noir" << endl;
-    // JoueurBl.placerPieces( e );
-    //cout << JoueurBl.placerPieces( e ) << endl;
-    // for (int i = 0; i < 8; i++)
-    // {
-    //     for (int j = 0; j < 8; j++)
-    //     {
-    //         int index = (j - 1) + (i - 1) * 8;
-    //         cout << index << endl;
-    //     }
-    // }    
+    assert( JoueurNr.placerPieces( e ) ); // On place tous les pions noirs sur la table
+    assert( JoueurBl.placerPieces( e ) ); // On place tous les pions blancs sur la table
+    
+    e.affiche(); // on test par un affichage R=>Tableau avec tous les pions   
     
     //Run();
 
