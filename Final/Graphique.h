@@ -61,7 +61,6 @@ int transformationBlanc = 0, transformationNoir = 0;
 
 // fênetre de jeu
 RenderWindow window(VideoMode(800, 800), "Ehiquier by Emmanuel NGBAME");
-Texture tab_jeux, tranformation_blanc, tranformation_noir;
 Texture t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15;
 
 //-----------------------------------------------------------
@@ -119,7 +118,7 @@ class Piece
     int  m_x;
     int  m_y;
     bool m_white;
-    Texture img;
+    String src;
    public:
     virtual ~Piece();
     Piece();
@@ -130,8 +129,7 @@ class Piece
     void         move( int x, int y );
     int          x();
     int          y();
-    Texture      getImage();
-    Sprite       dessineImg();
+    String       getSrc();
     bool         isWhite();
     bool         isBlack();
     void         affiche();
@@ -147,8 +145,7 @@ class Roi : public Piece
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y );
     void roque();
-    Texture getImage();
-    Sprite dessineImg();
+    String getSrc();
 };
 
 class Tour : virtual public Piece
@@ -158,8 +155,7 @@ class Tour : virtual public Piece
     ~Tour();
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y );
-    Texture getImage();
-    Sprite dessineImg();
+    String getSrc();
 };
 
 class Fou : virtual public Piece
@@ -169,8 +165,7 @@ class Fou : virtual public Piece
     ~Fou();
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y );
-    Texture getImage();
-    Sprite dessineImg();
+    String getSrc();
 };
 
 class Cavalier : public Piece
@@ -180,8 +175,7 @@ class Cavalier : public Piece
     ~Cavalier();
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y );
-    Texture getImage();
-    Sprite dessineImg();
+    String getSrc();
 };
 
 class Reine : public Fou, public Tour
@@ -191,8 +185,7 @@ class Reine : public Fou, public Tour
     ~Reine();
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y );
-    Texture getImage();
-    Sprite dessineImg();
+    String getSrc();
 };
 
 class Pion : public Piece
@@ -202,8 +195,7 @@ class Pion : public Piece
     ~Pion();
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y );
-    Texture getImage();
-    Sprite dessineImg();
+    String getSrc();
 };
 
 //##############################"""""HEADER JOUEUR"#######################################

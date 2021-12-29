@@ -23,15 +23,6 @@ Piece::Piece( int x, int y, bool white )
     m_x     = x;
     m_y     = y;
     m_white = white;    
-    
-    if(m_white == false)
-    {
-        this->img.loadFromFile(PION_NOIR);
-    }
-    else
-    {
-        this->img.loadFromFile(PION_BLANC); 
-    }
     // cout << "Constructeur Piece special" << endl;
 }
 
@@ -40,15 +31,6 @@ Piece::Piece( const Piece &autre )
     m_x     = autre.m_x;
     m_y     = autre.m_y;
     m_white = autre.m_white;
-
-    if(m_white == false)
-    {
-        this->img.loadFromFile(PION_NOIR);
-    }
-    else
-    {
-        this->img.loadFromFile(PION_BLANC); 
-    }
     // cout << "Constructeur Piece par copie" << endl;
 }
 
@@ -58,7 +40,7 @@ Piece::~Piece()
 }
 
 Piece &
-Piece::operator=( const Piece &autre )
+Piece::operator=(const Piece &autre )
 {
     m_x     = autre.m_x;
     m_y     = autre.m_y;
@@ -73,14 +55,6 @@ Piece::init( int x, int y, bool white )
     m_x     = x;
     m_y     = y;
     m_white = white;
-    if(m_white == false)
-    {
-        this->img.loadFromFile(PION_NOIR);
-    }
-    else
-    {
-        this->img.loadFromFile(PION_BLANC); 
-    }
 }
 
 void
@@ -101,10 +75,10 @@ Piece::y()
 {
     return m_y;
 }
-Texture
-Piece::getImage()
+String
+Piece::getSrc()
 {
-    return this->img;
+    return this->src;
 }
 bool
 Piece::isWhite()
@@ -144,11 +118,11 @@ Roi::Roi( bool white ) : Piece( 5, white ? 8 : 1, white )
     // cout << "Constructeur Roi" << endl;
     if(m_white == false)
     {
-        this->img.loadFromFile(ROI_NOIR);
+        this->src = ROI_NOIR;
     }
     else
     {
-        this->img.loadFromFile(ROI_BLANC); 
+        this->src = ROI_BLANC; 
     }
 }
 
@@ -169,10 +143,10 @@ Roi::vue()
 {
     return m_white ? 'R' : 'r';
 }
-Texture
-Roi::getImage()
+String
+Roi::getSrc()
 {
-    return this->img;
+    return this->src;
 }
 
 void
@@ -186,11 +160,11 @@ Reine::Reine( bool white )
 {
     if(m_white == false)
     {
-        this->img.loadFromFile(REINE_NOIR);
+        this->src  = REINE_NOIR;
     }
     else
     {
-        this->img.loadFromFile(REINE_BLANC); 
+        this->src  = REINE_BLANC; 
     }
     // cout << "Constructeur Reine" << endl;
 }
@@ -212,21 +186,21 @@ Reine::vue()
     return Fou::m_white ? 'Q' : 'q';
 }
 
-Texture
-Reine::getImage()
+String
+Reine::getSrc()
 {
-    return this->img;
+    return this->src;
 }
 
 Tour::Tour( bool white, bool gauche ) : Piece( gauche ? 1 : 8, white ? 8 : 1, white )
 {
     if(m_white == false)
     {
-        this->img.loadFromFile(TOUR_NOIR);
+        this->src  = TOUR_NOIR;
     }
     else
     {
-        this->img.loadFromFile(TOUR_NOIR); 
+        this->src  = TOUR_BLANC; 
     }
     // cout << "Constructeur Tour" << endl;
 }
@@ -248,21 +222,21 @@ Tour::vue()
 {
     return m_white ? 'T' : 't';
 }
-Texture
-Tour::getImage()
+String
+Tour::getSrc()
 {
-    return this->img;
+    return this->src;
 }
 
 Fou::Fou( bool white, bool gauche ) : Piece( gauche ? 3 : 6, white ? 8 : 1, white )
 {
     if(m_white == false)
     {
-        this->img.loadFromFile(FOU_NOIR);
+        this->src  = FOU_NOIR;
     }
     else
     {
-        this->img.loadFromFile(FOU_BLANC); 
+        this->src  = FOU_BLANC; 
     }
     // cout << "Constructeur Fou" << endl;
 }
@@ -285,21 +259,21 @@ Fou::vue()
     return m_white ? 'F' : 'f';
 }
 
-Texture
-Fou::getImage()
+String
+Fou::getSrc()
 {
-    return this->img;
+    return this->src;
 }
 
 Cavalier::Cavalier( bool white, bool gauche ) : Piece( gauche ? 2 : 7, white ? 8 : 1, white )
 {
     if(m_white == false)
     {
-        this->img.loadFromFile(CHEVAL_NOIR);
+        this->src  = CHEVAL_NOIR;
     }
     else
     {
-        this->img.loadFromFile(CHEVAL_BLANC); 
+        this->src  = CHEVAL_BLANC; 
     }
     // cout << "Constructeur Cavalier" << endl;
 }
@@ -321,21 +295,21 @@ Cavalier::vue()
     return m_white ? 'C' : 'c';
 }
 
-Texture
-Cavalier::getImage()
+String
+Cavalier::getSrc()
 {
-    return this->img;
+    return this->src;
 }
 
 Pion::Pion( bool white, int x ) : Piece( x, white ? 7 : 2, white )
 {
     if(m_white == false)
     {
-        this->img.loadFromFile(PION_NOIR);
+        this->src  = PION_NOIR;
     }
     else
     {
-        this->img.loadFromFile(PION_BLANC); 
+        this->src  = PION_BLANC; 
     }
     // cout << "Constructeur Pion" << endl;
 }
@@ -357,10 +331,10 @@ Pion::vue()
 {
     return m_white ? 'P' : 'p';
 }
-Texture
-Pion::getImage()
+String
+Pion::getSrc()
 {
-    return this->img;
+    return this->src;
 }
 //##############################"""""HEADER Echiquier"#######################################
 
@@ -532,23 +506,7 @@ Echiquier::enleverPiece( int x, int y )
 void
 Echiquier::affiche()
 {
-    // cout << endl << "  12345678" << endl;
-    // for ( int y = 1; y <= 8; ++y ) {
-    //     cout << y << " ";
-    //     for ( int x = 1; x <= 8; ++x ) {
-    //         char   c;
-    //         Piece *p = getPiece( x, y );
-    //         if ( nullptr == p )
-    //             c = ( ( x + y ) % 2 ) == 0 ? '#' : '.';
-    //         else
-    //             c = p->vue();  // p->isWhite() ? 'B' : 'N';
-    //         cout << c;
-    //     }
-    //     cout << " " << y << endl;
-    // }
-    // cout << "  12345678" << endl;
     // importation des images
-
     t1.loadFromFile(TABLEAU);
     t2.loadFromFile(PION_NOIR);
     t3.loadFromFile(PION_BLANC);
@@ -565,7 +523,7 @@ Echiquier::affiche()
     t14.loadFromFile(TRANFORMATION_BLANC);
     t15.loadFromFile(TRANFORMATION_NOIR);
 
-	// Afficher les images
+	// Affectation des images
 	Sprite imgTableau(t1);
 	Sprite imgPionNoir(t2);
     Sprite imgPionBlanc(t3);
@@ -581,26 +539,20 @@ Echiquier::affiche()
 	Sprite imgRoiBlanc(t13);
 	Sprite BlancTransformation(t14);
 	Sprite NoirTransformation(t15);
-
-    // Importation d'image
-    tab_jeux.loadFromFile(TABLEAU);
-    tranformation_blanc.loadFromFile(TRANFORMATION_BLANC);
-    tranformation_noir.loadFromFile(TRANFORMATION_NOIR);
-
-    // Afficher les images
-	// Sprite imgTableau(tab_jeux);
 	Sprite Deplacement;
-	// Sprite BlancTransformation(tranformation_blanc);
-	// Sprite NoirTransformation(tranformation_noir);
 
 	float dx = 0, dy = 0;
-	int pasMouvPiece = 0;
+	Piece* pasMouvPiece;
 
 	while (window.isOpen())
 	{
 		Vector2i pos = Mouse::getPosition(window);
 		x = pos.x / taille;
-		y = pos.y / taille;
+		y = pos.y / taille;  
+
+        // Variables temporaires pour la lisibilité du code
+        int index   = (x - 1) + (y - 1) * 8;
+        Piece* p    = m_cases[ index ];
 		Event e;
 
 		while (window.pollEvent(e))
@@ -610,512 +562,97 @@ Echiquier::affiche()
 				window.close();
 			}
 			window.clear();
-
-			// if (e.type == Event::MouseButtonPressed)
-			// {
-			// 	if (e.key.code == Mouse::Left)
-			// 	{
-			// 		//std::cout << "x=" << x << " y=" << y << "\n";
-			// 		//std::cout << "pos_x=" << pos.x << " pos_y=" << pos.y << "\n";
-			// 		//std::cout << "tableDeJeu[y][x]=" << tableDeJeu[y][x] << "\n";
-			// 		//std::cout << "\n";
-			// 		if (transformationBlanc == 1)
-			// 		{
-			// 			if (pos.y >= transforme_blanc.y * taille && pos.y <= (transforme_blanc.y + 1) * taille && pos.x >= transforme_blanc.x * taille && pos.x <= (transforme_blanc.x + 1) * taille)
-			// 			{
-			// 				int posX = pos.x % 100, posY = pos.y % 100;
-			// 				//std::cout << "pos.y=" << posY << "\n";
-			// 				//std::cout << "pos.x=" << posX << "\n";
-			// 				if (posX < 50 && posY < 50 && posX > 0 && posY > 0)
-			// 				{
-			// 					tableDeJeu[transforme_blanc.y][transforme_blanc.x] = TOUR_BLANC;
-			// 					transformationBlanc = 0;
-			// 				}
-			// 				if (posX > 50 && posX < 100 && posY < 50 && posY > 0)
-			// 				{
-			// 					tableDeJeu[transforme_blanc.y][transforme_blanc.x] = REINE_BLANC;
-			// 					transformationBlanc = 0;
-			// 				}
-			// 				if (posX > 50 && posX < 100 && posY>50 && posY < 100)
-			// 				{
-			// 					tableDeJeu[transforme_blanc.y][transforme_blanc.x] = CHEVAL_BLANC;
-			// 					transformationBlanc = 0;
-			// 				}
-			// 				if (posX < 50 && posX>0 && posY > 50 && y < 100)
-			// 				{
-			// 					tableDeJeu[transforme_blanc.y][transforme_blanc.x] = FOU_BLANC;
-			// 					transformationBlanc = 0;
-			// 				}
-			// 				if (transformationBlanc == 0)
-			// 				{
-			// 					posRoiNoir();
-			// 					bool h = RoiNoirEchecTest(roi_noir.x, roi_noir.y);
-			// 					if (h == 0)
-			// 					{
-			// 						EchecNoir = 1;
-			// 					}
-			// 				}
-			// 			}
-			// 		}
-			// 		if (transformationNoir == 1)
-			// 		{
-			// 			if (pos.y >= transforme_noir.y * taille && pos.y <= (transforme_noir.y + 1) * taille && pos.x >= transforme_noir.x * taille && pos.x <= (transforme_noir.x + 1) * taille)
-			// 			{
-			// 				int posX = pos.x % 100, posY = pos.y % 100;
-			// 				//std::cout << "pos.y=" << posY << "\n";
-			// 				//std::cout << "pos.x=" << posX << "\n";
-			// 				if (posX < 50 && posY < 50 && posX > 0 && posY > 0)
-			// 				{
-			// 					tableDeJeu[transforme_noir.y][transforme_noir.x] = TOUR_NOIR;
-			// 					transformationNoir = 0;
-			// 				}
-			// 				if (posX > 50 && posX < 100 && posY < 50 && posY > 0)
-			// 				{
-			// 					tableDeJeu[transforme_noir.y][transforme_noir.x] = REINE_NOIR;
-			// 					transformationNoir = 0;
-			// 				}
-			// 				if (posX > 50 && posX < 100 && posY>50 && posY < 100)
-			// 				{
-			// 					tableDeJeu[transforme_noir.y][transforme_noir.x] = CHEVAL_NOIR;
-			// 					transformationNoir = 0;
-			// 				}
-			// 				if (posX < 50 && posX>0 && posY > 50 && y < 100)
-			// 				{
-			// 					tableDeJeu[transforme_noir.y][transforme_noir.x] = FOU_NOIR;
-			// 					transformationNoir = 0;
-			// 				}
-			// 				if (transformationNoir == 0)
-			// 				{
-			// 					posRoiBlanc();
-			// 					int h = RoiBlancEchecTest(roi_blanc.x, roi_blanc.y);
-			// 					if (h == 0)
-			// 					{
-			// 						EchecBlanc = 1;
-			// 					}
-			// 				}
-			// 			}
-			// 		}
-			// 		if (tableDeJeu[y][x] != 0)
-			// 		{
-			// 			dx = pos.x - x * 100;
-			// 			dy = pos.y - y * 100;
-			// 			if (tableDeJeu[y][x]  == PION_NOIR && mouvement ==1)
-			// 			{
-			// 				pasMouvPiece = PION_NOIR;
-			// 				Deplacement = imgPionNoir;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}
-			// 			if (tableDeJeu[y][x] == PION_BLANC && mouvement ==0)
-			// 			{
-			// 				pasMouvPiece = PION_BLANC;
-			// 				Deplacement = imgPionBlanc;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}
-			// 			if (tableDeJeu[y][x] == TOUR_NOIR && mouvement ==1)
-			// 			{
-			// 				pasMouvPiece = TOUR_NOIR;
-			// 				Deplacement = imgTourNoir;
-			// 				tableDeJeu[y][x] = 0;
-
-			// 			}
-			// 			if (tableDeJeu[y][x] == TOUR_BLANC && mouvement ==0)
-			// 			{
-			// 				pasMouvPiece = TOUR_BLANC;
-			// 				Deplacement = imgTourNoir;
-			// 				tableDeJeu[y][x] = 0;
-
-			// 			}
-			// 			if (tableDeJeu[y][x] == CHEVAL_BLANC && mouvement ==0)
-			// 			{
-			// 				pasMouvPiece = CHEVAL_BLANC;
-			// 				Deplacement = imgChevalBlanc;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}
-			// 			if (tableDeJeu[y][x] == CHEVAL_NOIR && mouvement ==1)
-			// 			{
-			// 				pasMouvPiece = CHEVAL_NOIR;
-			// 				Deplacement = imgChevalNoir;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}
-			// 			if (tableDeJeu[y][x] == FOU_NOIR && mouvement ==1)
-			// 			{
-			// 				pasMouvPiece = FOU_NOIR;
-			// 				Deplacement = imgFouNoir;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}
-			// 			if (tableDeJeu[y][x] == FOU_BLANC && mouvement ==0)
-			// 			{
-			// 				pasMouvPiece = FOU_BLANC;
-			// 				Deplacement = imgFouBlanc;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}
-			// 			if (tableDeJeu[y][x] == REINE_BLANC && mouvement ==0)
-			// 			{
-			// 				pasMouvPiece = REINE_BLANC;
-			// 				Deplacement = imgReineBlanc;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}
-			// 			if (tableDeJeu[y][x] == REINE_NOIR && mouvement ==1)
-			// 			{
-			// 				pasMouvPiece = REINE_NOIR;
-			// 				Deplacement = imgReineNoir;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}
-			// 			if (tableDeJeu[y][x] == ROI_NOIR && mouvement ==1)
-			// 			{
-			// 				pasMouvPiece = ROI_NOIR;
-			// 				Deplacement = imgRoiNoir;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}
-			// 			if (tableDeJeu[y][x] == ROI_BLANC && mouvement ==0)
-			// 			{
-			// 				pasMouvPiece = ROI_BLANC;
-			// 				Deplacement = imgRoiBlanc;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}
-			// 			if (tableDeJeu[y][x] == 0)
-			// 			{
-			// 				ca_bouge = 1;
-			// 				ancienne_Pos.x = x;
-			// 				ancienne_Pos.y = y;
-			// 			}
-			// 		}
-			// 	}
-			// }
-			
-			// if (e.type == Event::MouseButtonReleased)
-			// {
-			// 	if (e.key.code == Mouse::Left)
-			// 	{
-			// 		int ok=2;
-			// 		if (pasMouvPiece == PION_BLANC && ca_bouge==1)
-			// 		{
-			// 			 ok = PionBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 		}
-			// 		if (pasMouvPiece  == PION_NOIR && ca_bouge == 1)
-			// 		{
-			// 			ok = PionNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 		}
-			// 		if (pasMouvPiece == TOUR_BLANC && ca_bouge == 1)
-			// 		{
-			// 			ok = TourBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 			if (ok == 1 && mouvGaucheTourBlanc==0 && ancienne_Pos.y == 7 && ancienne_Pos.x == 0)
-			// 			{
-			// 				mouvGaucheTourBlanc = 1;
-			// 				//std::cout << mouvGaucheTourBlanc << "\n";
-			// 			}
-			// 			if (ok == 1 && mouvDroitTourBlanc==0 && ancienne_Pos.y == 7 && ancienne_Pos.x == 7)
-			// 			{
-			// 				mouvDroitTourBlanc = 1;
-			// 				//std::cout << mouvDroitTourBlanc << "\n";
-			// 			}
-			// 		}
-			// 		if (pasMouvPiece == TOUR_NOIR && ca_bouge == 1)
-			// 		{
-			// 			ok=TourNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 			if (ok == 1 && mouvDroitTourNoir == 0 && ancienne_Pos.y == 0 && ancienne_Pos.x == 7)
-			// 			{
-			// 				mouvDroitTourNoir = 1;
-			// 				//std::cout << mouvDroitTourNoir<< "\n";
-			// 			}
-			// 			if (ok == 1 && mouvGaucheTourNoir == 0 && ancienne_Pos.y == 0 && ancienne_Pos.x == 0)
-			// 			{
-			// 				mouvGaucheTourNoir = 1;
-			// 				//std::cout << mouvGaucheTourNoir << "\n";
-			// 			}
-			// 		}
-			// 		if (pasMouvPiece == FOU_BLANC && ca_bouge == 1)
-			// 		{
-			// 			ok = FouBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 		}
-			// 		if (pasMouvPiece == FOU_NOIR && ca_bouge == 1)
-			// 		{
-			// 			ok= FouNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 		}
-			// 		if (pasMouvPiece == REINE_BLANC && ca_bouge == 1)
-			// 		{
-			// 			ok=ReineBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 		}
-			// 		if (pasMouvPiece == REINE_NOIR && ca_bouge == 1)
-			// 		{
-			// 			ok=ReineNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 		}
-			// 		if (pasMouvPiece == CHEVAL_BLANC && ca_bouge == 1)
-			// 		{
-			// 			ok=ChevalBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 		}
-			// 		if (pasMouvPiece == CHEVAL_NOIR && ca_bouge == 1)
-			// 		{
-			// 			ok = ChevalNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 		}
-			// 		if (pasMouvPiece == ROI_NOIR && ca_bouge == 1)
-			// 		{
-			// 			ok=RoiNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 			if (ok == 1 && RoiNoirPremierMouv == 0)
-			// 			{
-			// 				RoiNoirPremierMouv = 1;
-			// 			//	std::cout << imgRoiNoir << "\n";
-			// 			}
-			// 		}
-			// 		if (pasMouvPiece == ROI_BLANC && ca_bouge == 1)
-			// 		{
-			// 			ok=RoiBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
-			// 			if (ok == 1 && RoiBlancPremierMouv == 0)
-			// 			{
-			// 				RoiBlancPremierMouv = 1;
-			// 				//std::cout << "primaDeplacementimgRoiBlanc=" << imgRoiBlanc << "\n";
-			// 			}
-			// 		}
-			// 		if (ok == 1)
-			// 		{
-			// 			int nr = tableDeJeu[y][x];
-			// 			tableDeJeu[y][x] = pasMouvPiece;
-			// 			if (y == 0 && pasMouvPiece == PION_BLANC)
-			// 			{
-			// 				transformationBlanc = 1;
-			// 				transforme_blanc.x = x;
-			// 				transforme_blanc.y = y;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}
-			// 			if (y == 7 && pasMouvPiece  == PION_NOIR)
-			// 			{
-			// 				transformationNoir = 1;
-			// 				transforme_noir.x = x;
-			// 				transforme_noir.y = y;
-			// 				tableDeJeu[y][x] = 0;
-			// 			}                        
-			// 			if(mouvement == 0) // blanc a bougé et noir suit
-			// 			{
-			// 				if (EchecBlanc == 1)
-			// 				{
-			// 					posRoiBlanc();
-			// 					int s = RoiBlancEchecTest(roi_blanc.x, roi_blanc.y);
-			// 					if (s == 0)
-			// 					{
-			// 						tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
-			// 						tableDeJeu[y][x] = nr;
-			// 					}
-			// 					else
-			// 					{
-			// 						EchecBlanc = 0;
-			// 						posRoiNoir();
-			// 						int Echec = RoiNoirEchecTest(roi_noir.x,roi_noir.y);
-			// 						if (Echec == 0)
-			// 						{
-			// 							EchecNoir = 1;
-			// 						}
-			// 						mouvement = 1;
-			// 					}
-			// 				}
-			// 				else
-			// 				{
-			// 					posRoiBlanc();
-			// 					int sa = RoiBlancEchecTest(roi_blanc.x, roi_blanc.y);
-			// 					if (sa == 0)
-			// 					{
-			// 						tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
-			// 						tableDeJeu[y][x] = nr;
-			// 					}
-			// 					else
-			// 					{
-			// 						posRoiNoir();
-			// 						int Echec = RoiNoirEchecTest(roi_noir.x, roi_noir.y);
-			// 						if (Echec == 0)
-			// 						{
-			// 							EchecNoir = 1;
-			// 						}
-			// 						mouvement = 1;
-			// 					}
-			// 				}
-			// 			}
-			// 			else // noir a bougé et blanc a suivi
-			// 			{
-			// 				if (EchecNoir == 1)
-			// 				{
-			// 					posRoiNoir();
-			// 					int s = RoiNoirEchecTest(roi_noir.x,roi_noir.y);
-			// 					if (s == 0)
-			// 					{
-			// 						tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
-			// 						tableDeJeu[y][x] = nr;
-			// 					}
-			// 					else
-			// 					{
-			// 						EchecNoir = 0;
-			// 						posRoiBlanc();
-			// 						int Echec = RoiBlancEchecTest(roi_blanc.x,roi_blanc.y);
-			// 						if (Echec == 0)
-			// 						{
-			// 							EchecBlanc = 1;
-			// 						}
-			// 						mouvement = 0;
-			// 					}
-			// 				}
-			// 				else
-			// 				{
-			// 					posRoiNoir();
-			// 					int sa = RoiNoirEchecTest(roi_noir.x, roi_noir.y);
-			// 					if (sa == 0)
-			// 					{
-			// 						tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
-			// 						tableDeJeu[y][x] = nr;
-			// 					}
-			// 					else
-			// 					{
-			// 						posRoiBlanc();
-			// 						int Echec = RoiBlancEchecTest(roi_blanc.x, roi_blanc.y);
-			// 						if (Echec == 0)
-			// 						{
-			// 							EchecBlanc = 1;
-			// 						}
-			// 						mouvement = 0;
-			// 					}
-			// 				}
-			// 			}             
-                    
-                    
-            //         }
-			// 		else if(ok==0)
-			// 		{
-			// 			tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
-			// 		}
-            //        ca_bouge = 0;
-			// 	}
-			// }
-		
-		}
-        // Afficher les images
-        /*
-        Sprite imgTableau(t1);
-        Sprite imgPionNoir(t2);
-        Sprite imgPionBlanc(t3);
-        Sprite imgTourNoir(t4);
-        Sprite imgTourBlanc(t5);
-        Sprite imgChevalBlanc(t6);
-        Sprite imgChevalNoir(t7);
-        Sprite imgFouNoir(t8);
-        Sprite imgFouBlanc(t9);
-        Sprite imgReineBlanc(t10);
-        Sprite imgReineNoir(t11);
-        Sprite imgRoiNoir(t12);
-        Sprite imgRoiBlanc(t13);
-        Sprite Deplacement;
-        Sprite BlancTransformation(t14);
-        Sprite NoirTransformation(t15);
-        
-        */
-
+        }
 		// Affichage
 		window.clear();
 		window.draw(imgTableau);
-		        
-		// Cas particulier de Dame
 
-		if (transformationBlanc == 1)
-		{
-			BlancTransformation.setPosition(transforme_blanc.x* taille, transforme_blanc.y* taille);
-			window.draw(BlancTransformation);
-		}
-		if (transformationNoir == 1)
-		{
-			NoirTransformation.setPosition(transforme_noir.x* taille, transforme_noir.y* taille);
-			window.draw(NoirTransformation);
-		}
-		if (ca_bouge == 1)
-		{
-			Deplacement.setPosition(pos.x-dx, pos.y-dy);
-			window.draw(Deplacement);
-		}
-
-		// Cas normal
-		// On dessine la table de jeu  
-        //hear_we_go      
+        // while (window.pollEvent(e))
+        // {
+        //     /* code */
+        // }
         
+		// Cas normal
+		// On dessine la table de jeu   
         for (int i = 1; i <= LONGUEUR; i++)
         {
             for (int j = 1; j <= LONGUEUR; j++)
             {
                 // Variables temporaires pour la lisibilité du code
-                Piece* p    = m_cases[ (i - 1) + (j - 1) * 8 ];
                 int index   = (i - 1) + (j - 1) * 8;
+                Piece* p    = m_cases[ index ];
 
                 if (p != nullptr)
                 {                    
                     int x       = p->x()-1;
                     int y       = p->y()-1;
-                    
+
                     // Pions noir
                     if (p->isBlack())
                     { 
-                        if (0 == x || 7 == x)
+                        if (p->getSrc() == TOUR_NOIR)
                         {
-                            imgTourNoir.setPosition(x * taille, 0 * taille);
+                            imgTourNoir.setPosition(x * taille, y * taille);
                             window.draw(imgTourNoir);  
                         }
-                        else if (1 == x || 6 == x)
+                        if (p->getSrc() == CHEVAL_NOIR)
                         {
-                            imgChevalNoir.setPosition(x * taille, 0 * taille);
+                            imgChevalNoir.setPosition(x * taille, y * taille);
                             window.draw(imgChevalNoir);  
                         }
-                        else if (2 == x || 5 == x)
+                        if (p->getSrc() == FOU_NOIR)
                         {
                             imgFouNoir.setPosition(x * taille, 0 * taille);
                             window.draw(imgFouNoir);  
                         }
-                        else if (3 == x)
+                        if (p->getSrc() == REINE_NOIR)
                         {
                             imgReineNoir.setPosition(x * taille, 0 * taille);
                             window.draw(imgReineNoir);  
                         }
-                        else
+                        if (p->getSrc() == ROI_NOIR)
                         {
                             imgRoiNoir.setPosition(x * taille, 0 * taille);
                             window.draw(imgRoiNoir); 
                         }                        
-                        if (1 == y)
+                        if (p->getSrc() == PION_NOIR)
                         {
-                            for (int lignePionNoir = 0; lignePionNoir < 8; lignePionNoir++)
-                            {
-                                imgPionNoir.setPosition(lignePionNoir * taille, y * taille);
-                                window.draw(imgPionNoir);
-                            }  
+                            imgPionNoir.setPosition(x * taille, y * taille);
+                            window.draw(imgPionNoir); 
                         } 
                     }
                     // Pions blanc
                     if (p->isWhite())
                     { 
-                        if (0 == x || 7 == x)
+                        if (p->getSrc() == TOUR_BLANC)
                         {
                             imgTourBlanc.setPosition(x * taille, 7 * taille);
                             window.draw(imgTourBlanc);  
                         }
-                        else if (1 == x || 6 == x)
+                        if (p->getSrc() == CHEVAL_BLANC)
                         {
-                            imgChevalBlanc.setPosition(x * taille, 7 * taille);
+                            imgChevalBlanc.setPosition(x * taille, y * taille);
                             window.draw(imgChevalBlanc);  
                         }
-                        else if (2 == x || 5 == x)
+                        if (p->getSrc() == FOU_BLANC)
                         {
-                            imgFouBlanc.setPosition(x * taille, 7 * taille);
+                            imgFouBlanc.setPosition(x * taille, y * taille);
                             window.draw(imgFouBlanc);  
                         }
-                        else if (3 == x)
+                        if (p->getSrc() == REINE_BLANC)
                         {
-                            imgReineBlanc.setPosition(x * taille, 7 * taille);
+                            imgReineBlanc.setPosition(x * taille, y * taille);
                             window.draw(imgReineBlanc);  
                         }
-                        else
+                        if (p->getSrc() == ROI_BLANC)
                         {
-                            imgRoiBlanc.setPosition(x * taille, 7 * taille);
+                            imgRoiBlanc.setPosition(x * taille, y * taille);
                             window.draw(imgRoiBlanc); 
                         }                        
-                        if (6 == y)
+                        if (p->getSrc() == PION_BLANC)
                         {
-                            for (int lignePionBlanc = 0; lignePionBlanc < 8; lignePionBlanc++)
-                            {
-                                imgPionBlanc.setPosition(lignePionBlanc * taille, y * taille);
-                                window.draw(imgPionBlanc);
-                            }  
+                            imgPionBlanc.setPosition(x * taille, y * taille);
+                            window.draw(imgPionBlanc);  
                         } 
                     }
                 
@@ -1273,9 +810,26 @@ JoueurBlanc::isWhite()
 
 //################################################ PROG ############################################
 
+class test
+{
+    public:
+        String src;
+    public:
+        test();
+        ~test();
+};
+
+test::test()
+{
+    src = PION_BLANC;
+}
+
+test::~test()
+{
+}
+
 int main(int argc, char const *argv[])
 {
-
 	Echiquier e; // on créer la table de jeu
     //e.affiche(); // on test par un affichage R=>Tableau vide
 
