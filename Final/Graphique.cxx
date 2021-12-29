@@ -1035,32 +1035,15 @@ Echiquier::affiche()
         {
             for (int j = 1; j <= LONGUEUR; j++)
             {
-                // On place les piions noirs en premiers
-                // On récupère le pion dans ImagePiece
-                // Tour *tg      = new Tour( false, true );
-                // Cavalier *cg  = new Cavalier( false, true );
-                // Fou *fg       = new Fou( false, true );
-                // Reine *q      = new Reine( false );
-                // Roi *r        = new Roi( false );
-                // Fou *fd       = new Fou( false, false );  
-                // Cavalier *cd  = new Cavalier( false, false );
-                // Tour *td      = new Tour( false, false );
-                // for ( int i = 1; i <= 8; i++ ) {
-                //     Pion *ptr     = new Pion( false, i );
-                // }   
-                // //Pion* pn    = new Pion(false, i+1);
-                // Tour* tng    = new Tour(false, true);
-                // Pion* pb    = new Pion(true, i+1);
-                // //Pion(false, i+1);
-                // m_cases[ 9 ] = nullptr;
-                // m_cases[ 9 ] = pn;
+                // Variables temporaires pour la lisibilité du code
                 Piece* p    = m_cases[ (i - 1) + (j - 1) * 8 ];
-                int index   = (i - 1) + (j - 1) * 8 ;
+                int index   = (i - 1) + (j - 1) * 8;
 
                 if (p != nullptr)
                 {                    
                     int x       = p->x()-1;
                     int y       = p->y()-1;
+                    
                     // Pions noir
                     if (p->isBlack())
                     { 
@@ -1136,57 +1119,7 @@ Echiquier::affiche()
                         } 
                     }
                 
-                }
-                //if (m_cases[ (j - 1) + (i - 1) * 8 ]->getImage().loadFromFile(PION_NOIR))
-                //imgTourNoir.setPosition(j * taille, 0 * taille);
-                // if(( (i - 1) + (j - 1) * 8 ) == 1)
-                // {
-                //     imgPionNoir.setPosition((j - 1) * taille, 1 * taille);
-                //     window.draw(imgPionNoir);
-                // }
-                // if(( (i - 1) + (j - 1) * 8 ) == 49)
-                // {
-                //     imgPionBlanc.setPosition((j - 1) * taille, 6 * taille);
-                //     window.draw(imgPionBlanc);
-                // }
-                // if(p->getImage().loadFromFile(PION_NOIR))
-                // {
-                //     imgPionNoir.setPosition(j * taille, 1 * taille);
-                //     window.draw(imgPionNoir);
-                // }
-                // if (m_cases[ 49 ]->getImage().loadFromFile(PION_BLANC))
-                // {
-                //     imgPionBlanc.setPosition(j * taille, 6 * taille);
-                //     window.draw(imgPionBlanc);
-                // }
-                // if ((j == 0 && i == 1) || (j == 0 && i == 6))
-                // {
-                //     imgChevalNoir.setPosition(i * taille, j * taille);
-                //     window.draw(imgChevalNoir);
-                // }
-                /*
-                if ((j == 0 && i == 2) || (j == 0 && i == 5))
-                {
-                    imgFouNoir.setPosition(i * taille, j * taille);
-                    window.draw(imgFouNoir);
-                }
-                if (j == 0 && i == 3)
-                {
-                    imgReineNoir.setPosition(i * taille, j * taille);
-                    window.draw(imgReineNoir);
-                }
-                if (j == 0 && i == 4)
-                {
-                    imgRoiNoir.setPosition(i * taille, j * taille);
-                    window.draw(imgRoiNoir);
-                }
-                if ((j == 1 && i < 8))
-                {
-                    imgPionNoir.setPosition(i * taille, j * taille);
-                    window.draw(imgPionNoir);
-                }
-                */   
-                // En suite on place les pions blancs          
+                }         
             }
         }
 
