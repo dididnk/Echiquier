@@ -8,7 +8,44 @@
 using namespace sf;
 using namespace std;
 
+bool isEchec = true;
+void
+getPositionRoi( Echiquier &e, Piece &p)
+{
+    int ax  = (p.x() - 1);
+    int ay  = (p.y() - 1);
 
+    if(p.isWhite())
+    {
+        for (int i = 0; i < LONGUEUR; i++)
+        {
+            for (int j = 0; j < LONGUEUR; j++)
+            {
+                if ( e.getPiece(i, j)->getSrc() == ROI_BLANC)
+                {
+                    ax  = j;
+                    ay  = i;
+                    break;
+                }
+            }
+        }
+    }
+    if(p.isBlack())
+    {
+        for (int i = 0; i < LONGUEUR; i++)
+        {
+            for (int j = 0; j < LONGUEUR; j++)
+            {
+                if ( e.getPiece(i, j)->getSrc() == ROI_NOIR)
+                {
+                    ax  = j;
+                    ay  = i;
+                    break;
+                }
+            }
+        }
+    }
+}
 
 //################################################ PIECE.cxx ############################################
 
@@ -138,7 +175,7 @@ Roi::EchecTest( Echiquier &e)
 
 	if(this->isWhite())
 	{
-		int isEchec= 0;
+		// int isEchec= 0;
 		for (int i = 0; i < LONGUEUR; i++)
 		{
 			for (int j = 0; j < LONGUEUR; j++)
@@ -181,7 +218,7 @@ Roi::EchecTest( Echiquier &e)
 
 	if(this->isBlack())
     {
-        int isEchec= 0;
+        // int isEchec= 0;
         for (int i = 0; i < LONGUEUR; i++)
         {
             for (int j = 0; j < LONGUEUR; j++)
@@ -232,7 +269,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 	{
 		if (ax - 1 >= 0 && ay - 1 >= 0 && y == ay - 1 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
 		{
-			int isEchec = EchecTest(ax - 1, ay - 1);
+			// int isEchec = EchecTest(ax - 1, ay - 1);
 			if (isEchec == 1)
 			{
 				return 1;  // Haut gauche
@@ -240,7 +277,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ay - 1 >= 0 && x == ax && y == ay - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
 		{
-			int isEchec = EchecTest(ax, ay - 1);
+			// int isEchec = EchecTest(ax, ay - 1);
 			if (isEchec == 1)
 			{
 				return 1; // Côté Haut
@@ -248,7 +285,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ay - 1 >= 0 && ax + 1 < LONGUEUR && x == ax + 1 && y == ay - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
 		{
-			int isEchec = EchecTest(ax + 1, ay - 1);
+			// int isEchec = EchecTest(ax + 1, ay - 1);
 			if (isEchec == 1)
 			{
 				return 1; // Haut droit
@@ -256,7 +293,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ax + 1 < LONGUEUR && y == ay && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
 		{
-			int isEchec = EchecTest(ax + 1, ay);
+			// int isEchec = EchecTest(ax + 1, ay);
 			if (isEchec == 1)
 			{
 				return 1; // droit
@@ -264,7 +301,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ax + 1 < LONGUEUR && ay + 1 < LONGUEUR && y == ay + 1 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
 		{
-			int isEchec = EchecTest(ax + 1, ay + 1);
+			// int isEchec = EchecTest(ax + 1, ay + 1);
 			if (isEchec == 1)
 			{
 				return 1; // droit bas
@@ -272,7 +309,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ay + 1 < LONGUEUR && y == ay + 1 && x == ax && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
 		{
-			int isEchec = EchecTest(ax, ay + 1);
+			// int isEchec = EchecTest(ax, ay + 1);
 			if (isEchec == 1)
 			{
 				return 1; // bas
@@ -280,7 +317,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ax - 1 >= 0 && ay + 1 < LONGUEUR && x == ax - 1 && y == ay + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
 		{
-			int isEchec = EchecTest(ax - 1, ay + 1);
+			// int isEchec = EchecTest(ax - 1, ay + 1);
 			if (isEchec == 1)
 			{
 				return 1; // gauche bas
@@ -288,16 +325,16 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ax - 1 >= 0 && y == ay && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
 		{
-			int isEchec = EchecTest(ax - 1, ay);
+			// int isEchec = EchecTest(ax - 1, ay);
 			if (isEchec == 1)
 			{
 				return 1; // gauche
 			}
 		}
 		// Tourner à Droit
-		if (RoiBlancPremierMouv == 0 && mouvDroitTourBlanc == 0 && m_cases[7][5] == 0 && m_cases[7][6] == 0 && y==7 && x==6)
+		if (RoiBlancPremierMouv == 0 && mouvDroitTourBlanc == 0 && nullptr == e.getPiece(7, 5) && nullptr == e.getPiece(7, 6) && y==7 && x==6)
 		{
-			int isEchec = 1;
+			// int isEchec = 1;
 			isEchec = EchecTest(4, 7);
 			if (isEchec == 1)
 			{
@@ -317,9 +354,9 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 			}
 		}
 		// Tourner à Gauche
-		if (RoiBlancPremierMouv == 0 && mouvDroitTourBlanc == 0 && m_cases[7][3] == 0 && m_cases[7][2] == 0 && m_cases[7][1] == 0 && y == 7 && x == 2)
+		if (RoiBlancPremierMouv == 0 && mouvDroitTourBlanc == 0 && nullptr == e.getPiece(7, 3) && nullptr == e.getPiece(7, 2) && m_cases[7][1] == 0 && y == 7 && x == 2)
 		{
-			int isEchec = 1;
+			// int isEchec = 1;
 			isEchec = EchecTest(4, 7);
 			if (isEchec == 1)
 			{
@@ -348,7 +385,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 	{
 		if (ax - 1 >= 0 && ay - 1 >= 0 && y == ay - 1 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
 		{
-			int isEchec = EchecTest(ax - 1, ay - 1);
+			// int isEchec = EchecTest(ax - 1, ay - 1);
 			if (isEchec == 1)
 			{
 				return 1;  // Haut gauche
@@ -356,7 +393,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ay - 1 >= 0 && x == ax && y == ay-1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
 		{
-			int isEchec = EchecTest(ax, ay-1);
+			// int isEchec = EchecTest(ax, ay-1);
 			if (isEchec == 1)
 			{
 				return 1; // Côté Haut
@@ -364,7 +401,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ay - 1 >= 0 && ax + 1 < LONGUEUR && x == ax + 1 && y == ay - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
 		{
-			int isEchec = EchecTest(ax+ 1, ay- 1);
+			// int isEchec = EchecTest(ax+ 1, ay- 1);
 			if (isEchec == 1)
 			{
 				return 1; // Haut droit
@@ -372,7 +409,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ax + 1 < LONGUEUR && y == ay && x == ax+1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
 		{
-			int isEchec = EchecTest(ax+1, ay);
+			// int isEchec = EchecTest(ax+1, ay);
 			if (isEchec == 1)
 			{
 				return 1; // droit
@@ -380,7 +417,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ax + 1 < LONGUEUR && ay + 1 < LONGUEUR && y == ay + 1 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
 		{
-			int isEchec = EchecTest(ax + 1, ay + 1);
+			// int isEchec = EchecTest(ax + 1, ay + 1);
 			if (isEchec == 1)
 			{
 				return 1; // droit bas
@@ -388,7 +425,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ay + 1 < LONGUEUR && y == ay+1 && x == ax && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
 		{
-			int isEchec = EchecTest(ax, ay+1);
+			// int isEchec = EchecTest(ax, ay+1);
 			if (isEchec == 1)
 			{
 				return 1; // bas
@@ -396,7 +433,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ax - 1 >=0 && ay + 1 <LONGUEUR && x == ax - 1 && y == ay + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
 		{
-			int isEchec = EchecTest(ax-1, ay+ 1);
+			// int isEchec = EchecTest(ax-1, ay+ 1);
 			if (isEchec == 1)
 			{
 				return 1; // gauche bas
@@ -404,7 +441,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		}
 		if (ax - 1 >= 0 && y == ay && x == ax-1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
 		{
-			int isEchec = EchecTest(ax-1, ay);
+			// int isEchec = EchecTest(ax-1, ay);
 			if (isEchec == 1)
 			{
 				return 1; // gauche
@@ -413,7 +450,7 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 		// Tourner à Droit
 		if (mouvDroitTourNoir==0 && RoiNoirPremierMouv ==0 && m_cases[0][5]==0 && m_cases[0][6]==0 && y==0 && x==6)
 		{
-			int isEchec = EchecTest(4, 0);
+			// int isEchec = EchecTest(4, 0);
 			if (isEchec == 1)
 			{
 				isEchec = EchecTest(5, 0);
@@ -431,9 +468,9 @@ Roi::mouvementValide( Echiquier &e, int x, int y)
 				}
 			}
 		}
-		if (mouvGaucheTourNoir == 0 && RoiNoirPremierMouv == 0 && m_cases[0][3] == 0 && m_cases[0][2] == 0 && m_cases[0][1] == 0 && y == 0 && x == 2)
+		if (mouvGaucheTourNoir == 0 && RoiNoirPremierMouv == 0 && nullptr == e.getPiece(0, 3) && nullptr == e.getPiece(0, 2) && nullptr == e.getPiece(0, 1) && y == 0 && x == 2)
 		{
-			int isEchec = EchecTest(4, 0);
+			// int isEchec = EchecTest(4, 0);
 			if (isEchec == 1)
 			{
 				isEchec = EchecTest(3, 0);
@@ -538,7 +575,7 @@ Roi::mouvementEchec( Echiquier &e, int x, int y)
     return false;
 }
 void
-Roi::getPosition( Echiquier &e)
+Roi::getPositionRoi( Echiquier &e)
 {
     int ax  = (m_x - 1);
     int ay  = (m_y - 1);
@@ -590,7 +627,19 @@ Roi::roque()
 {
     cout << "Roque Roi" << endl;
 }
-
+Reine::Reine( int x, int y, bool white ) 
+    : Piece( x, y, white ) , Fou( white, true ), Tour( white, true )
+{
+    if(m_white == false)
+    {
+        this->src  = REINE_NOIR;
+    }
+    else
+    {
+        this->src  = REINE_BLANC; 
+    }
+    // cout << "Constructeur Reine" << endl;
+}
 Reine::Reine( bool white )
     : Piece( 4, white ? 8 : 1, white ), Fou( white, true ), Tour( white, true )
 {
@@ -1049,6 +1098,17 @@ Tour::Tour( bool white, bool gauche ) : Piece( gauche ? 1 : 8, white ? 8 : 1, wh
     }
     // cout << "Constructeur Tour" << endl;
 }
+Tour::Tour ( int x, int y, bool white) : Piece( x, y, white)
+{
+    if(m_white == false)
+    {
+        this->src  = TOUR_NOIR;
+    }
+    else
+    {
+        this->src  = TOUR_BLANC; 
+    }
+}
 
 Tour::~Tour()
 {
@@ -1274,6 +1334,18 @@ Tour::getSrc()
 }
 
 Fou::Fou( bool white, bool gauche ) : Piece( gauche ? 3 : 6, white ? 8 : 1, white )
+{
+    if(m_white == false)
+    {
+        this->src  = FOU_NOIR;
+    }
+    else
+    {
+        this->src  = FOU_BLANC; 
+    }
+    // cout << "Constructeur Fou" << endl;
+}
+Fou::Fou( int x, int y, bool white) : Piece( x, y, white )
 {
     if(m_white == false)
     {
@@ -1543,6 +1615,18 @@ Fou::getSrc()
 }
 
 Cavalier::Cavalier( bool white, bool gauche ) : Piece( gauche ? 2 : 7, white ? 8 : 1, white )
+{
+    if(m_white == false)
+    {
+        this->src  = CHEVAL_NOIR;
+    }
+    else
+    {
+        this->src  = CHEVAL_BLANC; 
+    }
+    // cout << "Constructeur Cavalier" << endl;
+}
+Cavalier::Cavalier( int x, int y, bool white ) : Piece( x, y, white )
 {
     if(m_white == false)
     {
@@ -2098,48 +2182,81 @@ Echiquier::affiche()
 			{
 				if (e.key.code == Mouse::Left)
 				{
-					//std::cout << "x=" << x << " y=" << y << "\n";
-					//std::cout << "pos_x=" << pos.x << " pos_y=" << pos.y << "\n";
-					//std::cout << "tableDeJeu[y][x]=" << tableDeJeu[y][x] << "\n";
-					//std::cout << "\n";
 					if (transformationBlanc == 1)
 					{
 						if (pos.y >= transforme_blanc.y * taille && pos.y <= (transforme_blanc.y + 1) * taille && pos.x >= transforme_blanc.x * taille && pos.x <= (transforme_blanc.x + 1) * taille)
 						{
-							int ax = pos.x % 100, ay = pos.y % 100;
-							//std::cout << "pos.y=" << ay << "\n";
-							//std::cout << "pos.x=" << ax << "\n";
+							int ax      = pos.x % 100, ay = pos.y % 100;
+							Piece* p;
+
 							if (ax < 50 && ay < 50 && ax > 0 && ay > 0)
 							{
-								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = TOUR_BLANC;
-								transformationBlanc = 0;
+                                p = new Tour( transforme_blanc.y, transforme_blanc.x, true);
+                                if(this->placer(p))
+								    transformationBlanc = 0;
+                                else
+                                    cout << "erreur de transformation Tour blanc" << endl;
 							}
 							if (ax > 50 && ax < 100 && ay < 50 && ay > 0)
-							{
-								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = REINE_BLANC;
-								transformationBlanc = 0;
+							{ 
+								p = new Reine( transforme_blanc.y, transforme_blanc.x, true);
+                                if(this->placer(p))
+								    transformationBlanc = 0;
+                                else
+                                    cout << "erreur de transformation reine blanc "<< endl;
 							}
 							if (ax > 50 && ax < 100 && ay>50 && ay < 100)
 							{
-								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = CHEVAL_BLANC;
-								transformationBlanc = 0;
+                                p = new Cavalier( transforme_blanc.y, transforme_blanc.x, true);
+                                if(this->placer(p))
+								    transformationBlanc = 0;
+                                else
+                                    cout << "erreur de transformation cavalier blanc "<< endl;
 							}
 							if (ax < 50 && ax>0 && ay > 50 && y < 100)
 							{
-								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = FOU_BLANC;
-								transformationBlanc = 0;
+                                p = new Fou( transforme_blanc.y, transforme_blanc.x, true);
+                                if(this->placer(p))
+								    transformationBlanc = 0;
+                                else
+                                    cout << "erreur de transformation fou blanc "<< endl;
 							}
 							if (transformationBlanc == 0)
 							{
-								getPosition();
-								bool h = EchecTest(roi_noir.x, roi_noir.y);
-								if (h == 0)
-								{
-									EchecNoir = 1;
-								}
+                                Piece* p;
+                                for(int i = 1; i <= 8; i++)
+                                {
+                                    for (int j = 1; j <= 8; j++)
+                                    {
+                                        if(this->getPiece(i, j)->getSrc() == ROI_BLANC)
+                                        {
+                                            p = getPiece(i, j);
+                                            int ax  = (getPiece(i, j)->x() - 1);
+                                            int ay  = (getPiece(i, j)->y() - 1);
+
+                                            for (int i = 0; i < LONGUEUR; i++)
+                                            {
+                                                for (int j = 0; j < LONGUEUR; j++)
+                                                {
+                                                    if ( this->getPiece(i, j)->getSrc() == ROI_BLANC)
+                                                    {
+                                                        ax  = j;
+                                                        ay  = i;
+                                                        break;
+                                                    }
+                                                }
+                                            }                                           
+                                        }
+                                    }                                    
+                                }   
+								// if (EchecTest(roi_noir.x, roi_noir.y) == false)
+								// {
+								// 	EchecNoir = 1;
+								// }
 							}
 						}
 					}
+                    /*
 					if (transformationNoir == 1)
 					{
 						if (pos.y >= transforme_noir.y * taille && pos.y <= (transforme_noir.y + 1) * taille && pos.x >= transforme_noir.x * taille && pos.x <= (transforme_noir.x + 1) * taille)
@@ -2169,7 +2286,7 @@ Echiquier::affiche()
 							}
 							if (transformationNoir == 0)
 							{
-								getPosition();
+								getPositionRoi();
 								int h = EchecTest(roi_blanc.x, roi_blanc.y);
 								if (h == 0)
 								{
@@ -2178,85 +2295,88 @@ Echiquier::affiche()
 							}
 						}
 					}
-					if (tableDeJeu[y][x] != 0)
+					*/
+                    Piece* tmp_p = this->getPiece(y, x);
+                    if(nullptr != tmp_p)
 					{
 						dx = pos.x - x * 100;
 						dy = pos.y - y * 100;
-						if (tableDeJeu[y][x]  == PION_NOIR && mouvement ==1)
+                        
+						if (tmp_p->getSrc() == PION_NOIR && mouvement ==1)
 						{
-							pasMouvPiece = PION_NOIR;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgPionNoir;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
-						if (tableDeJeu[y][x] == PION_BLANC && mouvement ==0)
+						if (tmp_p->getSrc() == PION_BLANC && mouvement ==0)
 						{
-							pasMouvPiece = PION_BLANC;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgPionBlanc;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
-						if (tableDeJeu[y][x] == TOUR_NOIR && mouvement ==1)
+						if (tmp_p->getSrc() == TOUR_NOIR && mouvement ==1)
 						{
-							pasMouvPiece = TOUR_NOIR;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgTourNoir;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 
 						}
-						if (tableDeJeu[y][x] == TOUR_BLANC && mouvement ==0)
+						if (tmp_p->getSrc() == TOUR_BLANC && mouvement ==0)
 						{
-							pasMouvPiece = TOUR_BLANC;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgTourNoir;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 
 						}
-						if (tableDeJeu[y][x] == CHEVAL_BLANC && mouvement ==0)
+						if (tmp_p->getSrc() == CHEVAL_BLANC && mouvement ==0)
 						{
-							pasMouvPiece = CHEVAL_BLANC;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgChevalBlanc;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
-						if (tableDeJeu[y][x] == CHEVAL_NOIR && mouvement ==1)
+						if (tmp_p->getSrc() == CHEVAL_NOIR && mouvement ==1)
 						{
-							pasMouvPiece = CHEVAL_NOIR;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgChevalNoir;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
-						if (tableDeJeu[y][x] == FOU_NOIR && mouvement ==1)
+						if (tmp_p->getSrc() == FOU_NOIR && mouvement ==1)
 						{
-							pasMouvPiece = FOU_NOIR;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgFouNoir;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
-						if (tableDeJeu[y][x] == FOU_BLANC && mouvement ==0)
+						if (tmp_p->getSrc() == FOU_BLANC && mouvement ==0)
 						{
-							pasMouvPiece = FOU_BLANC;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgFouBlanc;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
-						if (tableDeJeu[y][x] == REINE_BLANC && mouvement ==0)
+						if (tmp_p->getSrc() == REINE_BLANC && mouvement ==0)
 						{
-							pasMouvPiece = REINE_BLANC;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgReineBlanc;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
-						if (tableDeJeu[y][x] == REINE_NOIR && mouvement ==1)
+						if (tmp_p->getSrc() == REINE_NOIR && mouvement ==1)
 						{
-							pasMouvPiece = REINE_NOIR;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgReineNoir;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
-						if (tableDeJeu[y][x] == ROI_NOIR && mouvement ==1)
+						if (tmp_p->getSrc() == ROI_NOIR && mouvement ==1)
 						{
-							pasMouvPiece = ROI_NOIR;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgRoiNoir;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
-						if (tableDeJeu[y][x] == ROI_BLANC && mouvement ==0)
+						if (tmp_p->getSrc() == ROI_BLANC && mouvement ==0)
 						{
-							pasMouvPiece = ROI_BLANC;
+							pasMouvPiece = tmp_p;
 							Deplacement = imgRoiBlanc;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
-						if (tableDeJeu[y][x] == 0)
+						if (tmp_p->getSrc() == 0)
 						{
 							ca_bouge = 1;
 							ancienne_Pos.x = x;
@@ -2270,16 +2390,16 @@ Echiquier::affiche()
 			{
 				if (e.key.code == Mouse::Left)
 				{
-					int isEchec=2;
-					if (pasMouvPiece == PION_BLANC && ca_bouge==1)
+					// int isEchec=2;
+					if (pasMouvPiece->getSrc() == PION_BLANC && ca_bouge==1)
 					{
 						 isEchec = PionBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
 					}
-					if (pasMouvPiece  == PION_NOIR && ca_bouge == 1)
+					if (pasMouvPiece->getSrc() == PION_NOIR && ca_bouge == 1)
 					{
 						isEchec = PionNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
 					}
-					if (pasMouvPiece == TOUR_BLANC && ca_bouge == 1)
+					if (pasMouvPiece->getSrc() == TOUR_BLANC && ca_bouge == 1)
 					{
 						isEchec = TourBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
 						if (isEchec == 1 && mouvGaucheTourBlanc==0 && ancienne_Pos.y == 7 && ancienne_Pos.x == 0)
@@ -2293,7 +2413,7 @@ Echiquier::affiche()
 							//std::cout << mouvDroitTourBlanc << "\n";
 						}
 					}
-					if (pasMouvPiece == TOUR_NOIR && ca_bouge == 1)
+					if (pasMouvPiece->getSrc() == TOUR_NOIR && ca_bouge == 1)
 					{
 						isEchec=TourNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
 						if (isEchec == 1 && mouvDroitTourNoir == 0 && ancienne_Pos.y == 0 && ancienne_Pos.x == 7)
@@ -2307,31 +2427,31 @@ Echiquier::affiche()
 							//std::cout << mouvGaucheTourNoir << "\n";
 						}
 					}
-					if (pasMouvPiece == FOU_BLANC && ca_bouge == 1)
+					if (pasMouvPiece->getSrc() == FOU_BLANC && ca_bouge == 1)
 					{
 						isEchec = FouBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
 					}
-					if (pasMouvPiece == FOU_NOIR && ca_bouge == 1)
+					if (pasMouvPiece->getSrc() == FOU_NOIR && ca_bouge == 1)
 					{
 						isEchec= FouNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
 					}
-					if (pasMouvPiece == REINE_BLANC && ca_bouge == 1)
+					if (pasMouvPiece->getSrc() == REINE_BLANC && ca_bouge == 1)
 					{
 						isEchec=ReineBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
 					}
-					if (pasMouvPiece == REINE_NOIR && ca_bouge == 1)
+					if (pasMouvPiece->getSrc() == REINE_NOIR && ca_bouge == 1)
 					{
 						isEchec=ReineNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
 					}
-					if (pasMouvPiece == CHEVAL_BLANC && ca_bouge == 1)
+					if (pasMouvPiece->getSrc() == CHEVAL_BLANC && ca_bouge == 1)
 					{
 						isEchec=ChevalBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
 					}
-					if (pasMouvPiece == CHEVAL_NOIR && ca_bouge == 1)
+					if (pasMouvPiece->getSrc() == CHEVAL_NOIR && ca_bouge == 1)
 					{
 						isEchec = ChevalNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
 					}
-					if (pasMouvPiece == ROI_NOIR && ca_bouge == 1)
+					if (pasMouvPiece->getSrc() == ROI_NOIR && ca_bouge == 1)
 					{
 						isEchec=RoiNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
 						if (isEchec == 1 && RoiNoirPremierMouv == 0)
@@ -2340,7 +2460,7 @@ Echiquier::affiche()
 						//	std::cout << imgRoiNoir << "\n";
 						}
 					}
-					if (pasMouvPiece == ROI_BLANC && ca_bouge == 1)
+					if (pasMouvPiece->getSrc() == ROI_BLANC && ca_bouge == 1)
 					{
 						isEchec=RoiBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
 						if (isEchec == 1 && RoiBlancPremierMouv == 0)
@@ -2351,37 +2471,39 @@ Echiquier::affiche()
 					}
 					if (isEchec == 1)
 					{
-						int nr = tableDeJeu[y][x];
-						tableDeJeu[y][x] = pasMouvPiece;
-						if (y == 0 && pasMouvPiece == PION_BLANC)
+						Piece* nr = tmp_p;
+						tmp_p = pasMouvPiece;
+						if (y == 0 && pasMouvPiece->getSrc() == PION_BLANC)
 						{
 							transformationBlanc = 1;
 							transforme_blanc.x = x;
 							transforme_blanc.y = y;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
-						if (y == 7 && pasMouvPiece  == PION_NOIR)
+						if (y == 7 && pasMouvPiece->getSrc() == PION_NOIR)
 						{
 							transformationNoir = 1;
 							transforme_noir.x = x;
 							transforme_noir.y = y;
-							tableDeJeu[y][x] = 0;
+							tmp_p = nullptr;
 						}
+                        /*
+
 						if(mouvement ==0) // blanc a bougé et noir suit
 						{
 							if (EchecBlanc == 1)
 							{
-								getPosition();
+								getPositionRoi();
 								int s = EchecTest(roi_blanc.x, roi_blanc.y);
 								if (s == 0)
 								{
 									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
-									tableDeJeu[y][x] = nr;
+									tmp_p = nr;
 								}
 								else
 								{
 									EchecBlanc = 0;
-									getPosition();
+									getPositionRoi();
 									int Echec = EchecTest(roi_noir.x,roi_noir.y);
 									if (Echec == 0)
 									{
@@ -2392,16 +2514,16 @@ Echiquier::affiche()
 							}
 							else
 							{
-								getPosition();
+								getPositionRoi();
 								int sa = EchecTest(roi_blanc.x, roi_blanc.y);
 								if (sa == 0)
 								{
 									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
-									tableDeJeu[y][x] = nr;
+									tmp_p = nr;
 								}
 								else
 								{
-									getPosition();
+									getPositionRoi();
 									int Echec = EchecTest(roi_noir.x, roi_noir.y);
 									if (Echec == 0)
 									{
@@ -2415,17 +2537,17 @@ Echiquier::affiche()
 						{
 							if (EchecNoir == 1)
 							{
-								getPosition();
+								getPositionRoi();
 								int s = EchecTest(roi_noir.x,roi_noir.y);
 								if (s == 0)
 								{
 									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
-									tableDeJeu[y][x] = nr;
+									tmp_p = nr;
 								}
 								else
 								{
 									EchecNoir = 0;
-									getPosition();
+									getPositionRoi();
 									int Echec = EchecTest(roi_blanc.x,roi_blanc.y);
 									if (Echec == 0)
 									{
@@ -2436,16 +2558,16 @@ Echiquier::affiche()
 							}
 							else
 							{
-								getPosition();
+								getPositionRoi();
 								int sa = EchecTest(roi_noir.x, roi_noir.y);
 								if (sa == 0)
 								{
 									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
-									tableDeJeu[y][x] = nr;
+									tmp_p = nr;
 								}
 								else
 								{
-									getPosition();
+									getPositionRoi();
 									int Echec = EchecTest(roi_blanc.x, roi_blanc.y);
 									if (Echec == 0)
 									{
@@ -2455,7 +2577,8 @@ Echiquier::affiche()
 								}
 							}
 						}
-					}
+                        */
+                    }
 					else if(isEchec==0)
 					{
 						tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;

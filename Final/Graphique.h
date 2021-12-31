@@ -136,12 +136,14 @@ class Piece
     virtual char vue();
     virtual bool mouvementValide( Echiquier &e, int x, int y) = 0;
     virtual bool mouvementEchec( Echiquier &e, int x, int y ) = 0;
+    virtual void getPositionRoi( Echiquier &e);
 };
 
 class Roi : public Piece
 {
    public:
     Roi( bool white );
+    Roi( int x, int y, bool white );
     ~Roi();
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y);
@@ -149,13 +151,14 @@ class Roi : public Piece
     String getSrc();
     bool mouvementEchec( Echiquier &e, int x, int y );
     bool EchecTest( Echiquier &e);
-    void getPosition( Echiquier &e);
+    void getPositionRoi( Echiquier &e);
 };
 
 class Tour : virtual public Piece
 {
    public:
     Tour( bool white, bool gauche );
+    Tour( int x, int y, bool white );
     ~Tour();
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y);
@@ -167,6 +170,7 @@ class Fou : virtual public Piece
 {
    public:
     Fou( bool white, bool gauche );
+    Fou( int x, int y, bool white );
     ~Fou();
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y);
@@ -178,6 +182,7 @@ class Cavalier : public Piece
 {
    public:
     Cavalier( bool white, bool gauche );
+    Cavalier( int x, int y, bool white );
     ~Cavalier();
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y);
@@ -189,6 +194,7 @@ class Reine : public Fou, public Tour
 {
    public:
     Reine( bool white );
+    Reine( int x, int y, bool white );
     ~Reine();
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y);
@@ -200,6 +206,7 @@ class Pion : public Piece
 {
    public:
     Pion( bool white, int x );
+    Pion( int x, int y, bool white );
     ~Pion();
     char vue();
     bool mouvementValide( Echiquier &e, int x, int y);
