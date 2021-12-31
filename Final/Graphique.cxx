@@ -106,7 +106,7 @@ Piece::vue()
 
 /*
 bool
-Piece::mouvementValide( Echiquier &e, int x, int y )
+Piece::mouvementValide( Echiquier &e, int x, int y)
 {
     cout << "Mouvement Valide Piece" << endl;
     return true;  // cette methode deviendra abstraite
@@ -130,14 +130,450 @@ Roi::~Roi()
 {
     // cout << "Destructeur Roi" << endl;
 }
-
 bool
-Roi::mouvementValide( Echiquier &e, int x, int y )
+Roi::EchecTest( Echiquier &e)
 {
-    cout << "Mouvement Valide Roi" << endl;
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
+
+	if(this->isWhite())
+	{
+		int isEchec= 0;
+		for (int i = 0; i < LONGUEUR; i++)
+		{
+			for (int j = 0; j < LONGUEUR; j++)
+			{
+				if (e.getPiece(i, j)->isBlack())
+				{
+					if (e.getPiece(i, j)->getSrc() == PION_NOIR)
+					{
+						isEchec= PionNoirEchec(j, i, ax, ax);
+					}
+					if (e.getPiece(i, j)->getSrc() == TOUR_NOIR)
+					{
+						isEchec= TourNoirEchec(j, i, ax, ax);
+					}
+					if (e.getPiece(i, j)->getSrc() == CHEVAL_NOIR)
+					{
+						isEchec= ChevalNoirEchec(j, i, ax, ax);
+					}
+					if (e.getPiece(i, j)->getSrc() == FOU_NOIR)
+					{
+						isEchec= FouNoirEchec(j, i, ax, ax);
+					}
+					if (e.getPiece(i, j)->getSrc() == REINE_NOIR)
+					{
+						isEchec= ReineNoirEchec(j, i, ax, ax);
+					}
+					if (e.getPiece(i, j)->getSrc() == ROI_NOIR)
+					{
+						isEchec =RoiNoirEchec(j, i, ax, ax);
+					}
+					if (isEchec== 1)
+					{
+						//	std::cout << "da" << "\n";
+						return 0;
+					}
+				}
+			}
+		}
+	}
+
+	if(this->isBlack())
+    {
+        int isEchec= 0;
+        for (int i = 0; i < LONGUEUR; i++)
+        {
+            for (int j = 0; j < LONGUEUR; j++)
+            {
+                if(e.getPiece(i, j)->isWhite())
+                {
+                    if (e.getPiece(i, j)->getSrc() == PION_BLANC)
+                    {
+                        isEchec = PionBlancEchec(j, i, ax, ax);
+                    }
+                    if (e.getPiece(i, j)->getSrc() == TOUR_BLANC)
+                    {
+                        isEchec = TourBlancEchec(j, i, ax, ax);
+                    }
+                    if (e.getPiece(i, j)->getSrc() == CHEVAL_BLANC)
+                    {
+                        isEchec = ChevalBlancEchec(j, i, ax, ax);
+                    }
+                    if (e.getPiece(i, j)->getSrc() == FOU_BLANC)
+                    {
+                        isEchec = FouBlancEchec(j, i, ax, ax);
+                    }
+                    if (e.getPiece(i, j)->getSrc() == REINE_BLANC)
+                    {
+                        isEchec = ReineBlancEchec(j, i, ax, ax);
+                    }
+                    if (e.getPiece(i, j)->getSrc() == ROI_BLANC)
+                    {
+                        isEchec = RoiBlancEchec(j, i, ax, ax);
+                    }
+                    if (isEchec== 1)
+                    {
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
     return true;
 }
+bool
+Roi::mouvementValide( Echiquier &e, int x, int y)
+{
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
 
+    if(this->isWhite())
+	{
+		if (ax - 1 >= 0 && ay - 1 >= 0 && y == ay - 1 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			int isEchec = EchecTest(ax - 1, ay - 1);
+			if (isEchec == 1)
+			{
+				return 1;  // Haut gauche
+			}
+		}
+		if (ay - 1 >= 0 && x == ax && y == ay - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			int isEchec = EchecTest(ax, ay - 1);
+			if (isEchec == 1)
+			{
+				return 1; // Côté Haut
+			}
+		}
+		if (ay - 1 >= 0 && ax + 1 < LONGUEUR && x == ax + 1 && y == ay - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			int isEchec = EchecTest(ax + 1, ay - 1);
+			if (isEchec == 1)
+			{
+				return 1; // Haut droit
+			}
+		}
+		if (ax + 1 < LONGUEUR && y == ay && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			int isEchec = EchecTest(ax + 1, ay);
+			if (isEchec == 1)
+			{
+				return 1; // droit
+			}
+		}
+		if (ax + 1 < LONGUEUR && ay + 1 < LONGUEUR && y == ay + 1 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			int isEchec = EchecTest(ax + 1, ay + 1);
+			if (isEchec == 1)
+			{
+				return 1; // droit bas
+			}
+		}
+		if (ay + 1 < LONGUEUR && y == ay + 1 && x == ax && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			int isEchec = EchecTest(ax, ay + 1);
+			if (isEchec == 1)
+			{
+				return 1; // bas
+			}
+		}
+		if (ax - 1 >= 0 && ay + 1 < LONGUEUR && x == ax - 1 && y == ay + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			int isEchec = EchecTest(ax - 1, ay + 1);
+			if (isEchec == 1)
+			{
+				return 1; // gauche bas
+			}
+		}
+		if (ax - 1 >= 0 && y == ay && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			int isEchec = EchecTest(ax - 1, ay);
+			if (isEchec == 1)
+			{
+				return 1; // gauche
+			}
+		}
+		// Tourner à Droit
+		if (RoiBlancPremierMouv == 0 && mouvDroitTourBlanc == 0 && m_cases[7][5] == 0 && m_cases[7][6] == 0 && y==7 && x==6)
+		{
+			int isEchec = 1;
+			isEchec = EchecTest(4, 7);
+			if (isEchec == 1)
+			{
+				isEchec = EchecTest(5, 7);
+				if (isEchec == 1)
+				{
+					isEchec = EchecTest(6, 7);
+					if (isEchec == 1)
+					{
+						m_cases[7][7] = 0;
+						m_cases[7][5] = TOUR_BLANC;
+						RoiBlancPremierMouv = 1;
+						mouvDroitTourBlanc = 1;
+						return 1;
+					}
+				}
+			}
+		}
+		// Tourner à Gauche
+		if (RoiBlancPremierMouv == 0 && mouvDroitTourBlanc == 0 && m_cases[7][3] == 0 && m_cases[7][2] == 0 && m_cases[7][1] == 0 && y == 7 && x == 2)
+		{
+			int isEchec = 1;
+			isEchec = EchecTest(4, 7);
+			if (isEchec == 1)
+			{
+				isEchec = EchecTest(3, 7);
+				if (isEchec == 1)
+				{
+					isEchec = EchecTest(2, 7);
+					if (isEchec == 1)
+					{
+						isEchec = EchecTest(1, 7);
+						if (isEchec == 1)
+						{
+							m_cases[7][0] = 0;
+							m_cases[7][3] = TOUR_BLANC;
+							RoiBlancPremierMouv = 1;
+							mouvGaucheTourBlanc = 1;
+							return 1;
+						}
+					}
+				}
+			}
+		}
+	}
+
+    if(this->isBlack())
+	{
+		if (ax - 1 >= 0 && ay - 1 >= 0 && y == ay - 1 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			int isEchec = EchecTest(ax - 1, ay - 1);
+			if (isEchec == 1)
+			{
+				return 1;  // Haut gauche
+			}
+		}
+		if (ay - 1 >= 0 && x == ax && y == ay-1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			int isEchec = EchecTest(ax, ay-1);
+			if (isEchec == 1)
+			{
+				return 1; // Côté Haut
+			}
+		}
+		if (ay - 1 >= 0 && ax + 1 < LONGUEUR && x == ax + 1 && y == ay - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			int isEchec = EchecTest(ax+ 1, ay- 1);
+			if (isEchec == 1)
+			{
+				return 1; // Haut droit
+			}
+		}
+		if (ax + 1 < LONGUEUR && y == ay && x == ax+1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			int isEchec = EchecTest(ax+1, ay);
+			if (isEchec == 1)
+			{
+				return 1; // droit
+			}
+		}
+		if (ax + 1 < LONGUEUR && ay + 1 < LONGUEUR && y == ay + 1 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			int isEchec = EchecTest(ax + 1, ay + 1);
+			if (isEchec == 1)
+			{
+				return 1; // droit bas
+			}
+		}
+		if (ay + 1 < LONGUEUR && y == ay+1 && x == ax && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			int isEchec = EchecTest(ax, ay+1);
+			if (isEchec == 1)
+			{
+				return 1; // bas
+			}
+		}
+		if (ax - 1 >=0 && ay + 1 <LONGUEUR && x == ax - 1 && y == ay + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			int isEchec = EchecTest(ax-1, ay+ 1);
+			if (isEchec == 1)
+			{
+				return 1; // gauche bas
+			}
+		}
+		if (ax - 1 >= 0 && y == ay && x == ax-1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			int isEchec = EchecTest(ax-1, ay);
+			if (isEchec == 1)
+			{
+				return 1; // gauche
+			}
+		}
+		// Tourner à Droit
+		if (mouvDroitTourNoir==0 && RoiNoirPremierMouv ==0 && m_cases[0][5]==0 && m_cases[0][6]==0 && y==0 && x==6)
+		{
+			int isEchec = EchecTest(4, 0);
+			if (isEchec == 1)
+			{
+				isEchec = EchecTest(5, 0);
+				if (isEchec == 1)
+				{
+					isEchec = EchecTest(6, 0);
+					if (isEchec == 1)
+					{
+						RoiNoirPremierMouv = 1;
+						mouvDroitTourNoir = 1;
+						m_cases[0][7] = 0;
+						m_cases[0][5] = TOUR_NOIR;
+						return 1;
+					}
+				}
+			}
+		}
+		if (mouvGaucheTourNoir == 0 && RoiNoirPremierMouv == 0 && m_cases[0][3] == 0 && m_cases[0][2] == 0 && m_cases[0][1] == 0 && y == 0 && x == 2)
+		{
+			int isEchec = EchecTest(4, 0);
+			if (isEchec == 1)
+			{
+				isEchec = EchecTest(3, 0);
+				if (isEchec == 1)
+				{
+					isEchec = EchecTest(2, 0);
+					if (isEchec == 1)
+					{
+						isEchec = EchecTest(1, 0);
+						if (isEchec == 1)
+						{
+							RoiNoirPremierMouv = 1;
+							mouvGaucheTourNoir = 1;
+							m_cases[0][0] = 0;
+							m_cases[0][3] = TOUR_NOIR;
+							return 1;
+						}
+					}
+				}
+			}
+		}
+	}
+    return false;
+}
+bool
+Roi::mouvementEchec( Echiquier &e, int x, int y)
+{
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
+
+	if(this->isWhite())
+	{
+		if (ax - 1 >= 0 && ay - 1 >= 0 && y == ay - 1 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			return 1;
+		}
+		if (ay - 1 >= 0 && x == ax && y == ay - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			return 1;
+		}
+		if (ay - 1 >= 0 && ax + 1 < LONGUEUR && x == ax + 1 && y == ay - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			return 1;
+		}
+		if (ax + 1 < LONGUEUR && y == ay && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			return 1;
+		}
+		if (ax + 1 < LONGUEUR && ay + 1 < LONGUEUR && y == ay + 1 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			return 1;
+		}
+		if (ay + 1 < LONGUEUR && y == ay + 1 && x == ax && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			return 1;
+		}
+		if (ax - 1 >= 0 && ay + 1 < LONGUEUR && x == ax - 1 && y == ay + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			return 1;
+		}
+		if (ax - 1 >= 0 && y == ay && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+		{
+			return 1;
+		}
+	}
+	if(this->isBlack())
+	{
+		if (ax - 1 >= 0 && ay - 1 >= 0 && y == ay - 1 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			return 1;
+		}
+		if (ay - 1 >= 0 && x == ax && y == ay - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			return 1;
+		}
+		if (ay - 1 >= 0 && ax + 1 < LONGUEUR && x == ax + 1 && y == ay - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			return 1;
+		}
+		if (ax + 1 < LONGUEUR && y == ay && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			return 1;
+		}
+		if (ax + 1 < LONGUEUR && ay + 1 < LONGUEUR && y == ay + 1 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			return 1;
+		}
+		if (ay + 1 < LONGUEUR && y == ay + 1 && x == ax && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			return 1;
+		}
+		if (ax - 1 >= 0 && ay + 1 < LONGUEUR && x == ax - 1 && y == ay + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			return 1;
+		}
+		if (ax - 1 >= 0 && y == ay && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+		{
+			return 1;
+		}
+	}
+
+    return false;
+}
+void
+Roi::getPosition( Echiquier &e)
+{
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
+
+    if(this->isWhite())
+    {
+        for (int i = 0; i < LONGUEUR; i++)
+        {
+            for (int j = 0; j < LONGUEUR; j++)
+            {
+                if ( e.getPiece(i, j)->getSrc() == ROI_BLANC)
+                {
+                    ax  = j;
+                    ay  = i;
+                    break;
+                }
+            }
+        }
+    }
+    if(this->isBlack())
+    {
+        for (int i = 0; i < LONGUEUR; i++)
+        {
+            for (int j = 0; j < LONGUEUR; j++)
+            {
+                if ( e.getPiece(i, j)->getSrc() == ROI_NOIR)
+                {
+                    ax  = j;
+                    ay  = i;
+                    break;
+                }
+            }
+        }
+    }
+}
 char
 Roi::vue()
 {
@@ -175,11 +611,420 @@ Reine::~Reine()
 }
 
 bool
-Reine::mouvementValide( Echiquier &e, int x, int y )
+Reine::mouvementValide( Echiquier &e, int x, int y)
 {
-    return Fou::mouvementValide( e, x, y ) || Tour::mouvementValide( e, x, y );
-}
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
 
+    if(this->isWhite())
+    {
+        for (int i = ax - 1; i >= 0; i--) // Côté gauche
+        {
+            if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isBlack() && (x == i && y == ay))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay - 1; i >= 0; i--) // Côté Haut
+        {
+            if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isBlack() && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, ax))
+            {
+                break;
+            }
+        }
+        for (int i = ax + 1; i < LONGUEUR; i++) // À droite
+        {
+            if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isBlack() && (y == ay && x == i))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay + 1; i < LONGUEUR; i++) // bas
+        {
+            if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isBlack() && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, ax))
+            {
+                break;
+            }
+        }
+        int j = ax - 1;
+        for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay - 1; i >= 0; i--) // À droite haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+        j = ax - 1;
+        for (int i = ay + 1; i < LONGUEUR; i++) // Côté gauche bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay + 1; i < LONGUEUR; i++)  // À droite bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+        return 0;
+    }
+
+    if(this->isBlack())
+    {
+        for (int i = ax - 1; i >= 0; i--) // Côté gauche
+        {
+            if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isWhite() && (x == i && y == ay))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay - 1; i >= 0; i--) // Côté Haut
+        {
+            if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isWhite() && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, ax))
+            {
+                break;
+            }
+        }
+        for (int i = ax + 1; i < LONGUEUR; i++) // À droite
+        {
+            if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isWhite() && (y == ay && x == i))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay + 1; i < LONGUEUR; i++) // bas
+        {
+            if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isWhite() && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, ax))
+            {
+                break;
+            }
+        }
+        int j = ax - 1;
+        for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay - 1; i >= 0; i--) // À droite haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+        j = ax - 1;
+        for (int i = ay + 1; i < LONGUEUR; i++) // Côté gauche bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay + 1; i < LONGUEUR; i++)  // À droite bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+        return 0;
+    }
+}
+bool
+Reine::mouvementEchec( Echiquier &e, int x, int y)
+{
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
+
+	if(this->isWhite())
+	{
+		for (int i = ax - 1; i >= 0; i--) // Côté gauche
+		{
+			if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isBlack() && (x == i && y == ay))
+			{
+				return 1;
+			}
+			else if(nullptr == e.getPiece(ay, i))
+			{
+				break;
+			}
+		}
+		for (int i = ay - 1; i >= 0; i--) // Côté Haut
+		{
+			if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isBlack() && (y == i && x == ax))
+			{
+				return 1;
+			}
+			else if(nullptr == e.getPiece(i, ax))
+			{
+				break;
+			}
+		}
+		for (int i = ax + 1; i < LONGUEUR; i++) // À droite
+		{
+			if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isBlack() && (y == ay && x == i))
+			{
+				return 1;
+			}
+			else if (nullptr == e.getPiece(ay, i))
+			{
+				break;
+			}
+		}
+		for (int i = ay + 1; i <LONGUEUR; i++) // bas
+		{
+			if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isBlack() && (y == i && x == ax))
+			{
+				return 1;
+			}
+			else if(nullptr == e.getPiece(i, ax))
+			{
+				break;
+			}
+		}
+		int j = ax - 1;
+		for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
+		{
+			if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+			{
+				return 1;
+			}
+			else if(nullptr != e.getPiece(i, j))
+			{
+				break;
+			}
+			j--;
+		}
+		j = ax + 1;
+		for (int i = ay - 1; i >= 0; i--) // À droite haut
+		{
+			if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+			{
+				return 1;
+			}
+			else if (nullptr != e.getPiece(i, j))
+			{
+				break;
+			}
+			j++;
+		}
+		j = ax - 1;
+		for (int i = ay + 1; i < LONGUEUR; i++) // Côté gauche bas
+		{
+			if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+			{
+				return 1;
+			}
+			else if(nullptr != e.getPiece(i, j))
+			{
+				break;
+			}
+			j--;
+		}
+		j = ax + 1;
+		for (int i = ay + 1; i < LONGUEUR; i++)  // À droite bas
+		{
+			if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+			{
+				return 1;
+			}
+			else if(nullptr != e.getPiece(i, j))
+			{
+				break;
+			}
+			j++;
+		}
+	}
+
+	if(this->isBlack())
+	{
+		for (int i = ax - 1; i >= 0; i--) // Côté gauche
+		{
+			if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isWhite() && (x == i && y == ay))
+			{
+				return 1;
+			}
+			else if (nullptr == e.getPiece(ay, i))
+			{
+				break;
+			}
+		}
+		for (int i = ay - 1; i >= 0; i--) // Côté Haut
+		{
+			if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isWhite() && (y == i && x == ax))
+			{
+				return 1;
+			}
+			else if (nullptr == e.getPiece(i, ax))
+			{
+				break;
+			}
+		}
+		for (int i = ax + 1; i < LONGUEUR; i++) // À droite
+		{
+			if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isWhite() && (y == ay && x == i))
+			{
+				return 1;
+			}
+			else if (nullptr == e.getPiece(ay, i))
+			{
+				break;
+			}
+		}
+		for (int i = ay + 1; i < LONGUEUR; i++) // bas
+		{
+			if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isWhite() && (y == i && x == ax))
+			{
+				return 1;
+			}
+			else if (nullptr == e.getPiece(i, ax))
+			{
+				break;
+			}
+		}
+		int j = ax - 1;
+		for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
+		{
+			if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+			{
+				return 1;
+			}
+			else if (nullptr != e.getPiece(i, j))
+			{
+				break;
+			}
+			j--;
+		}
+		j = ax + 1;
+		for (int i = ay - 1; i >= 0; i--) // À droite haut
+		{
+			if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+			{
+				return 1;
+			}
+			else if (nullptr != e.getPiece(i, j))
+			{
+				break;
+			}
+			j++;
+		}
+		j = ax - 1;
+		for (int i = ay + 1; i < LONGUEUR; i++) // Côté gauche bas
+		{
+			if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+			{
+				return 1;
+			}
+			else if (nullptr != e.getPiece(i, j))
+			{
+				break;
+			}
+			j--;
+		}
+		j = ax + 1;
+		for (int i = ay + 1; i < LONGUEUR; i++)  // À droite bas
+		{
+			if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+			{
+				return 1;
+			}
+			else if (nullptr != e.getPiece(i, j))
+			{
+				break;
+			}
+			j++;
+		}
+	}
+    return false;
+}
 char
 Reine::vue()
 {
@@ -211,12 +1056,212 @@ Tour::~Tour()
 }
 
 bool
-Tour::mouvementValide( Echiquier &e, int x, int y )
+Tour::mouvementValide( Echiquier &e, int x, int y)
 {
-    cout << "Mouvement Valide Tour" << endl;
+    int ax  =   (this->m_x - 1);
+    int ay  =   (this->m_y - 1);
+
+    if(this->isWhite())
+    {
+        for (int i = ax - 1; i >= 0; i--) // Côté gauche
+        {
+            if ( e.getPiece(ay, i)->isBlack() || nullptr == e.getPiece(ay, i) && (x == 1 && y == ay) )
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay - 1; i >= 0; i--) // Côté Haut
+        {
+            if (e.getPiece(i, ax)->isBlack() || nullptr == e.getPiece(i, ax) && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, ax) )
+            {
+                break;
+            }
+        }
+        for (int i = ax + 1; i < LONGUEUR; i++) // À droite
+        {
+            if (e.getPiece(ay, i)->isBlack() || nullptr == e.getPiece(ay, i) && (y == ay && x == i))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay + 1; i < LONGUEUR; i++) // bas
+        {
+            if (e.getPiece(i, ax)->isBlack() || nullptr == e.getPiece(i, ax) && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, ax))
+            {
+                break;
+            }
+        }
+        return 0;
+    }
+    if(this->isBlack())
+    {
+        for (int i = ax - 1; i >= 0; i--) // Côté gauche
+        {
+            if (e.getPiece(ay, i)->isWhite() || nullptr == e.getPiece(ay, i) && (x == i && y == ay))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay - 1; i >= 0; i--) // Côté Haut
+        {
+            if (e.getPiece(i, ax)->isWhite() || nullptr == e.getPiece(i, ax) && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, ax))            
+            {
+                break;
+            }
+        }
+        for (int i = ax + 1; i < LONGUEUR; i++) // À droite
+        {
+            if (e.getPiece(ay, i)->isWhite() || nullptr == e.getPiece(ay, i) && (y == ay && x == i))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay + 1; i < LONGUEUR; i++) // bas
+        {
+            if (e.getPiece(i, ay)->isWhite() || nullptr == e.getPiece(i, ay) && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, ax))
+            {
+                break;
+            }
+        }
+        return 0;
+    }
     return false;
 }
+bool
+Tour::mouvementEchec(Echiquier &e, int x, int y)
+{
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
 
+    if(this->isWhite())
+    {
+        for (int i = ax - 1; i >= 0; i--) // Côté gauche
+        {
+            if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isBlack() && (x== i && y == ay))
+            {
+                return 1;
+            }
+            else if(nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay - 1; i >= 0; i--) // Côté Haut
+        {
+            if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isBlack() && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if(nullptr != e.getPiece(i, ax))
+            {
+                break;
+            }
+        }
+        for (int i = ax + 1; i < LONGUEUR; i++) // À droite
+        {
+            if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isBlack() && (y == ay && x == i))
+            {
+                return 1;
+            }
+            else if(nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay + 1; i <LONGUEUR; i++) // bas
+        {
+            if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isBlack() && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if(nullptr != e.getPiece(i, ax))
+            {
+                break;
+            }
+        }
+        return 0;
+    }
+    if(this->isBlack())
+    {
+        for (int i = ax - 1; i >= 0; i--) // Côté gauche
+        {
+            if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isWhite() && (x == i && y == ay))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay - 1; i >= 0; i--) // Côté Haut
+        {
+            if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isWhite() && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, ax))
+            {
+                break;
+            }
+        }
+        for (int i = ax + 1; i < LONGUEUR; i++) // À droite
+        {
+            if (nullptr == e.getPiece(ay, i) || e.getPiece(ay, i)->isWhite() && (y == ay && x == i))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(ay, i))
+            {
+                break;
+            }
+        }
+        for (int i = ay + 1; i < LONGUEUR; i++) // bas
+        {
+            if (nullptr == e.getPiece(i, ax) || e.getPiece(i, ax)->isWhite() && (y == i && x == ax))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, ax))
+            {
+                break;
+            }
+        }
+    }
+    return 0;
+}
 char
 Tour::vue()
 {
@@ -247,12 +1292,244 @@ Fou::~Fou()
 }
 
 bool
-Fou::mouvementValide( Echiquier &e, int x, int y )
+Fou::mouvementValide( Echiquier &e, int x, int y)
 {
-    cout << "Mouvement Valide Fou" << endl;
+    
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
+
+    if(this->isWhite())
+    {
+        int j = ax - 1;
+        for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay - 1; i >= 0; i--) // À droite haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+        j = ax - 1;
+        for (int i = ay + 1; i < LONGUEUR; i++) // Côté gauche bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay + 1; i < LONGUEUR; i++)  // À droite bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+    }
+
+    if(this->isBlack())
+    {
+        int j = ax - 1;
+        for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay - 1; i >= 0; i--) // À droite haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+        j = ax - 1;
+        for (int i = ay + 1; i < LONGUEUR; i++) // Côté gauche bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay + 1; i < LONGUEUR; i++)  // À droite bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+    }
     return false;
 }
+bool
+Fou::mouvementEchec( Echiquier &e, int x, int y)
+{
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
+    
+    if(this->isWhite())
+    {
+        int j = ax - 1;
+        for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if(nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay - 1; i >= 0; i--) // À droite haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if(nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+        j = ax - 1;
+        for (int i = ay + 1; i < LONGUEUR; i++) // Côté gauche bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay + 1; i < LONGUEUR; i++)  // À droite bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isBlack() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+    }
 
+    if(this->isBlack())
+    {
+        int j = ax - 1;
+        for (int i = ay - 1; i >= 0; i--) // Côté gauche haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay - 1; i >= 0; i--) // À droite haut
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+        j = ax - 1;
+        for (int i = ay + 1; i < LONGUEUR; i++) // Côté gauche bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j--;
+        }
+        j = ax + 1;
+        for (int i = ay + 1; i < LONGUEUR; i++)  // À droite bas
+        {
+            if (nullptr == e.getPiece(i, j) || e.getPiece(i, j)->isWhite() && (y == i && x == j))
+            {
+                return 1;
+            }
+            else if (nullptr != e.getPiece(i, j))
+            {
+                break;
+            }
+            j++;
+        }
+    }
+    return false;
+}
 char
 Fou::vue()
 {
@@ -283,12 +1560,166 @@ Cavalier::~Cavalier()
 }
 
 bool
-Cavalier::mouvementValide( Echiquier &e, int x, int y )
+Cavalier::mouvementValide( Echiquier &e, int x, int y)
 {
-    cout << "Mouvement Valide Cavalier" << endl;
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
+    
+    if(this->isWhite())
+    {
+        if (ay - 2 >= 0 && ax - 1 >= 0 && y == ay - 2 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // Haut gauche
+        }
+        if (ay - 2 >= 0 && ax + 1 <LONGUEUR && y == ay - 2 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // Haut droit
+        }
+        if (ay - 1 >= 0 && ax + 2 < LONGUEUR && y==ay-1 && x==ax+2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // droit 1
+        }
+        if (ay + 1 >= 0 && ax + 2 < LONGUEUR && y == ay + 1 && x == ax + 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // droit 2
+        }
+        if (ay+2<LONGUEUR && ax+1<LONGUEUR && y==ay+2 && x==ax+1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // bas 1
+        }
+        if (ay + 2 < LONGUEUR && ax - 1 >= 0 && y == ay + 2 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // bas 2
+        }
+        if (ay+1<LONGUEUR && ax-2>=0 && y==ay+1 && x==ax-2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack() )
+        {
+            return 1; // gauche 1
+        }
+        if (ay - 1 >= 0 && ax - 2 >= 0 && y == ay - 1 && x == ax - 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1;
+        }
+        return 0;
+    }
+
+    //------------------------------------------Mouvement Cheval Noir----------------------------//
+
+    if(this->isBlack())
+    {
+        if (ay - 2 >= 0 && ax - 1 >= 0 && y == ay - 2 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // Haut gauche
+        }
+        if (ay - 2 >= 0 && ax + 1 < LONGUEUR && y == ay - 2 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // Haut droit
+        }
+        if (ay - 1 >= 0 && ax + 2 < LONGUEUR && y == ay - 1 && x == ax + 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // droit 1
+        }
+        if (ay + 1 >= 0 && ax + 2 < LONGUEUR && y == ay + 1 && x == ax + 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // droit 2
+        }
+        if (ay + 2 < LONGUEUR && ax + 1 < LONGUEUR && y == ay + 2 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // bas 1
+        }
+        if (ay + 2 < LONGUEUR && ax - 1 >= 0 && y == ay + 2 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // bas 2
+        }
+        if (ay + 1 < LONGUEUR && ax - 2 >= 0 && y == ay + 1 && x == ax - 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // gauche 1
+        }
+        if (ay - 1 >= 0 && ax - 2 >= 0 && y == ay - 1 && x == ax - 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1;
+        }
+        return 0;
+    }
+}
+bool
+Cavalier::mouvementEchec( Echiquier &e, int x, int y)
+{
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
+
+    if(this->isWhite())
+    {
+        if (ay - 2 >= 0 && ax - 1 >= 0 && y == ay - 2 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // Haut gauche
+        }
+        if (ay - 2 >= 0 && ax + 1 < LONGUEUR && y == ay - 2 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // Haut droit
+        }
+        if (ay - 1 >= 0 && ax + 2 < LONGUEUR && y == ay - 1 && x == ax + 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // droit 1
+        }
+        if (ay + 1 >= 0 && ax + 2 < LONGUEUR && y == ay + 1 && x == ax + 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // droit 2
+        }
+        if (ay + 2 < LONGUEUR && ax + 1 < LONGUEUR && y == ay + 2 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // bas 1
+        }
+        if (ay + 2 < LONGUEUR && ax - 1 >= 0 && y == ay + 2 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // bas 2
+        }
+        if (ay + 1 < LONGUEUR && ax - 2 >= 0 && y == ay + 1 && x == ax - 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1; // gauche 1
+        }
+        if (ay - 1 >= 0 && ax - 2 >= 0 && y == ay - 1 && x == ax - 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isBlack())
+        {
+            return 1;
+        }
+    }
+
+    if(this->isBlack())
+    {
+        if (ay - 2 >= 0 && ax - 1 >= 0 && y == ay - 2 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // Haut gauche
+        }
+        if (ay - 2 >= 0 && ax + 1 < LONGUEUR && y == ay - 2 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // Haut droit
+        }
+        if (ay - 1 >= 0 && ax + 2 < LONGUEUR && y == ay - 1 && x == ax + 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // droit 1
+        }
+        if (ay + 1 >= 0 && ax + 2 < LONGUEUR && y == ay + 1 && x == ax + 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // droit 2
+        }
+        if (ay + 2 < LONGUEUR && ax + 1 < LONGUEUR && y == ay + 2 && x == ax + 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // bas 1
+        }
+        if (ay + 2 < LONGUEUR && ax - 1 >= 0 && y == ay + 2 && x == ax - 1 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // bas 2
+        }
+        if (ay + 1 < LONGUEUR && ax - 2 >= 0 && y == ay + 1 && x == ax - 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1; // gauche 1
+        }
+        if (ay - 1 >= 0 && ax - 2 >= 0 && y == ay - 1 && x == ax - 2 && nullptr == e.getPiece(y, x) || e.getPiece(y, x)->isWhite())
+        {
+            return 1;
+        }
+    }
     return false;
 }
-
 char
 Cavalier::vue()
 {
@@ -320,12 +1751,113 @@ Pion::~Pion()
 }
 
 bool
-Pion::mouvementValide( Echiquier &e, int x, int y )
+Pion::mouvementValide( Echiquier &e, int x, int y)
 {
-    cout << "Mouvement Valide Pion" << endl;
+    int ax  =   (this->m_x - 1);
+    int ay  =   (this->m_y - 1);
+
+    if (this->isWhite())
+    {
+        if (6 == ay)
+        {
+            if (( nullptr == e.getPiece(ay-1, x) && y == ay - 1 && x == ax ) ||
+                ( nullptr == e.getPiece(ay-1, x) && nullptr == e.getPiece(ay-2, x) && y == ay-2 && x==ax))
+            {
+                return true;
+            }            
+        }
+        else if( nullptr == e.getPiece(ay-1, x) && y == ay - 1 && x == ax )
+        {
+            return true;
+        }
+        if ( nullptr != e.getPiece(ay-1, x-1) )
+        {
+            if (y == ay - 1 && x == ax - 1)
+            {
+                return true;
+            }
+        }
+        if ( nullptr != e.getPiece(ay-1, x+1) )
+        {
+            if (y == ay - 1 && x == ax + 1)
+            {
+                return true;
+            }
+        }
+    }
+    if(this->isWhite())
+    {
+        if( 1 == ay )
+        {
+            if (( nullptr == e.getPiece(ay+1, ax) && y == ay + 1 && x == ax ) || 
+                ( nullptr == e.getPiece(ay+1, ax) && nullptr == e.getPiece(ay+2, ax) && y == ay + 2 && x == ax))
+            {
+                return true;
+            }
+        }
+        else if (y == ay + 1 && x == ax && nullptr == e.getPiece(ay+1, ax))
+        {
+            return true;
+        }
+        if (e.getPiece(ay+1, ax-1)->isWhite())
+        {
+            if (y == ay + 1 && x == ax - 1)
+            {
+                return true;
+            }
+        }
+        if (e.getPiece(ay+1, ax+1)->isWhite())
+        {
+            if (y == ay + 1 && x == ax + 1)
+            {
+                return true;
+            }
+        }
+    }    
     return false;
 }
-
+bool
+Pion::mouvementValide(Echiquier &e, int x, int y)
+{
+    int ax  = (m_x - 1);
+    int ay  = (m_y - 1);
+    
+    if(this->isWhite())
+    {
+        if(nullptr == e.getPiece(ay-1, ax -1) || e.getPiece(ay-1, ax-1)->isBlack())
+        {
+            if (ay-1 == y && ax - 1 == x)
+            {
+                return 1;
+            }
+            if(nullptr == e.getPiece(ay-1, ax+1) || e.getPiece(ay-1, ax+1)->isBlack())
+            {
+                if (ay - 1 == y && ax + 1==x)
+                {
+                    return 1;
+                }
+            }
+        }
+    }
+    if(this->isWhite())
+    {
+        if (nullptr == e.getPiece(ay+1, ax-1) || e.getPiece(ay+1, ax-1)->isWhite())
+        {
+            if (y == ay + 1 && x == ax - 1)
+            {
+                return 1;
+            }
+        }
+        if (nullptr == e.getPiece(ay+1, ax+1) || e.getPiece(ay+1, ax+1)->isWhite())
+        {
+            if (y == ay + 1 && x == ax + 1)
+            {
+                return 1;
+            }
+        }
+    }
+    return false;
+}
 char
 Pion::vue()
 {
@@ -362,7 +1894,7 @@ class Echiquier
      * @param x un entier entre 1 et 8
      * @param y un entier entre 1 et 8
      *
-     * @return 0 si aucune piece n'est sur cette case et un pointeur
+     * @return false si aucune piece n'est sur cette case et un pointeur
      * vers une piece sinon.
      */
     Piece *getPiece( int x, int y );
@@ -397,7 +1929,7 @@ class Echiquier
      * @param x un entier entre 1 et 8
      * @param y un entier entre 1 et 8
      *
-     * @return 0 si aucune piece n'est sur cette case et le pointeur
+     * @return false si aucune piece n'est sur cette case et le pointeur
      * vers la piece enlevee sinon.
      */
     Piece *enleverPiece( int x, int y );
@@ -429,7 +1961,7 @@ Echiquier::Echiquier()
  * @param x un entier entre 1 et 8
  * @param y un entier entre 1 et 8
  *
- * @return 0 si aucune piece n'est sur cette case et un pointeur
+ * @return false si aucune piece n'est sur cette case et un pointeur
  * vers une piece sinon.
  */
 Piece *
@@ -486,7 +2018,7 @@ Echiquier::deplacer( Piece *p, int x, int y )
  * @param x un entier entre 1 et 8
  * @param y un entier entre 1 et 8
  *
- * @return 0 si aucune piece n'est sur cette case et le pointeur
+ * @return false si aucune piece n'est sur cette case et le pointeur
  * vers la piece enlevee sinon.
  */
 Piece *
@@ -562,16 +2094,400 @@ Echiquier::affiche()
 				window.close();
 			}
 			window.clear();
-        }
+			if (e.type == Event::MouseButtonPressed)
+			{
+				if (e.key.code == Mouse::Left)
+				{
+					//std::cout << "x=" << x << " y=" << y << "\n";
+					//std::cout << "pos_x=" << pos.x << " pos_y=" << pos.y << "\n";
+					//std::cout << "tableDeJeu[y][x]=" << tableDeJeu[y][x] << "\n";
+					//std::cout << "\n";
+					if (transformationBlanc == 1)
+					{
+						if (pos.y >= transforme_blanc.y * taille && pos.y <= (transforme_blanc.y + 1) * taille && pos.x >= transforme_blanc.x * taille && pos.x <= (transforme_blanc.x + 1) * taille)
+						{
+							int ax = pos.x % 100, ay = pos.y % 100;
+							//std::cout << "pos.y=" << ay << "\n";
+							//std::cout << "pos.x=" << ax << "\n";
+							if (ax < 50 && ay < 50 && ax > 0 && ay > 0)
+							{
+								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = TOUR_BLANC;
+								transformationBlanc = 0;
+							}
+							if (ax > 50 && ax < 100 && ay < 50 && ay > 0)
+							{
+								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = REINE_BLANC;
+								transformationBlanc = 0;
+							}
+							if (ax > 50 && ax < 100 && ay>50 && ay < 100)
+							{
+								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = CHEVAL_BLANC;
+								transformationBlanc = 0;
+							}
+							if (ax < 50 && ax>0 && ay > 50 && y < 100)
+							{
+								tableDeJeu[transforme_blanc.y][transforme_blanc.x] = FOU_BLANC;
+								transformationBlanc = 0;
+							}
+							if (transformationBlanc == 0)
+							{
+								getPosition();
+								bool h = EchecTest(roi_noir.x, roi_noir.y);
+								if (h == 0)
+								{
+									EchecNoir = 1;
+								}
+							}
+						}
+					}
+					if (transformationNoir == 1)
+					{
+						if (pos.y >= transforme_noir.y * taille && pos.y <= (transforme_noir.y + 1) * taille && pos.x >= transforme_noir.x * taille && pos.x <= (transforme_noir.x + 1) * taille)
+						{
+							int ax = pos.x % 100, ay = pos.y % 100;
+							//std::cout << "pos.y=" << ay << "\n";
+							//std::cout << "pos.x=" << ax << "\n";
+							if (ax < 50 && ay < 50 && ax > 0 && ay > 0)
+							{
+								tableDeJeu[transforme_noir.y][transforme_noir.x] = TOUR_NOIR;
+								transformationNoir = 0;
+							}
+							if (ax > 50 && ax < 100 && ay < 50 && ay > 0)
+							{
+								tableDeJeu[transforme_noir.y][transforme_noir.x] = REINE_NOIR;
+								transformationNoir = 0;
+							}
+							if (ax > 50 && ax < 100 && ay>50 && ay < 100)
+							{
+								tableDeJeu[transforme_noir.y][transforme_noir.x] = CHEVAL_NOIR;
+								transformationNoir = 0;
+							}
+							if (ax < 50 && ax>0 && ay > 50 && y < 100)
+							{
+								tableDeJeu[transforme_noir.y][transforme_noir.x] = FOU_NOIR;
+								transformationNoir = 0;
+							}
+							if (transformationNoir == 0)
+							{
+								getPosition();
+								int h = EchecTest(roi_blanc.x, roi_blanc.y);
+								if (h == 0)
+								{
+									EchecBlanc = 1;
+								}
+							}
+						}
+					}
+					if (tableDeJeu[y][x] != 0)
+					{
+						dx = pos.x - x * 100;
+						dy = pos.y - y * 100;
+						if (tableDeJeu[y][x]  == PION_NOIR && mouvement ==1)
+						{
+							pasMouvPiece = PION_NOIR;
+							Deplacement = imgPionNoir;
+							tableDeJeu[y][x] = 0;
+						}
+						if (tableDeJeu[y][x] == PION_BLANC && mouvement ==0)
+						{
+							pasMouvPiece = PION_BLANC;
+							Deplacement = imgPionBlanc;
+							tableDeJeu[y][x] = 0;
+						}
+						if (tableDeJeu[y][x] == TOUR_NOIR && mouvement ==1)
+						{
+							pasMouvPiece = TOUR_NOIR;
+							Deplacement = imgTourNoir;
+							tableDeJeu[y][x] = 0;
+
+						}
+						if (tableDeJeu[y][x] == TOUR_BLANC && mouvement ==0)
+						{
+							pasMouvPiece = TOUR_BLANC;
+							Deplacement = imgTourNoir;
+							tableDeJeu[y][x] = 0;
+
+						}
+						if (tableDeJeu[y][x] == CHEVAL_BLANC && mouvement ==0)
+						{
+							pasMouvPiece = CHEVAL_BLANC;
+							Deplacement = imgChevalBlanc;
+							tableDeJeu[y][x] = 0;
+						}
+						if (tableDeJeu[y][x] == CHEVAL_NOIR && mouvement ==1)
+						{
+							pasMouvPiece = CHEVAL_NOIR;
+							Deplacement = imgChevalNoir;
+							tableDeJeu[y][x] = 0;
+						}
+						if (tableDeJeu[y][x] == FOU_NOIR && mouvement ==1)
+						{
+							pasMouvPiece = FOU_NOIR;
+							Deplacement = imgFouNoir;
+							tableDeJeu[y][x] = 0;
+						}
+						if (tableDeJeu[y][x] == FOU_BLANC && mouvement ==0)
+						{
+							pasMouvPiece = FOU_BLANC;
+							Deplacement = imgFouBlanc;
+							tableDeJeu[y][x] = 0;
+						}
+						if (tableDeJeu[y][x] == REINE_BLANC && mouvement ==0)
+						{
+							pasMouvPiece = REINE_BLANC;
+							Deplacement = imgReineBlanc;
+							tableDeJeu[y][x] = 0;
+						}
+						if (tableDeJeu[y][x] == REINE_NOIR && mouvement ==1)
+						{
+							pasMouvPiece = REINE_NOIR;
+							Deplacement = imgReineNoir;
+							tableDeJeu[y][x] = 0;
+						}
+						if (tableDeJeu[y][x] == ROI_NOIR && mouvement ==1)
+						{
+							pasMouvPiece = ROI_NOIR;
+							Deplacement = imgRoiNoir;
+							tableDeJeu[y][x] = 0;
+						}
+						if (tableDeJeu[y][x] == ROI_BLANC && mouvement ==0)
+						{
+							pasMouvPiece = ROI_BLANC;
+							Deplacement = imgRoiBlanc;
+							tableDeJeu[y][x] = 0;
+						}
+						if (tableDeJeu[y][x] == 0)
+						{
+							ca_bouge = 1;
+							ancienne_Pos.x = x;
+							ancienne_Pos.y = y;
+						}
+					}
+				}
+			}
+			
+			if (e.type == Event::MouseButtonReleased)
+			{
+				if (e.key.code == Mouse::Left)
+				{
+					int isEchec=2;
+					if (pasMouvPiece == PION_BLANC && ca_bouge==1)
+					{
+						 isEchec = PionBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece  == PION_NOIR && ca_bouge == 1)
+					{
+						isEchec = PionNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == TOUR_BLANC && ca_bouge == 1)
+					{
+						isEchec = TourBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
+						if (isEchec == 1 && mouvGaucheTourBlanc==0 && ancienne_Pos.y == 7 && ancienne_Pos.x == 0)
+						{
+							mouvGaucheTourBlanc = 1;
+							//std::cout << mouvGaucheTourBlanc << "\n";
+						}
+						if (isEchec == 1 && mouvDroitTourBlanc==0 && ancienne_Pos.y == 7 && ancienne_Pos.x == 7)
+						{
+							mouvDroitTourBlanc = 1;
+							//std::cout << mouvDroitTourBlanc << "\n";
+						}
+					}
+					if (pasMouvPiece == TOUR_NOIR && ca_bouge == 1)
+					{
+						isEchec=TourNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
+						if (isEchec == 1 && mouvDroitTourNoir == 0 && ancienne_Pos.y == 0 && ancienne_Pos.x == 7)
+						{
+							mouvDroitTourNoir = 1;
+							//std::cout << mouvDroitTourNoir<< "\n";
+						}
+						if (isEchec == 1 && mouvGaucheTourNoir == 0 && ancienne_Pos.y == 0 && ancienne_Pos.x == 0)
+						{
+							mouvGaucheTourNoir = 1;
+							//std::cout << mouvGaucheTourNoir << "\n";
+						}
+					}
+					if (pasMouvPiece == FOU_BLANC && ca_bouge == 1)
+					{
+						isEchec = FouBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == FOU_NOIR && ca_bouge == 1)
+					{
+						isEchec= FouNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == REINE_BLANC && ca_bouge == 1)
+					{
+						isEchec=ReineBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == REINE_NOIR && ca_bouge == 1)
+					{
+						isEchec=ReineNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == CHEVAL_BLANC && ca_bouge == 1)
+					{
+						isEchec=ChevalBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == CHEVAL_NOIR && ca_bouge == 1)
+					{
+						isEchec = ChevalNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
+					}
+					if (pasMouvPiece == ROI_NOIR && ca_bouge == 1)
+					{
+						isEchec=RoiNoir(ancienne_Pos.x, ancienne_Pos.y, x, y);
+						if (isEchec == 1 && RoiNoirPremierMouv == 0)
+						{
+							RoiNoirPremierMouv = 1;
+						//	std::cout << imgRoiNoir << "\n";
+						}
+					}
+					if (pasMouvPiece == ROI_BLANC && ca_bouge == 1)
+					{
+						isEchec=RoiBlanc(ancienne_Pos.x, ancienne_Pos.y, x, y);
+						if (isEchec == 1 && RoiBlancPremierMouv == 0)
+						{
+							RoiBlancPremierMouv = 1;
+							//std::cout << "primaDeplacementimgRoiBlanc=" << imgRoiBlanc << "\n";
+						}
+					}
+					if (isEchec == 1)
+					{
+						int nr = tableDeJeu[y][x];
+						tableDeJeu[y][x] = pasMouvPiece;
+						if (y == 0 && pasMouvPiece == PION_BLANC)
+						{
+							transformationBlanc = 1;
+							transforme_blanc.x = x;
+							transforme_blanc.y = y;
+							tableDeJeu[y][x] = 0;
+						}
+						if (y == 7 && pasMouvPiece  == PION_NOIR)
+						{
+							transformationNoir = 1;
+							transforme_noir.x = x;
+							transforme_noir.y = y;
+							tableDeJeu[y][x] = 0;
+						}
+						if(mouvement ==0) // blanc a bougé et noir suit
+						{
+							if (EchecBlanc == 1)
+							{
+								getPosition();
+								int s = EchecTest(roi_blanc.x, roi_blanc.y);
+								if (s == 0)
+								{
+									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
+									tableDeJeu[y][x] = nr;
+								}
+								else
+								{
+									EchecBlanc = 0;
+									getPosition();
+									int Echec = EchecTest(roi_noir.x,roi_noir.y);
+									if (Echec == 0)
+									{
+										EchecNoir = 1;
+									}
+									mouvement = 1;
+								}
+							}
+							else
+							{
+								getPosition();
+								int sa = EchecTest(roi_blanc.x, roi_blanc.y);
+								if (sa == 0)
+								{
+									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
+									tableDeJeu[y][x] = nr;
+								}
+								else
+								{
+									getPosition();
+									int Echec = EchecTest(roi_noir.x, roi_noir.y);
+									if (Echec == 0)
+									{
+										EchecNoir = 1;
+									}
+									mouvement = 1;
+								}
+							}
+						}
+						else // noir a bougé et blanc a suivi
+						{
+							if (EchecNoir == 1)
+							{
+								getPosition();
+								int s = EchecTest(roi_noir.x,roi_noir.y);
+								if (s == 0)
+								{
+									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
+									tableDeJeu[y][x] = nr;
+								}
+								else
+								{
+									EchecNoir = 0;
+									getPosition();
+									int Echec = EchecTest(roi_blanc.x,roi_blanc.y);
+									if (Echec == 0)
+									{
+										EchecBlanc = 1;
+									}
+									mouvement = 0;
+								}
+							}
+							else
+							{
+								getPosition();
+								int sa = EchecTest(roi_noir.x, roi_noir.y);
+								if (sa == 0)
+								{
+									tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
+									tableDeJeu[y][x] = nr;
+								}
+								else
+								{
+									getPosition();
+									int Echec = EchecTest(roi_blanc.x, roi_blanc.y);
+									if (Echec == 0)
+									{
+										EchecBlanc = 1;
+									}
+									mouvement = 0;
+								}
+							}
+						}
+					}
+					else if(isEchec==0)
+					{
+						tableDeJeu[ancienne_Pos.y][ancienne_Pos.x] = pasMouvPiece;
+					}
+                   ca_bouge = 0;
+				}
+			}
+		
+		}
+
 		// Affichage
 		window.clear();
 		window.draw(imgTableau);
+		        
+		// Cas particulier de Dame
 
-        // while (window.pollEvent(e))
-        // {
-        //     /* code */
-        // }
-        
+		if (transformationBlanc == 1)
+		{
+			BlancTransformation.setPosition(transforme_blanc.x* taille, transforme_blanc.y* taille);
+			window.draw(BlancTransformation);
+		}
+		if (transformationNoir == 1)
+		{
+			NoirTransformation.setPosition(transforme_noir.x* taille, transforme_noir.y* taille);
+			window.draw(NoirTransformation);
+		}
+		if (ca_bouge == 1)
+		{
+			Deplacement.setPosition(pos.x-dx, pos.y-dy);
+			window.draw(Deplacement);
+		}
+
 		// Cas normal
 		// On dessine la table de jeu   
         for (int i = 1; i <= LONGUEUR; i++)
@@ -602,17 +2518,17 @@ Echiquier::affiche()
                         }
                         if (p->getSrc() == FOU_NOIR)
                         {
-                            imgFouNoir.setPosition(x * taille, 0 * taille);
+                            imgFouNoir.setPosition(x * taille, y * taille);
                             window.draw(imgFouNoir);  
                         }
                         if (p->getSrc() == REINE_NOIR)
                         {
-                            imgReineNoir.setPosition(x * taille, 0 * taille);
+                            imgReineNoir.setPosition(x * taille, y * taille);
                             window.draw(imgReineNoir);  
                         }
                         if (p->getSrc() == ROI_NOIR)
                         {
-                            imgRoiNoir.setPosition(x * taille, 0 * taille);
+                            imgRoiNoir.setPosition(x * taille, y * taille);
                             window.draw(imgRoiNoir); 
                         }                        
                         if (p->getSrc() == PION_NOIR)
@@ -626,7 +2542,7 @@ Echiquier::affiche()
                     { 
                         if (p->getSrc() == TOUR_BLANC)
                         {
-                            imgTourBlanc.setPosition(x * taille, 7 * taille);
+                            imgTourBlanc.setPosition(x * taille, y * taille);
                             window.draw(imgTourBlanc);  
                         }
                         if (p->getSrc() == CHEVAL_BLANC)
@@ -729,32 +2645,23 @@ JoueurNoir::JoueurNoir()
     int p         = 0;
     Tour *tg      = new Tour( false, true );
     m_pieces[p++] = tg;
-    //cout << ((tg->x() - 1 ) + (tg->y() - 1) *8) << endl;
     Cavalier *cg  = new Cavalier( false, true );
     m_pieces[p++] = cg;
-    //cout << ((cg->x() - 1 ) + (cg->y() - 1) *8) << endl;
     Fou *fg       = new Fou( false, true );
     m_pieces[p++] = fg;
-    //cout << ((fg->x() - 1 ) + (fg->y() - 1) *8) << endl;
     Reine *q      = new Reine( false );
     m_pieces[p++] = q;
-    //cout << ((cg->x() - 1 ) + (cg->y() - 1) *8) << endl;
     Roi *r        = new Roi( false );
     m_pieces[p++] = r;
-    //cout << ((r->x() - 1 ) + (r->y() - 1) *8) << endl; 
     Fou *fd       = new Fou( false, false );
     m_pieces[p++] = fd; 
-    //cout << ((fd->x() - 1 ) + (fd->y() - 1) *8) << endl;   
     Cavalier *cd  = new Cavalier( false, false );
     m_pieces[p++] = cd;
-    //cout << ((cd->x() - 1 ) + (cd->y() - 1) *8) << endl; 
     Tour *td      = new Tour( false, false );
     m_pieces[p++] = td;
-    //cout << ((td->x() - 1 ) + (td->y() - 1) *8) << endl; 
     for ( int i = 1; i <= 8; i++ ) {
         Pion *ptr     = new Pion( false, i );
         m_pieces[p++] = ptr;
-        // cout << "|" << ((ptr->x() - 1 ) + (ptr->y() - 1) *8)  << "|"<< endl; 
     }
     assert( 16 == p );
     // cout << "Constructeur JoueurNoir" << endl;
@@ -810,23 +2717,6 @@ JoueurBlanc::isWhite()
 
 //################################################ PROG ############################################
 
-class test
-{
-    public:
-        String src;
-    public:
-        test();
-        ~test();
-};
-
-test::test()
-{
-    src = PION_BLANC;
-}
-
-test::~test()
-{
-}
 
 int main(int argc, char const *argv[])
 {

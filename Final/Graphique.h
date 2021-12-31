@@ -134,7 +134,8 @@ class Piece
     bool         isBlack();
     void         affiche();
     virtual char vue();
-    virtual bool mouvementValide( Echiquier &e, int x, int y ) = 0;
+    virtual bool mouvementValide( Echiquier &e, int x, int y) = 0;
+    virtual bool mouvementEchec( Echiquier &e, int x, int y ) = 0;
 };
 
 class Roi : public Piece
@@ -143,9 +144,12 @@ class Roi : public Piece
     Roi( bool white );
     ~Roi();
     char vue();
-    bool mouvementValide( Echiquier &e, int x, int y );
+    bool mouvementValide( Echiquier &e, int x, int y);
     void roque();
     String getSrc();
+    bool mouvementEchec( Echiquier &e, int x, int y );
+    bool EchecTest( Echiquier &e);
+    void getPosition( Echiquier &e);
 };
 
 class Tour : virtual public Piece
@@ -154,8 +158,9 @@ class Tour : virtual public Piece
     Tour( bool white, bool gauche );
     ~Tour();
     char vue();
-    bool mouvementValide( Echiquier &e, int x, int y );
+    bool mouvementValide( Echiquier &e, int x, int y);
     String getSrc();
+    bool mouvementEchec( Echiquier &e, int x, int y );
 };
 
 class Fou : virtual public Piece
@@ -164,8 +169,9 @@ class Fou : virtual public Piece
     Fou( bool white, bool gauche );
     ~Fou();
     char vue();
-    bool mouvementValide( Echiquier &e, int x, int y );
+    bool mouvementValide( Echiquier &e, int x, int y);
     String getSrc();
+    bool mouvementEchec( Echiquier &e, int x, int y );
 };
 
 class Cavalier : public Piece
@@ -174,8 +180,9 @@ class Cavalier : public Piece
     Cavalier( bool white, bool gauche );
     ~Cavalier();
     char vue();
-    bool mouvementValide( Echiquier &e, int x, int y );
+    bool mouvementValide( Echiquier &e, int x, int y);
     String getSrc();
+    bool mouvementEchec( Echiquier &e, int x, int y );
 };
 
 class Reine : public Fou, public Tour
@@ -184,8 +191,9 @@ class Reine : public Fou, public Tour
     Reine( bool white );
     ~Reine();
     char vue();
-    bool mouvementValide( Echiquier &e, int x, int y );
+    bool mouvementValide( Echiquier &e, int x, int y);
     String getSrc();
+    bool mouvementEchec( Echiquier &e, int x, int y );
 };
 
 class Pion : public Piece
@@ -194,8 +202,9 @@ class Pion : public Piece
     Pion( bool white, int x );
     ~Pion();
     char vue();
-    bool mouvementValide( Echiquier &e, int x, int y );
+    bool mouvementValide( Echiquier &e, int x, int y);
     String getSrc();
+    bool mouvementEchec( Echiquier &e, int x, int y );
 };
 
 //##############################"""""HEADER JOUEUR"#######################################
